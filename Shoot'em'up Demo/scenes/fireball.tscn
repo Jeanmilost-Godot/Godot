@@ -1,0 +1,120 @@
+[gd_scene load_steps=15 format=3 uid="uid://dhoroo7dg1mo8"]
+
+[ext_resource type="AudioStream" uid="uid://cdo5o3d067el2" path="res://assets/sounds/fireball/fireball.mp3" id="2_rweq2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0foxd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bcaes"]
+transparency = 1
+no_depth_test = true
+albedo_color = Color(1, 0.694118, 0.278431, 0.921569)
+emission_enabled = true
+emission = Color(1, 0.839216, 0.560784, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_37ko5"]
+material = SubResource("StandardMaterial3D_bcaes")
+radial_segments = 20
+rings = 10
+
+[sub_resource type="Curve" id="Curve_l6xkf"]
+_data = [Vector2(0.037, 30), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_b1tl5"]
+curve = SubResource("Curve_l6xkf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lhbex"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+spread = 15.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+angular_velocity_min = 180.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, -2, 0)
+scale_min = 0.1
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_b1tl5")
+color = Color(0.796078, 0.533333, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wv15n"]
+transparency = 1
+no_depth_test = true
+albedo_color = Color(1, 0.694118, 0.278431, 0.921569)
+emission_enabled = true
+emission = Color(1, 0.839216, 0.560784, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_1rir3"]
+material = SubResource("StandardMaterial3D_wv15n")
+radius = 0.05
+height = 0.1
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Curve" id="Curve_wjgsg"]
+min_value = -48.27
+max_value = 163.65
+bake_resolution = 10
+_data = [Vector2(0.003663, 4.15231), 10.0, 1.0, 0, 0, Vector2(1, 22), 0.0, 0.0, 0, 0, Vector2(1, 30), 200.0, inf, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2htvg"]
+curve = SubResource("Curve_wjgsg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y774a"]
+spread = 15.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.5
+gravity = Vector3(0, -0.5, 0)
+scale_min = 0.2
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_2htvg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f1s4n"]
+transparency = 1
+no_depth_test = true
+albedo_color = Color(0.196078, 0.188235, 0.0784314, 0.360784)
+
+[sub_resource type="SphereMesh" id="SphereMesh_b0nyj"]
+material = SubResource("StandardMaterial3D_f1s4n")
+radius = 0.05
+height = 0.1
+radial_segments = 8
+rings = 4
+
+[node name="Fireball" type="StaticBody3D"]
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_0foxd")
+
+[node name="FireballMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_37ko5")
+
+[node name="FireParticles" type="GPUParticles3D" parent="."]
+amount = 150
+lifetime = 0.8
+explosiveness = 0.1
+process_material = SubResource("ParticleProcessMaterial_lhbex")
+draw_pass_1 = SubResource("SphereMesh_1rir3")
+
+[node name="SmokeParticles" type="GPUParticles3D" parent="."]
+sorting_offset = 1.0
+amount = 50
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_y774a")
+draw_pass_1 = SubResource("SphereMesh_b0nyj")
+
+[node name="FireLight" type="OmniLight3D" parent="."]
+light_energy = 5.0
+light_indirect_energy = 5.0
+omni_range = 10.0
+omni_attenuation = 0.35
+
+[node name="FireSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_rweq2")
+volume_db = -5.0
+unit_size = 1.5
+autoplay = true
+max_distance = 15.0

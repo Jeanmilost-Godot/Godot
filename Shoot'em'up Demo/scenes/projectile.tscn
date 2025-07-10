@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0oxgp6wrmnng"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_v5xfa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dqbr7"]
+transparency = 1
+no_depth_test = true
+albedo_color = Color(1, 0.694118, 0.278431, 0.921569)
+emission_enabled = true
+emission = Color(1, 0.839216, 0.560784, 1)
+emission_energy_multiplier = 5.75
+backlight_enabled = true
+backlight = Color(0.92549, 0.929412, 0.792157, 1)
+disable_receive_shadows = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_1wera"]
+material = SubResource("StandardMaterial3D_dqbr7")
+radial_segments = 20
+rings = 10
+
+[node name="Projectile" type="StaticBody3D"]
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_v5xfa")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("SphereMesh_1wera")
+
+[node name="Light" type="OmniLight3D" parent="."]
+light_energy = 5.0
+light_indirect_energy = 5.0
+omni_range = 10.0
+omni_attenuation = 0.35
