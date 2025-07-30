@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://doan6fo577rk4"]
+[gd_scene load_steps=34 format=3 uid="uid://doan6fo577rk4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_lw3oy"]
 [ext_resource type="PackedScene" uid="uid://cnmdq3bwax2d4" path="res://scenes/ocean.tscn" id="2_rcnpr"]
+[ext_resource type="Script" path="res://scripts/fader.gd" id="3_cefix"]
 [ext_resource type="PackedScene" uid="uid://ba8tiig8bngn1" path="res://scenes/ancient_dome.tscn" id="3_etoct"]
 [ext_resource type="PackedScene" uid="uid://befol6m5me0ib" path="res://assets/models/landscape/coast cliff/coast.glb" id="5_grcex"]
 [ext_resource type="PackedScene" uid="uid://bb5d44f3nh5yb" path="res://assets/models/landscape/coast cliff part 2/coast.glb" id="5_ke3o6"]
@@ -12,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bcyolk6jvhb6p" path="res://scenes/lighthouse.tscn" id="9_j8lc6"]
 [ext_resource type="PackedScene" uid="uid://c5olpw00qblwu" path="res://scenes/rusty_old_truck.tscn" id="10_py6o7"]
 [ext_resource type="PackedScene" uid="uid://d3g1x6qftdy6m" path="res://scenes/animated_tree_2.tscn" id="11_2w13r"]
+[ext_resource type="Texture2D" uid="uid://cjcxqbjq6jj8o" path="res://assets/textures/sky/overcast_soil_puresky_4k.exr" id="14_lid1c"]
 
 [sub_resource type="Curve" id="Curve_k5xa3"]
 max_value = 0.3
@@ -65,6 +67,61 @@ albedo_color = Color(0.826275, 0.823442, 0.797518, 0.588235)
 material = SubResource("StandardMaterial3D_b0xy6")
 radius = 0.01
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_258j0"]
+
+[sub_resource type="SystemFont" id="SystemFont_t3vqn"]
+
+[sub_resource type="Theme" id="Theme_b3ne5"]
+default_font = SubResource("SystemFont_t3vqn")
+default_font_size = 80
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_s5xui"]
+panorama = ExtResource("14_lid1c")
+
+[sub_resource type="Sky" id="Sky_grlw4"]
+sky_material = SubResource("PanoramaSkyMaterial_s5xui")
+
+[sub_resource type="Environment" id="Environment_mo4hx"]
+background_mode = 2
+sky = SubResource("Sky_grlw4")
+sky_rotation = Vector3(0, 1.88496, 0)
+ambient_light_source = 3
+ambient_light_color = Color(0.494118, 0.666667, 0.854902, 1)
+ambient_light_sky_contribution = 0.55
+ambient_light_energy = 0.6
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 0.5
+tonemap_white = 2.0
+glow_enabled = true
+glow_intensity = 2.5
+glow_strength = 1.65
+fog_enabled = true
+fog_sun_scatter = 0.06
+fog_density = 0.0005
+fog_aerial_perspective = 1.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.002
+volumetric_fog_length = 500.39
+
+[sub_resource type="FogMaterial" id="FogMaterial_yur0h"]
+density = 0.3558
+albedo = Color(0.301961, 0.603922, 1, 1)
+height_falloff = 1e+06
+edge_fade = 0.926824
+
+[sub_resource type="GDScript" id="GDScript_ls4fh"]
+script/source = "extends FogVolume
+
+@export var visible_height_offset := 0.0
+
+
+func _process(_delta):
+	var camera = get_viewport().get_camera_3d()
+	if camera:
+		visible = camera.position.y < (position.y + visible_height_offset)
+"
+
 [node name="Main" type="Node3D"]
 
 [node name="Camera" type="Camera3D" parent="."]
@@ -82,6 +139,46 @@ lifetime = 0.5
 preprocess = 0.5
 process_material = SubResource("ParticleProcessMaterial_5xhph")
 draw_pass_1 = SubResource("TubeTrailMesh_twotm")
+
+[node name="Fader" type="ColorRect" parent="Camera"]
+modulate = Color(0, 0, 0, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("3_cefix")
+
+[node name="GameOverMsg" type="RichTextLabel" parent="Camera/Fader"]
+top_level = true
+material = SubResource("CanvasItemMaterial_258j0")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -46.0
+offset_right = 20.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_b3ne5")
+theme_override_colors/default_color = Color(0.960784, 0.960784, 0.960784, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/selection_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 0.152941)
+theme_override_colors/font_outline_color = Color(0.588235, 0.588235, 0.588235, 1)
+theme_override_colors/table_odd_row_bg = Color(1, 1, 1, 1)
+theme_override_colors/table_even_row_bg = Color(1, 1, 1, 1)
+theme_override_colors/table_border = Color(1, 1, 1, 1)
+text = "GAME OVER"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
 
 [node name="AncientDome" parent="." instance=ExtResource("3_etoct")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -130.042, 30.9162, -1325.94)
@@ -120,3 +217,24 @@ transform = Transform3D(-6.07299, 0, -5.20757, 0, 8, 0, 5.20757, 0, -6.07299, -1
 
 [node name="RustyOldTruck" parent="." instance=ExtResource("10_py6o7")]
 transform = Transform3D(0.814751, -0.50782, 1.75451, 0.213883, 1.93446, 0.460581, -1.81396, -2.99775e-08, 0.842357, -138.873, 39.2405, -983.592)
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="Light" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.877037, -0.278375, 0.391552, 0, 0.815017, 0.579437, -0.480422, -0.508188, 0.7148, 0, 23.7697, 0)
+light_color = Color(0.733133, 0.863227, 0.925712, 1)
+light_energy = 0.8
+light_indirect_energy = 1.5
+light_volumetric_fog_energy = 1.5
+shadow_enabled = true
+directional_shadow_max_distance = 2000.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_mo4hx")
+
+[node name="UnderwaterFog" type="FogVolume" parent="Environment"]
+shape = 4
+material = SubResource("FogMaterial_yur0h")
+script = SubResource("GDScript_ls4fh")
+
+[connection signal="game_over" from="Camera/Player" to="Camera" method="_on_player_game_over"]
