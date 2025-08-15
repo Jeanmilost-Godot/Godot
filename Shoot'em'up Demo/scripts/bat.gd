@@ -1,14 +1,30 @@
-extends StaticBody3D
+extends CharacterBody3D
 
-# global variables
-var m_Velocity = 0.0
+# children instances
+@onready var m_Bat: Node3D = $Model
+
+# signals
+signal increment_score()
 
 ###
-# Fires a projectile
-#@param force - force to apply to the projectile
+# Explodes the enemy
 ##
-func fire(force: float):
-	m_Velocity = absf(force)
+func explode():
+	# hide the bat model
+	m_Bat.hide();
+
+	# create an explosion and attach it to the scene
+	var explosion = preload("res://scenes/explosion.tscn").instantiate()
+	get_tree().current_scene.add_child(explosion)
+
+	explosion.global_position = global_position
+	explosion.fire()
+
+	# notify that the score should be incremented
+	increment_score.emit()
+
+	# delete the bat
+	queue_free()
 
 ###
 # Called when the node enters the scene tree for the first time
@@ -21,10 +37,9 @@ func _ready():
 #@param delta - elapsed time in seconds since the previous call
 ##
 func _physics_process(delta):
-	# move the projectile forward
-	var velocity = Vector3(0.0, 0.0, -m_Velocity)
+	var velocity = Vector3()
 
-	# move the projectile and check for collision
+	# move the bat and check for collision
 	var collision = move_and_collide(velocity * delta)
 
 	# found a collision?
@@ -37,10 +52,10 @@ func _physics_process(delta):
 			CollisionManager.register_collision(self, collider)
 
 ###
-# Called when the projectile goes out of the screen
+# Called when the bat goes out of the screen
 ##
 func _on_visibility_notifier_screen_exited():
-	# delete the projectile
+	# delete the bat
 	queue_free()
 
 ###
@@ -52,5 +67,4 @@ func _on_collision_manager_do_delete(obj1, obj2):
 	if (obj1 != self and obj2 != self):
 		return
 
-	# delete the projectile
-	queue_free()
+	explode()

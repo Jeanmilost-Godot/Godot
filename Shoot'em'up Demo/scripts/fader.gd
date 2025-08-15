@@ -1,7 +1,7 @@
 extends ColorRect
 
 # children instances
-@onready var g_GameOverMsg: RichTextLabel = $GameOverMsg
+@onready var m_GameOverMsg: RichTextLabel = $GameOverMsg
 
 ###
 # Fades the whole screen from black
@@ -17,7 +17,7 @@ func fade_from_black(duration: float = 1.0, applyOnGameOverMsg: bool = true):
 	if applyOnGameOverMsg:
 		# vary the alpha value until reaching the min value after a given duration
 		var gameOverTween = create_tween()
-		gameOverTween.tween_property(g_GameOverMsg, "modulate:a", 0.0, duration)
+		gameOverTween.tween_property(m_GameOverMsg, "modulate:a", 0.0, duration)
 
 ###
 # Fades the whole screen to black
@@ -33,14 +33,14 @@ func fade_to_black(duration: float = 1.0, applyOnGameOverMsg: bool = true):
 	if applyOnGameOverMsg:
 		# vary the alpha value until reaching the max value after a given duration
 		var gameOverTween = create_tween()
-		gameOverTween.tween_property(g_GameOverMsg, "modulate:a", 1.0, duration)
+		gameOverTween.tween_property(m_GameOverMsg, "modulate:a", 1.0, duration)
 
 ###
-# Show or hide the game over message
+# Shows or hides the game over message
 #@param show - if true, game over message will be shown, hidden otherwise
 ##
 func show_game_over_msg(show):
 	if show:
-		g_GameOverMsg.modulate.a = 1.0
+		m_GameOverMsg.modulate.a = 1.0
 	else:
-		g_GameOverMsg.modulate.a = 0.0
+		m_GameOverMsg.modulate.a = 0.0

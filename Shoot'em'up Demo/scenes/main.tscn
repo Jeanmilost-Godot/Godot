@@ -130,7 +130,7 @@ size = 0.1
 script = ExtResource("1_lw3oy")
 
 [node name="Player" parent="Camera" instance=ExtResource("5_t2sfl")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -40)
+transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 0, 0, -40)
 
 [node name="Rain" type="GPUParticles3D" parent="Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)

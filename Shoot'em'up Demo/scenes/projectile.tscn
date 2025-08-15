@@ -23,13 +23,13 @@ rings = 10
 [node name="Collider" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_v5xfa")
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("SphereMesh_1wera")
-
 [node name="Light" type="OmniLight3D" parent="."]
 light_energy = 5.0
 light_indirect_energy = 5.0
 omni_range = 10.0
 omni_attenuation = 0.35
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("SphereMesh_1wera")
