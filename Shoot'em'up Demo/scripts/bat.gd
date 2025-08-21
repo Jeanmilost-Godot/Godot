@@ -3,6 +3,9 @@ extends CharacterBody3D
 # children instances
 @onready var m_Bat: Node3D = $Model
 
+# variables
+var path: Path
+
 # signals
 signal increment_score()
 
@@ -32,13 +35,19 @@ func explode():
 func _ready():
 	CollisionManager.do_delete.connect(_on_collision_manager_do_delete)
 
+	path = Path.new()
+	path.end_reached.connect(_on_path_end_reached)
+	path.add_linear_path(global_position, Vector3(global_position.x, global_position.y - 40.0, global_position.z), 3.0, 0.0)
+
 ###
 # Called every frame at a fixed rate, which allows any processing that requires the physics values
 #@param delta - elapsed time in seconds since the previous call
 ##
 func _physics_process(delta):
-	var velocity = Vector3()
+	var velocity = path.get_pos(delta)
 
+	#REM print(velocity.y)
+	
 	# move the bat and check for collision
 	var collision = move_and_collide(velocity * delta)
 
@@ -68,3 +77,6 @@ func _on_collision_manager_do_delete(obj1, obj2):
 		return
 
 	explode()
+
+func _on_path_end_reached():
+	pass

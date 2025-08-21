@@ -210,6 +210,10 @@ class CirclePathCmd extends BasicPathCmd:
 var m_PathCmds: Array[BasicPathCmd] = []
 var m_CmdIndex                      = 0
 var m_ElapsedTime                   = 0.0
+var m_LastPos                       = Vector3()
+
+# signals
+signal end_reached()
 
 ###
 # Adds a linear command to the path
@@ -250,8 +254,22 @@ func add_circle_path(center: Vector3, radius: Vector2, angle: float, rotDir: E_R
 	var pathCmd = CirclePathCmd.new(E_TYPE.CIRCLE, center, radius, angle, rotDir, time, accel)
 	m_PathCmds.append(pathCmd)
 
+###
+# Gets current path position
+#@param elapsedTime - elapsed time since last frame
+#@return position
+##
 func get_pos(elapsedTime):
 	m_ElapsedTime += elapsedTime
 
 	var pathCmd = m_PathCmds[m_CmdIndex]
-	
+
+	if (m_ElapsedTime >= pathCmd.m_Time):
+		m_ElapsedTime = 0.0
+		m_CmdIndex += 1
+
+		if (m_CmdIndex >= m_PathCmds.size()):
+			m_CmdIndex = 0
+			end_reached.emit()
+
+	return pathCmd.get_pos(m_ElapsedTime / pathCmd.m_Time)

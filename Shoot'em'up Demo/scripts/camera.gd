@@ -40,6 +40,7 @@ func _physics_process(delta):
 
 		entity.global_position    =  global_position
 		entity.global_position.x  = -40.0
+		entity.global_position.y  =  70.0
 		entity.global_position.z -=  20.0
 		#entity.global_rotation.y  = -90;
 		#entity.global_scale(Vector3(7.0, 7.0, 7.0))
