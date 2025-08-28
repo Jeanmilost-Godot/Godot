@@ -13,14 +13,12 @@ const m_ScrollEndPos = -1250
 # Called when the node enters the scene tree for the first time
 ##
 func _ready():
+	# on opening show the level from black screen
 	m_Fader.show_game_over_msg(false)
 	m_Fader.fade_from_black()
 
+	# create the entities
 	m_Entities = Entities.new()
-
-	#REM REM REM
-	#var test = BezierCurve.new()
-	#test._test()
 
 ###
 # Called every frame at a fixed rate, which allows any processing that requires the physics values
@@ -33,19 +31,19 @@ func _physics_process(delta):
 	else:
 		position.z = m_ScrollEndPos
 
-	#REM REM REM
-	if !m_Entities.get_entity(0).is_spawned() && position.z <= -20:
-		var entity = preload("res://scenes/bat.tscn").instantiate()
-		get_tree().current_scene.add_child(entity)
+	# iterate through entities
+	for i  in range(m_Entities.get_count()):
+		# do spawn the entity?
+		if !m_Entities.is_spawned(i) && position.z <= m_Entities.get_spawn_pos(i):
+			# notify that the entity was spawned, this way it will not be respawn infinitely
+			m_Entities.set_spawned(i)
 
-		entity.global_position    =  global_position
-		entity.global_position.x  = -40.0
-		entity.global_position.y  =  70.0
-		entity.global_position.z -=  20.0
-		#entity.global_rotation.y  = -90;
-		#entity.global_scale(Vector3(7.0, 7.0, 7.0))
+			# get the entity scene and add it to parent one
+			var entity = m_Entities.get_scene(i).instantiate()
+			get_tree().current_scene.add_child(entity)
 
-		m_Entities.get_entity(0).set_spawned()
+			# set the entity start position
+			entity.global_position = m_Entities.get_start_pos(i)
 
 ###
 # Called when player game over sequence ended

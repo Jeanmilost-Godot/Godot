@@ -132,7 +132,7 @@ class BezierPathCmd extends BasicPathCmd:
 	func get_pos(progress):
 		var pos = clampf(progress, 0.0, 1.0)
 
-		match self.g_Type:
+		match self.m_Type:
 			E_TYPE.QUADRATIC_BEZIER: return BezierCurve.get_quadratic_bezier_point(self.m_Start, self.m_End, self.m_Ctrl1,               pos)
 			E_TYPE.CUBIC_BEZIER:     return BezierCurve.get_cubic_bezier_point    (self.m_Start, self.m_End, self.m_Ctrl1, self.m_Ctrl2, pos)
 			_:                       return Vector3()
@@ -183,22 +183,19 @@ class CirclePathCmd extends BasicPathCmd:
 
 		match self.m_Type:
 			E_TYPE.CIRCLE:
-				# calculate circle center in relation to the current position
-				var absoluteCenter = Vector3(self.m_Start.x + self.m_Center.x, self.m_Start.y + self.m_Center.y, self.m_Start.z)
-
-				var angle = pos * self.m_2PI
+				var angle = pos * self.m_Angle
 
 				# calculate the rotation angle
-				match self.g_RotDir:
-					E_ROT_DIR.CW:  angle =                 (angle * self.m_Angle) / (self.m_2PI)
-					E_ROT_DIR.CCW: angle = (self.m_2PI) - ((angle * self.m_Angle) / (self.m_2PI))
+				match self.m_RotDir:
+					E_ROT_DIR.CW:  angle = angle
+					E_ROT_DIR.CCW: angle = -angle
 					_:             return Vector3()
 
 				var result: Vector3
 
 				# calculate the current position around the circle
-				result.x = self.m_Start.x + (self.m_Radius.x * cos(angle))
-				result.y = self.m_Start.y + (self.m_Radius.y * sin(angle))
+				result.x = self.m_Start.x + self.m_Center.x + (self.m_Radius.x * cos(angle))
+				result.y = self.m_Start.y + self.m_Center.y + (self.m_Radius.y * sin(angle))
 				result.z = self.m_Start.z
 
 				return result
@@ -208,9 +205,11 @@ class CirclePathCmd extends BasicPathCmd:
 
 # variables
 var m_PathCmds: Array[BasicPathCmd] = []
-var m_CmdIndex                      = 0
-var m_ElapsedTime                   = 0.0
-var m_LastPos                       = Vector3()
+var m_CmdIndex: int = 0
+var m_ElapsedTime: float = 0.0
+var m_LastPos: Vector3 = Vector3()
+var m_CurrentPos: Vector3 = Vector3()
+var m_IsInitialized: bool = false
 
 # signals
 signal end_reached()
@@ -255,21 +254,83 @@ func add_circle_path(center: Vector3, radius: Vector2, angle: float, rotDir: E_R
 	m_PathCmds.append(pathCmd)
 
 ###
-# Gets current path position
-#@param elapsedTime - elapsed time since last frame
-#@return position
+# Initialize the path with the object's starting position
+#@param start_pos - the current position of the object
 ##
-func get_pos(elapsedTime):
+func initialize(start_pos: Vector3):
+	m_LastPos = start_pos
+	m_CurrentPos = start_pos
+	m_IsInitialized = true
+
+	# Set the start position for all path commands relative to the initial position
+	for i in range(m_PathCmds.size()):
+		if i == 0:
+			m_PathCmds[i].set_start_pos(start_pos)
+		else:
+			# Each subsequent command starts where the previous one ended
+			var prev_cmd = m_PathCmds[i - 1]
+			var end_pos = prev_cmd.get_pos(1.0)  # Get the end position of previous command
+			m_PathCmds[i].set_start_pos(end_pos)
+
+###
+# Gets velocity vector for physics movement
+#@param elapsedTime - elapsed time since last frame (delta)
+#@return velocity vector for move_and_collide
+##
+func get_velocity(elapsedTime: float) -> Vector3:
+	if not m_IsInitialized or m_PathCmds.is_empty():
+		return Vector3.ZERO
+
 	m_ElapsedTime += elapsedTime
 
 	var pathCmd = m_PathCmds[m_CmdIndex]
 
-	if (m_ElapsedTime >= pathCmd.m_Time):
+	# Check if current command is finished
+	if m_ElapsedTime >= pathCmd.m_Time:
 		m_ElapsedTime = 0.0
 		m_CmdIndex += 1
 
-		if (m_CmdIndex >= m_PathCmds.size()):
+		# Check if we've reached the end of all commands
+		if m_CmdIndex >= m_PathCmds.size():
+			m_CmdIndex = 0
+			end_reached.emit()
+			# Reinitialize for the next cycle if needed
+			if not m_PathCmds.is_empty():
+				initialize(m_CurrentPos)
+
+	# Get current target position
+	var progress = m_ElapsedTime / pathCmd.m_Time if pathCmd.m_Time > 0 else 0.0
+	var target_pos = pathCmd.get_pos(progress)
+
+	# Calculate velocity as the difference between target and current position
+	var velocity = (target_pos - m_CurrentPos) / elapsedTime if elapsedTime > 0 else Vector3.ZERO
+
+	# Update current position for next frame
+	m_CurrentPos = target_pos
+
+	return velocity
+
+###
+# Gets current path position (for compatibility with original API)
+#@param elapsedTime - elapsed time since last frame
+#@return absolute position on path
+##
+func get_pos(elapsedTime: float) -> Vector3:
+	if not m_IsInitialized or m_PathCmds.is_empty():
+		return Vector3.ZERO
+
+	m_ElapsedTime += elapsedTime
+
+	var pathCmd = m_PathCmds[m_CmdIndex]
+
+	if m_ElapsedTime >= pathCmd.m_Time:
+		m_ElapsedTime = 0.0
+		m_CmdIndex += 1
+
+		if m_CmdIndex >= m_PathCmds.size():
 			m_CmdIndex = 0
 			end_reached.emit()
 
-	return pathCmd.get_pos(m_ElapsedTime / pathCmd.m_Time)
+	var progress = m_ElapsedTime / pathCmd.m_Time if pathCmd.m_Time > 0 else 0.0
+
+	return pathCmd.get_pos(progress)

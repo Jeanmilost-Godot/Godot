@@ -1,10 +1,8 @@
 extends CharacterBody3D
 
 # children instances
-@onready var m_Bat: Node3D = $Model
-
-# variables
-var path: Path
+@onready var m_Root: Node3D = $"../../.."
+@onready var m_Bat:  Node3D = $Model
 
 # signals
 signal increment_score()
@@ -27,7 +25,7 @@ func explode():
 	increment_score.emit()
 
 	# delete the bat
-	queue_free()
+	m_Root.queue_free()
 
 ###
 # Called when the node enters the scene tree for the first time
@@ -35,20 +33,14 @@ func explode():
 func _ready():
 	CollisionManager.do_delete.connect(_on_collision_manager_do_delete)
 
-	path = Path.new()
-	path.end_reached.connect(_on_path_end_reached)
-	path.add_linear_path(global_position, Vector3(global_position.x, global_position.y - 40.0, global_position.z), 3.0, 0.0)
-
 ###
 # Called every frame at a fixed rate, which allows any processing that requires the physics values
 #@param delta - elapsed time in seconds since the previous call
 ##
 func _physics_process(delta):
-	var velocity = path.get_pos(delta)
+	var velocity = Vector3()
 
-	#REM print(velocity.y)
-	
-	# move the bat and check for collision
+	# check the bat collisions. Don't move it because the bat is already moved by path
 	var collision = move_and_collide(velocity * delta)
 
 	# found a collision?
@@ -65,7 +57,7 @@ func _physics_process(delta):
 ##
 func _on_visibility_notifier_screen_exited():
 	# delete the bat
-	queue_free()
+	m_Root.queue_free()
 
 ###
 # Called when the collision manager notifies that the item should be deleted
@@ -77,6 +69,3 @@ func _on_collision_manager_do_delete(obj1, obj2):
 		return
 
 	explode()
-
-func _on_path_end_reached():
-	pass

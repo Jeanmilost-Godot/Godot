@@ -124,6 +124,18 @@ func _process(_delta):
 
 [node name="Main" type="Node3D"]
 
+[node name="AncientDome" parent="." instance=ExtResource("3_etoct")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -130.042, 30.9162, -1325.94)
+
+[node name="AnimatedTree" parent="." instance=ExtResource("9_gvr25")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -170.857, 58.4735, -342.589)
+
+[node name="AnimatedTree2" parent="." instance=ExtResource("11_2w13r")]
+transform = Transform3D(-5.72652, -2.68994, 7.74411, -3.47437, 9.35239, 0.679391, -7.42534, -2.30154, -6.29025, -141.448, 37.7851, -797.747)
+
+[node name="AnimatedTree3" parent="." instance=ExtResource("9_gvr25")]
+transform = Transform3D(4.94975, 0, 4.94975, 0, 7, 0, -4.94975, 0, 4.94975, -124.62, 32.5445, -1109.03)
+
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 10, 0)
 size = 0.1
@@ -180,18 +192,6 @@ scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
 
-[node name="AncientDome" parent="." instance=ExtResource("3_etoct")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -130.042, 30.9162, -1325.94)
-
-[node name="AnimatedTree" parent="." instance=ExtResource("9_gvr25")]
-transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -170.857, 58.4735, -342.589)
-
-[node name="AnimatedTree2" parent="." instance=ExtResource("11_2w13r")]
-transform = Transform3D(-5.72652, -2.68994, 7.74411, -3.47437, 9.35239, 0.679391, -7.42534, -2.30154, -6.29025, -141.448, 37.7851, -797.747)
-
-[node name="AnimatedTree3" parent="." instance=ExtResource("9_gvr25")]
-transform = Transform3D(4.94975, 0, 4.94975, 0, 7, 0, -4.94975, 0, 4.94975, -124.62, 32.5445, -1109.03)
-
 [node name="coast" parent="." instance=ExtResource("5_grcex")]
 transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, -125, -3.75, -600)
 
@@ -200,23 +200,6 @@ transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, -145.8
 
 [node name="coast3" parent="." instance=ExtResource("6_rjdr2")]
 transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, -118.249, -13.9829, -1206.77)
-
-[node name="Lighthouse" parent="." instance=ExtResource("9_j8lc6")]
-transform = Transform3D(0.0600657, 0, 0.0799507, 0, 0.1, 0, -0.0799507, 0, 0.0600657, -149.876, 36.2727, -689.25)
-
-[node name="Ocean" parent="." instance=ExtResource("2_rcnpr")]
-
-[node name="rock" parent="." instance=ExtResource("5_vfc6h")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -163.516, 0, -342.82)
-
-[node name="rock2" parent="." instance=ExtResource("5_vfc6h")]
-transform = Transform3D(-8, 0, -6.99382e-07, 0, 8, 0, 6.99382e-07, 0, -8, -129.738, -3.43416, -985.481)
-
-[node name="rock3" parent="." instance=ExtResource("5_vfc6h")]
-transform = Transform3D(-6.07299, 0, -5.20757, 0, 8, 0, 5.20757, 0, -6.07299, -122.132, 2.21392, -1455.49)
-
-[node name="RustyOldTruck" parent="." instance=ExtResource("10_py6o7")]
-transform = Transform3D(0.814751, -0.50782, 1.75451, 0.213883, 1.93446, 0.460581, -1.81396, -2.99775e-08, 0.842357, -138.873, 39.2405, -983.592)
 
 [node name="Environment" type="Node" parent="."]
 
@@ -236,5 +219,22 @@ environment = SubResource("Environment_mo4hx")
 shape = 4
 material = SubResource("FogMaterial_yur0h")
 script = SubResource("GDScript_ls4fh")
+
+[node name="Lighthouse" parent="." instance=ExtResource("9_j8lc6")]
+transform = Transform3D(0.0600657, 0, 0.0799507, 0, 0.1, 0, -0.0799507, 0, 0.0600657, -149.876, 36.2727, -689.25)
+
+[node name="Ocean" parent="." instance=ExtResource("2_rcnpr")]
+
+[node name="rock" parent="." instance=ExtResource("5_vfc6h")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -163.516, 0, -342.82)
+
+[node name="rock2" parent="." instance=ExtResource("5_vfc6h")]
+transform = Transform3D(-8, 0, -6.99382e-07, 0, 8, 0, 6.99382e-07, 0, -8, -129.738, -3.43416, -985.481)
+
+[node name="rock3" parent="." instance=ExtResource("5_vfc6h")]
+transform = Transform3D(-6.07299, 0, -5.20757, 0, 8, 0, 5.20757, 0, -6.07299, -122.132, 2.21392, -1455.49)
+
+[node name="RustyOldTruck" parent="." instance=ExtResource("10_py6o7")]
+transform = Transform3D(0.814751, -0.50782, 1.75451, 0.213883, 1.93446, 0.460581, -1.81396, -2.99775e-08, 0.842357, -138.873, 39.2405, -983.592)
 
 [connection signal="game_over" from="Camera/Player" to="Camera" method="_on_player_game_over"]
