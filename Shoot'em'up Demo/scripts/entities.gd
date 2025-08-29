@@ -40,6 +40,10 @@ func load_patterns():
 	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  60, -60), -40)
 	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  70, -70), -50)
 
+	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  45, -80), -60)
+	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  55, -90), -70)
+	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  65, -100), -80)
+
 ###
 # Gets entities count
 #@return entities count
