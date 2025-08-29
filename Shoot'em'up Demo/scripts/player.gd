@@ -102,8 +102,8 @@ func _physics_process(delta):
 		velocity.y = direction.y * m_Speed
 		velocity.z = direction.z * m_Speed
 	else:
-		velocity.y = move_toward(velocity.y, 0, m_Speed)
-		velocity.z = move_toward(velocity.z, 0, m_Speed)
+		velocity.y = move_toward(velocity.y, 0.0, m_Speed)
+		velocity.z = move_toward(velocity.z, 0.0, m_Speed)
 
 	# move the player and check for collision
 	var collision = move_and_collide(velocity * delta)
@@ -118,8 +118,8 @@ func _physics_process(delta):
 			CollisionManager.register_collision(self, collider)
 
 	# limit the item position into the screen
-	position.x = clamp(position.x, -45, 45)
-	position.y = clamp(position.y, -5,  25) 
+	position.x = clamp(position.x, -45.0, 45.0)
+	position.y = clamp(position.y, -5.0,  25.0) 
 
 	# fire a projectile
 	if Input.is_action_pressed("fire"):

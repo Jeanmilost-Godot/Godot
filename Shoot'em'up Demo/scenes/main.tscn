@@ -138,6 +138,7 @@ transform = Transform3D(4.94975, 0, 4.94975, 0, 7, 0, -4.94975, 0, 4.94975, -124
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 10, 0)
+current = true
 size = 0.1
 script = ExtResource("1_lw3oy")
 

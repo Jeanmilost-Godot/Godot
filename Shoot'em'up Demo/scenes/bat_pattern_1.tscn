@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://bbknyx6tpoajl"]
+
+[ext_resource type="Script" path="res://scripts/bat_path.gd" id="1_dik3x"]
+[ext_resource type="Script" path="res://scripts/bat_path_follow.gd" id="2_jaf1q"]
+[ext_resource type="PackedScene" uid="uid://otxuh4pxjvr6" path="res://scenes/bat.tscn" id="3_3tmjj"]
+
+[sub_resource type="Curve3D" id="Curve3D_3ohte"]
+_data = {
+"points": PackedVector3Array(-2.76368, 19.1848, 5.7001, 0, -20, -5.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -40, 0, 0, 0, 0, 0, 0, 0, 0, -40, 100),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="Bat-Pattern1" type="Node3D"]
+
+[node name="Path" type="Path3D" parent="."]
+curve = SubResource("Curve3D_3ohte")
+script = ExtResource("1_dik3x")
+
+[node name="PathFollow" type="PathFollow3D" parent="Path"]
+transform = Transform3D(1, 0, 0, 0, 0.265155, 0.964201, 0, -0.964201, 0.265155, 0, 0, 0)
+script = ExtResource("2_jaf1q")
+
+[node name="Bat" parent="Path/PathFollow" instance=ExtResource("3_3tmjj")]
