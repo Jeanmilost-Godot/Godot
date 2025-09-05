@@ -32,17 +32,108 @@ func _init():
 	load_patterns()
 
 ###
+# Adds an entity pattern
+#@param scene - preloaded scene to spawn
+#@param y - starting y position in the scene
+#@param startPos - start position in the scroll timeline
+##
+func add_pattern(scene: PackedScene, y: float, startPos: float):
+	add_entity(scene, Vector3(-40,  y, startPos - 40.0),  startPos)
+
+###
 # Loads the entities patterns
 ##
 func load_patterns():
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  40, -40), -20)
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  50, -50), -30)
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  60, -60), -40)
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  70, -70), -50)
+	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -40, -20)
+	return
 
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  45, -80), -60)
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  55, -90), -70)
-	add_entity(preload("res://scenes/bat_pattern_1.tscn"), Vector3(-40,  65, -100), -80)
+	# pyjama sharks, layout 1
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -25, -39)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -25, -45)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -25, -57)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -25, -71)
+
+	# pyjama sharks, layout 2
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -35, -43)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -35, -48)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -35, -52)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -35, -56)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -35, -59)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -35, -60)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -35, -67)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -35, -72)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -35, -76)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -35, -80)
+
+	# pyjama sharks, layout 3
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -40, -40)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -40, -45)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -40, -50)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -40, -55)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -40, -57)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -40, -62)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -40, -65)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -40, -70)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -40, -75)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -40, -77)
+
+	# pyjama sharks, layout 4
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -35)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -50, -39)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -42)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -44)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -45)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -50, -48)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -49)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -50, -51)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -50, -54)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -55)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -58)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -62)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -50, -67)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -71)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -74)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -50, -75)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -79)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -50, -82)
+
+	# pyjama sharks, layout 5
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -33)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -35)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -37)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -39)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -41)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -43)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -45)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -47)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -49)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -51)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -53)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -55)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -57)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -59)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -61)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -63)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -65)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -67)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -69)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -71)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -73)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -75)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -77)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -79)
+	add_pattern(preload("res://scenes/nocturnus_pattern_1.tscn"),    -55, -81)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -83)
+	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -85)
+
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 40, -90)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 50, -95)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 60, -100)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 70, -105)
+
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 45, -110)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 55, -115)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 65, -120)
 
 ###
 # Gets entities count

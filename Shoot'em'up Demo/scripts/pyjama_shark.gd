@@ -1,18 +1,18 @@
 extends CharacterBody3D
 
 # children instances
-@onready var m_Root: Node3D = $"../../.."
-@onready var m_Bat:  Node3D = $Model
+@onready var m_Root:  Node3D = $"../../.."
+@onready var m_Shark: Node3D = $Model
 
 # signals
 signal increment_score()
 
 ###
-# Explodes the bat
+# Explodes the shark
 ##
 func explode():
-	# hide the bat model
-	m_Bat.hide();
+	# hide the shark model
+	m_Shark.hide();
 
 	# create an explosion and attach it to the scene
 	var explosion = preload("res://scenes/explosion.tscn").instantiate()
@@ -24,7 +24,7 @@ func explode():
 	# notify that the score should be incremented
 	increment_score.emit()
 
-	# delete the bat
+	# delete the shark
 	m_Root.queue_free()
 
 ###
@@ -40,7 +40,7 @@ func _ready():
 func _physics_process(delta):
 	var velocity = Vector3()
 
-	# check the bat collisions. Don't move it because the bat is already moved by path
+	# check the shark collisions. Don't move it because the shark is already moved by path
 	var collision = move_and_collide(velocity * delta)
 
 	# found a collision?
@@ -53,10 +53,10 @@ func _physics_process(delta):
 			CollisionManager.register_collision(self, collider)
 
 ###
-# Called when the bat goes out of the screen
+# Called when the shark goes out of the screen
 ##
 func _on_visibility_notifier_screen_exited():
-	# delete the bat
+	# delete the shark
 	m_Root.queue_free()
 
 ###

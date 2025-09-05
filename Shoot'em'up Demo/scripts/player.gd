@@ -1,7 +1,8 @@
 extends CharacterBody3D
 
 # children instances
-@onready var m_Seagul: Node3D = $Model
+@onready var m_Seagul:   Node3D           = $Model
+@onready var m_Collider: CollisionShape3D = $Collider
 
 # constants
 const m_Speed           = 20.0
@@ -46,6 +47,9 @@ func run_game_over():
 
 	# hide the player model
 	m_Seagul.hide();
+
+	# disable the collider
+	m_Collider.disabled = true
 
 	# create an explosion and attach it to the scene
 	var explosion = preload("res://scenes/explosion.tscn").instantiate()

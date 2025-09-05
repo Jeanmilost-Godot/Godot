@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhos5pj7rjilj"]
+
+[ext_resource type="PackedScene" uid="uid://gsdxb0fsmwf5" path="res://scenes/seahorse.tscn" id="1_h7e01"]
+[ext_resource type="Script" path="res://scripts/path_follow.gd" id="1_m50te"]
+[ext_resource type="Script" path="res://scripts/seahorse_path.gd" id="1_seyp4"]
+
+[sub_resource type="Curve3D" id="Curve3D_ahc7h"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Seahorse-Pattern1" type="Node3D"]
+
+[node name="Path" type="Path3D" parent="."]
+curve = SubResource("Curve3D_ahc7h")
+script = ExtResource("1_seyp4")
+
+[node name="PathFollow" type="PathFollow3D" parent="Path"]
+script = ExtResource("1_m50te")
+
+[node name="Seahorse" parent="Path/PathFollow" instance=ExtResource("1_h7e01")]

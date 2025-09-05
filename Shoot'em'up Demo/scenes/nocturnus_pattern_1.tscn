@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://72je2g022swn"]
+
+[ext_resource type="PackedScene" uid="uid://b5nbexd3eh050" path="res://scenes/nocturnus.tscn" id="1_48je7"]
+[ext_resource type="Script" path="res://scripts/path_follow.gd" id="1_mljp2"]
+[ext_resource type="Script" path="res://scripts/nocturnus_path.gd" id="1_mypnf"]
+
+[sub_resource type="Curve3D" id="Curve3D_uu0y3"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.236, -27.081, 0, -0.236, 27.081, 0, 60, 35, 0, 0, 0, 0, 0, 0, 0, 0, 70),
+"tilts": PackedFloat32Array(0, 1.508, 0)
+}
+point_count = 3
+
+[node name="Nocturnus-Pattern1" type="Node3D"]
+
+[node name="Path" type="Path3D" parent="."]
+curve = SubResource("Curve3D_uu0y3")
+script = ExtResource("1_mypnf")
+
+[node name="PathFollow" type="PathFollow3D" parent="Path"]
+transform = Transform3D(-1, -7.5514e-08, -4.40498e-08, 0, 0.503871, -0.863779, 8.74228e-08, -0.863779, -0.503871, 0, 0, 0)
+script = ExtResource("1_mljp2")
+
+[node name="Nocturnus" parent="Path/PathFollow" instance=ExtResource("1_48je7")]

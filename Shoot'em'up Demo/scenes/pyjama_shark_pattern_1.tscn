@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://d13pvkqj44kku"]
+
+[ext_resource type="Script" path="res://scripts/pyjama_shark_path.gd" id="1_40hqe"]
+[ext_resource type="Script" path="res://scripts/path_follow.gd" id="1_h7evb"]
+[ext_resource type="PackedScene" uid="uid://c1b4q5ng1grju" path="res://scenes/pyjama_shark.tscn" id="2_adbpd"]
+
+[sub_resource type="Curve3D" id="Curve3D_dbqca"]
+_data = {
+"points": PackedVector3Array(5, -62, -31, 0, 0, 0, 0, 0, 0, 0, 0.236, -27.081, 0, -0.236, 27.081, 0, 60, 40, 0, 0, 0, 0, 0, 0, 0, 0, 80),
+"tilts": PackedFloat32Array(0, 1.50757, 0)
+}
+point_count = 3
+
+[node name="PyjamaShark-Pattern1" type="Node3D"]
+
+[node name="Path" type="Path3D" parent="."]
+curve = SubResource("Curve3D_dbqca")
+script = ExtResource("1_40hqe")
+
+[node name="PathFollow" type="PathFollow3D" parent="Path"]
+transform = Transform3D(-1, -7.27401e-08, -4.84934e-08, 0, 0.5547, -0.83205, 8.74228e-08, -0.83205, -0.5547, 0, 0, 0)
+script = ExtResource("1_h7evb")
+
+[node name="PyjamaShark" parent="Path/PathFollow" instance=ExtResource("2_adbpd")]
