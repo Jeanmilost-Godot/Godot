@@ -32,7 +32,7 @@ func _physics_process(delta):
 		position.z = m_ScrollEndPos
 
 	# iterate through entities
-	for i  in range(m_Entities.get_count()):
+	for i in range(m_Entities.get_count()):
 		# do spawn the entity?
 		if !m_Entities.is_spawned(i) && position.z <= m_Entities.get_spawn_pos(i):
 			# notify that the entity was spawned, this way it will not be respawn infinitely

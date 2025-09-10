@@ -4,6 +4,9 @@ extends CharacterBody3D
 @onready var m_Root: Node3D = $"../../.."
 @onready var m_Bat:  Node3D = $Model
 
+# variables
+var m_HitCount = 0
+
 # signals
 signal increment_score()
 
@@ -68,4 +71,14 @@ func _on_collision_manager_do_delete(obj1, obj2):
 	if (obj1 != self and obj2 != self):
 		return
 
-	explode()
+	if (obj1.name.contains("SeagullProjectile") || obj2.name.contains("SeagullProjectile")):
+		# only explode after 3 hits
+		if (m_HitCount >= 3):
+			explode()
+
+		m_HitCount += 1
+
+		# notify that the score should be incremented
+		increment_score.emit()
+	else:
+		explode()

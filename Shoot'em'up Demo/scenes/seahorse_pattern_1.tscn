@@ -18,6 +18,7 @@ curve = SubResource("Curve3D_ahc7h")
 script = ExtResource("1_seyp4")
 
 [node name="PathFollow" type="PathFollow3D" parent="Path"]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
 script = ExtResource("1_m50te")
 
 [node name="Seahorse" parent="Path/PathFollow" instance=ExtResource("1_h7e01")]

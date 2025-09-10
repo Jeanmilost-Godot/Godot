@@ -1,6 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://gsdxb0fsmwf5"]
+[gd_scene load_steps=16 format=3 uid="uid://gsdxb0fsmwf5"]
 
 [ext_resource type="Texture2D" uid="uid://ddflgx46nx67l" path="res://assets/models/fishes/seahorse/seahorse_0.png" id="1_d62ew"]
+[ext_resource type="Script" path="res://scripts/seahorse.gd" id="1_vqh03"]
 [ext_resource type="Texture2D" uid="uid://btnwkrumcmhq6" path="res://assets/models/fishes/seahorse/seahorse_1.png" id="2_55gor"]
 [ext_resource type="Texture2D" uid="uid://w33ac7ol2qct" path="res://assets/models/fishes/seahorse/seahorse_2.png" id="3_klyys"]
 [ext_resource type="Texture2D" uid="uid://ckjw1yx0i41yw" path="res://assets/models/fishes/seahorse/seahorse_3.png" id="4_6pa4w"]
@@ -180,6 +181,7 @@ shadow_mesh = SubResource("ArrayMesh_f2foy")
 [node name="Seahorse" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 5
+script = ExtResource("1_vqh03")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.64926, -0.176886)
@@ -227,3 +229,5 @@ skeleton = NodePath("")
 [node name="VisibilityNotifier" type="VisibleOnScreenNotifier3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.199073, -2.14588, -0.291473)
 aabb = AABB(-2.01076, -8.20236, -4.37734, 4.02153, 17.6047, 8.75468)
+
+[connection signal="screen_exited" from="VisibilityNotifier" to="." method="_on_visibility_notifier_screen_exited"]

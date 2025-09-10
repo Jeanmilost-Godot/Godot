@@ -12,6 +12,7 @@ const m_GameOverTimeout = 2.0
 # global variables
 var m_ElapsedFireTime = 0.0
 var m_GameOverTime    = 0.0
+var m_UniqueID        = 0
 var m_GameOver        = false
 var m_GameOverEmitted = false
 
@@ -30,10 +31,12 @@ func fire_projectile():
 	var projectile = preload("res://scenes/seagull_projectile.tscn").instantiate()
 	get_tree().current_scene.add_child(projectile)
 
+	projectile.name               = "SeagullProjectile_%d" % m_UniqueID
 	projectile.global_position    = global_position
 	projectile.global_position.z -= 5.0
 	projectile.fire(200.0)
 
+	m_UniqueID       += 1
 	m_ElapsedFireTime = 0.0
 
 ###

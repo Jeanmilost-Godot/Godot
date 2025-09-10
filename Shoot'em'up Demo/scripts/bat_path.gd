@@ -6,20 +6,20 @@ extends Path3D
 @onready var m_Bat        = $PathFollow/Bat
 
 # variables
-var m_Speed         = 1.5
-var m_PrevProgress  = 0.0
-var m_Angle         = 0.0
-var m_Offset        = 1.0
-var m_TimeToWait    = 1.0
-var m_WaitTimer     = 0.0
-var m_IsWaiting     = false
-var projectileFired = false
+var m_Speed           = 1.5
+var m_PrevProgress    = 0.0
+var m_Angle           = 0.0
+var m_Offset          = 1.0
+var m_TimeToWait      = 1.0
+var m_WaitTimer       = 0.0
+var m_IsWaiting       = false
+var m_ProjectileFired = false
 
 ###
 # Fires a projectile
 ##
 func fire_projectile():
-	projectileFired = true
+	m_ProjectileFired = true
 
 	# create a projectile and attach it to the scene
 	var projectile = preload("res://scenes/projectile.tscn").instantiate()
@@ -27,7 +27,7 @@ func fire_projectile():
 
 	projectile.global_position    = m_Bat.global_position
 	projectile.global_position.y += 5.0
-	#projectile.fire(200.0)
+	projectile.fire_bat()
 
 ###
 # Called when the node enters the scene tree for the first time
@@ -67,7 +67,7 @@ func _process(delta):
 		m_IsWaiting = true
 
 	# do fire a projectile?
-	if !projectileFired && m_PathFollow.progress_ratio >= 0.29:
+	if !m_ProjectileFired && m_PathFollow.progress_ratio >= 0.29:
 		fire_projectile()
 
 	# path end reached?

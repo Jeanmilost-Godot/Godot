@@ -1,18 +1,21 @@
 extends CharacterBody3D
 
 # children instances
-@onready var m_Root:      Node3D = $"../../.."
-@onready var m_Nocturnus: Node3D = $Model
+@onready var m_Root:     Node3D = $"../../.."
+@onready var m_Seahorse: Node3D = $Model
+
+# variables
+var m_HitCount = 0
 
 # signals
 signal increment_score()
 
 ###
-# Explodes the nocturnus
+# Explodes the seahorse
 ##
 func explode():
-	# hide the nocturnus model
-	m_Nocturnus.hide();
+	# hide the seahorse model
+	m_Seahorse.hide();
 
 	# create an explosion and attach it to the scene
 	var explosion = preload("res://scenes/explosion.tscn").instantiate()
@@ -24,7 +27,7 @@ func explode():
 	# notify that the score should be incremented
 	increment_score.emit()
 
-	# delete the nocturnus
+	# delete the seahorse
 	m_Root.queue_free()
 
 ###
@@ -40,7 +43,7 @@ func _ready():
 func _physics_process(delta):
 	var velocity = Vector3()
 
-	# check the nocturnus collisions. Don't move it because the nocturnus is already moved by path
+	# check the seahorse collisions. Don't move it because the seahorse is already moved by path
 	var collision = move_and_collide(velocity * delta)
 
 	# found a collision?
@@ -53,10 +56,10 @@ func _physics_process(delta):
 			CollisionManager.register_collision(self, collider)
 
 ###
-# Called when the nocturnus goes out of the screen
+# Called when the seahorse goes out of the screen
 ##
 func _on_visibility_notifier_screen_exited():
-	# delete the nocturnus
+	# delete the seahorse
 	m_Root.queue_free()
 
 ###
@@ -68,4 +71,14 @@ func _on_collision_manager_do_delete(obj1, obj2):
 	if (obj1 != self and obj2 != self):
 		return
 
-	explode()
+	if (obj1.name.contains("SeagullProjectile") || obj2.name.contains("SeagullProjectile")):
+		# only explode after 10 hits
+		if (m_HitCount >= 10):
+			explode()
+
+		m_HitCount += 1
+
+		# notify that the score should be incremented
+		increment_score.emit()
+	else:
+		explode()

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://n7xc2d8y2hc"]
 
-[ext_resource type="Script" path="res://scripts/seagull_projectile.gd" id="1_utydp"]
-[ext_resource type="AudioStream" uid="uid://i1o2gc3f473l" path="res://assets/sounds/projectile/fire.mp3" id="2_3hy62"]
+[ext_resource type="Script" path="res://scripts/seagull_projectile.gd" id="1_q8q2b"]
+[ext_resource type="AudioStream" uid="uid://i1o2gc3f473l" path="res://assets/sounds/projectile/fire.mp3" id="2_iicqo"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_kutsu"]
 points = PackedVector3Array(0.724587, 0.300247, 0.246264, -0.10897, 0.145312, -0.401853, -0.166124, 0.0880318, -0.372569, -0.931962, 0.237773, 0.465029, 0.849543, 0.0502559, 0.3713, -0.588235, -0.0122191, 0.15244, -0.0494259, 0.366803, -0.302082, 0.228369, -0.0214182, -0.277261, 1.00603, 0.206512, 0.49643, -0.931962, 0.0815622, 0.465029, 0.402434, 0.230504, -0.226157, -0.765782, 0.202492, 0.143067, -0.588235, 0.331508, 0.15244, -0.0768171, -0.0472081, -0.301572, 0.804146, 0.116927, 0.171334, -0.276758, 0.286731, -0.281745, -0.901017, 0.144037, 0.527736, 0.943358, 0.0815622, 0.465029, -0.413391, 0.0339489, -0.166411, 0.175015, 0.314985, -0.338252, 0.223873, -0.0451468, -0.188931, 0.176058, 0.0601635, -0.369071, -0.0734311, 0.252181, 0.453085, 0.222108, 0.36278, -0.187054, 0.755728, 0.0190413, 0.246264, -0.963495, 0.0815622, 0.433912, 0.709995, 0.230067, 0.0853096, 0.434376, 0.0882406, -0.199844, -0.393848, 0.173893, -0.227931, -0.0514983, 0.259928, -0.401099, 0.369192, 0.313404, -0.194582, -0.963495, 0.175252, 0.527736)
@@ -57,10 +57,10 @@ shadow_mesh = SubResource("ArrayMesh_wtmul")
 [node name="SeagullProjectile" type="StaticBody3D"]
 collision_layer = 4
 collision_mask = 2
-script = ExtResource("1_utydp")
+script = ExtResource("1_q8q2b")
 
 [node name="AudioStream" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("2_3hy62")
+stream = ExtResource("2_iicqo")
 autoplay = true
 
 [node name="Collider_size_1" type="CollisionShape3D" parent="."]
