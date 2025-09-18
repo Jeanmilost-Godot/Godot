@@ -49,6 +49,17 @@ func fire_seahorse(dir):
 	m_Speed = 100.0
 
 ###
+# Fires a projectile from a ghast
+##
+func fire_ghast(angle, speed):
+	var fireAngle = deg_to_rad(angle)
+
+	# convert angle to direction vector
+	m_Dir = Vector2(cos(fireAngle), sin(fireAngle))
+
+	m_Speed = speed
+
+###
 # Called every frame
 #@param delta - elapsed time in seconds since the previous call
 ##

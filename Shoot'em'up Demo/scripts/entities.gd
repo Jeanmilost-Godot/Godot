@@ -44,6 +44,9 @@ func add_pattern(scene: PackedScene, y: float, startPos: float):
 # Loads the entities patterns
 ##
 func load_patterns():
+	var startPos = -20
+	add_entity(preload("res://scenes/ghast_pattern_1.tscn"), Vector3(-40,  0, startPos - 55.0),  startPos)
+	return
 
 	# pyjama sharks, layout 1
 	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -25, -39)
@@ -132,13 +135,13 @@ func load_patterns():
 	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -50, -170)
 
 	# bats, first wave
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 40, -195)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 50, -200)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 60, -205)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 70, -210)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 45, -215)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 55, -220)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 65, -225)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 40, -240)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 50, -245)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 60, -250)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 70, -255)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 45, -260)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 55, -265)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 65, -270)
 
 ###
 # Gets entities count

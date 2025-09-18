@@ -101,10 +101,3 @@ func _process(delta):
 			fire_projectiles_diagonal()
 
 	m_PathFollow.progress_ratio = m_CurPos
-
-###
-# Called when the path end was reached
-##
-func on_path_completed():
-	# delete the shark
-	m_Root.queue_free()
