@@ -72,8 +72,8 @@ func _on_collision_manager_do_delete(obj1, obj2):
 		return
 
 	if (obj1.name.contains("SeagullProjectile") || obj2.name.contains("SeagullProjectile")):
-		# only explode after 40 hits
-		if (m_HitCount >= 40):
+		# only explode after 80 hits
+		if (m_HitCount >= 80):
 			explode()
 
 		m_HitCount += 1

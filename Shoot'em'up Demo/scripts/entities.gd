@@ -45,7 +45,7 @@ func add_pattern(scene: PackedScene, y: float, startPos: float):
 ##
 func load_patterns():
 	var startPos = -20
-	add_entity(preload("res://scenes/ghast_pattern_1.tscn"), Vector3(-40,  0, startPos - 55.0),  startPos)
+	add_entity(preload("res://scenes/ghast_pattern_1.tscn"), Vector3(-40,  0, startPos - 65.0),  startPos)
 	return
 
 	# pyjama sharks, layout 1

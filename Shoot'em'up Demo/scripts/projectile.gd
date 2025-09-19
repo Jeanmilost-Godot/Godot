@@ -55,7 +55,7 @@ func fire_ghast(angle, speed):
 	var fireAngle = deg_to_rad(angle)
 
 	# convert angle to direction vector
-	m_Dir = Vector2(cos(fireAngle), sin(fireAngle))
+	m_Dir = Vector2(cos(fireAngle), -sin(fireAngle))
 
 	m_Speed = speed
 
