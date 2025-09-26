@@ -6,73 +6,28 @@ extends Path3D
 @onready var m_Seahorse   = $PathFollow/Seahorse
 
 # variables
-var m_Speed                = 0.7
-var m_CurPos               = 0.0
-var m_ElapsedTime          = 0.0
-var m_ProjectilesFired     = false
-var m_ProjectilesDiagFired = false
+var m_Speed               = 0.7
+var m_CurPos              = 0.0
+var m_ElapsedTime         = 0.0
+var m_ProjectileIndex     = [1, 3, 5, 7]
+var m_ProjectileDiagIndex = [2, 4, 6, 8]
+var m_ProjectilesFired    = [false, false, false, false]
 
 ###
 # Fires the projectiles
+#@param index - fired projectile index
+#@param projectileArray - array containing projectile index to fire
 ##
-func fire_projectiles():
-	m_ProjectilesFired = true
+func fire_projectiles(index, projectileArray):
+	m_ProjectilesFired[index] = true
 
-	# create a projectile and attach it to the scene
-	var projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
+	for i in range(projectileArray.size()):
+		# create a projectile and attach it to the scene
+		var projectile = preload("res://scenes/projectile.tscn").instantiate()
+		get_tree().current_scene.add_child(projectile)
 
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(1)
-
-	projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(3)
-
-	projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(5)
-
-	projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(7)
-
-###
-# Fires projectiles on the diagonal
-##
-func fire_projectiles_diagonal():
-	m_ProjectilesDiagFired = true
-
-	# create a projectile and attach it to the scene
-	var projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(2)
-
-	projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(4)
-
-	projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(6)
-
-	projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
-
-	projectile.global_position = m_Seahorse.global_position
-	projectile.fire_seahorse(8)
+		projectile.global_position = m_Seahorse.global_position
+		projectile.fire_seahorse(projectileArray[i])
 
 ###
 # Called when the node enters the scene tree for the first time
@@ -94,10 +49,13 @@ func _process(delta):
 
 		m_ElapsedTime += delta
 
-		if (!m_ProjectilesFired && m_ElapsedTime >= 1):
-			fire_projectiles()
-
-		if (!m_ProjectilesDiagFired && m_ElapsedTime >= 3):
-			fire_projectiles_diagonal()
+		if (!m_ProjectilesFired[0] && m_ElapsedTime >= 1):
+			fire_projectiles(0, m_ProjectileIndex)
+		elif (!m_ProjectilesFired[1] && m_ElapsedTime >= 2):
+			fire_projectiles(1, m_ProjectileDiagIndex)
+		elif (!m_ProjectilesFired[2] && m_ElapsedTime >= 3):
+			fire_projectiles(2, m_ProjectileIndex)
+		elif (!m_ProjectilesFired[3] && m_ElapsedTime >= 4):
+			fire_projectiles(3, m_ProjectileDiagIndex)
 
 	m_PathFollow.progress_ratio = m_CurPos
