@@ -44,10 +44,6 @@ func add_pattern(scene: PackedScene, y: float, startPos: float):
 # Loads the entities patterns
 ##
 func load_patterns():
-	var startPos = -20
-	add_entity(preload("res://scenes/ghast_pattern_1.tscn"), Vector3(-40,  0, startPos - 65.0),  startPos)
-	return
-
 	# pyjama sharks, layout 1
 	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -25, -39)
 	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -25, -45)
@@ -128,20 +124,47 @@ func load_patterns():
 	add_pattern(preload("res://scenes/pyjama_shark_pattern_1.tscn"), -55, -85)
 
 	# seahorses, first wave
-	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -40, -110)
-	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -35, -125)
-	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -45, -140)
-	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -30, -155)
-	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -50, -170)
+	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -40, -150)
+	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -35, -165)
+	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -45, -180)
+	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -30, -195)
+	add_pattern(preload("res://scenes/seahorse_pattern_1.tscn"), -50, -210)
 
 	# bats, first wave
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 40, -240)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 50, -245)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 60, -250)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 70, -255)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 45, -260)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 55, -265)
-	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 65, -270)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 40, -280)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 50, -285)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 60, -290)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 70, -295)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 45, -300)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 55, -305)
+	add_pattern(preload("res://scenes/bat_pattern_1.tscn"), 65, -310)
+
+	# sculpted heads, first wave
+	var headStartPos = -350
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  0,  headStartPos - 65.0),   headStartPos)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  10, headStartPos - 70.0),   headStartPos - 5)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  20, headStartPos - 75.0),   headStartPos - 10)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  30, headStartPos - 80.0),   headStartPos - 15)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  0,  headStartPos - 85.0),   headStartPos - 20)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  30, headStartPos - 85.0),   headStartPos - 20)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  10, headStartPos - 90.0),   headStartPos - 25)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  20, headStartPos - 90.0),   headStartPos - 25)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  0,  headStartPos - 95.0),   headStartPos - 30)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  20, headStartPos - 95.0),   headStartPos - 30)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  10, headStartPos - 100.0),  headStartPos - 35)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  30, headStartPos - 100.0),  headStartPos - 35)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  10, headStartPos - 105.0),  headStartPos - 40)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  30, headStartPos - 105.0),  headStartPos - 40)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  0,  headStartPos - 110.0),  headStartPos - 45)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  20, headStartPos - 110.0),  headStartPos - 45)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  0,  headStartPos - 115.0),  headStartPos - 50)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  10, headStartPos - 115.0),  headStartPos - 50)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  20, headStartPos - 115.0),  headStartPos - 50)
+	add_entity(preload("res://scenes/sculpted_head_pattern_1.tscn"), Vector3(-40,  30, headStartPos - 115.0),  headStartPos - 50)
+
+	# ghast (in-level boss)
+	var ghastStartPos = -440
+	add_entity(preload("res://scenes/ghast_pattern_1.tscn"), Vector3(-40,  0, ghastStartPos - 65.0),  ghastStartPos)
 
 ###
 # Gets entities count

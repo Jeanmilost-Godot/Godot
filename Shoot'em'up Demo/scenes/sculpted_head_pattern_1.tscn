@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpe4vop58lsfx"]
+
+[ext_resource type="Script" path="res://scripts/sculpted_head_path.gd" id="1_1nkbf"]
+[ext_resource type="PackedScene" uid="uid://des874b0q1b14" path="res://scenes/sculpted_head.tscn" id="1_vm28l"]
+[ext_resource type="Script" path="res://scripts/path_follow.gd" id="2_s2evg"]
+
+[sub_resource type="Curve3D" id="Curve3D_br4xq"]
+_data = {
+"points": PackedVector3Array(1.64507, -4.89547, -14.8557, 0, 10, 20, 0, 0, 0, 0, -10, -20, -1.21112, 3.85313, 13.5777, 0, 0, 120),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="SculptedHead_Pattern1" type="Node3D"]
+
+[node name="Path" type="Path3D" parent="."]
+curve = SubResource("Curve3D_br4xq")
+script = ExtResource("1_1nkbf")
+
+[node name="PathFollow" type="PathFollow3D" parent="Path"]
+transform = Transform3D(-1, -3.90967e-08, -7.81933e-08, 0, 0.894427, -0.447214, 8.74228e-08, -0.447214, -0.894427, 0, 0, 0)
+script = ExtResource("2_s2evg")
+
+[node name="SculptedHead" parent="Path/PathFollow" instance=ExtResource("1_vm28l")]
