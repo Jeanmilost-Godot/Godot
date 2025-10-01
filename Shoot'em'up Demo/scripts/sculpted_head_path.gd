@@ -6,28 +6,34 @@ extends Path3D
 @onready var m_Head       = $PathFollow/SculptedHead
 
 # variables
-var m_Speed           = 0.75
-var m_PrevProgress    = 0.0
-var m_Angle           = 0.0
-var m_Offset          = 1.0
-var m_TimeToWait      = 1.0
-var m_WaitTimer       = 0.0
-var m_IsWaiting       = false
-var m_ProjectileFired = false
+var m_Speed            = 0.75
+var m_PrevProgress     = 0.0
+var m_Angle            = 0.0
+var m_Offset           = 1.0
+var m_TimeToWait       = 1.0
+var m_WaitTimer        = 0.0
+var m_IsWaiting        = false
+var m_ProjectilesFired = false
+var m_ProjectileAngles = [135, 180, 225]
 
 ###
-# Fires a projectile
+# Fires the projectiles
 ##
-func fire_projectile():
-	m_ProjectileFired = true
+func fire_projectiles():
+	m_ProjectilesFired = true;
 
-	# create a projectile and attach it to the scene
-	var projectile = preload("res://scenes/projectile.tscn").instantiate()
-	get_tree().current_scene.add_child(projectile)
+	# iterate through projectiles to fire
+	for i in range(m_ProjectileAngles.size()):
+		# create a projectile and attach it to the scene
+		var projectile = preload("res://scenes/projectile.tscn").instantiate()
+		get_tree().current_scene.add_child(projectile)
 
-	projectile.global_position    = m_Head.global_position
-	projectile.global_position.y += 5.0
-	projectile.fire_bat()
+		# place it in the scene
+		projectile.global_position    = m_Head.global_position
+		projectile.global_position.y += 10
+
+		# fire the projectile
+		projectile.fire_head(m_ProjectileAngles[i], 10.0)
 
 ###
 # Called when the node enters the scene tree for the first time
@@ -48,15 +54,15 @@ func _process(delta):
 	m_PathFollow.progress_ratio = 1.0 - cos(m_Angle)
 
 	# do fire a projectile?
-	#if !m_ProjectileFired && m_PathFollow.progress_ratio >= 0.29:
-		#fire_projectile()
+	if !m_ProjectilesFired && m_PathFollow.progress_ratio >= 0.35:
+		fire_projectiles()
 
 	# path end reached?
-	#if m_PathFollow.progress_ratio < m_PrevProgress:
-		#on_path_completed()
+	if m_PathFollow.progress_ratio < m_PrevProgress:
+		on_path_completed()
 
 	# keep the current position as previous one
-	#m_PrevProgress = m_PathFollow.progress_ratio
+	m_PrevProgress = m_PathFollow.progress_ratio
 
 ###
 # Called when the path end was reached
