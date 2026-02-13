@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://bdkru0rfmtlyt"]
+
+[ext_resource type="PackedScene" uid="uid://cd7nihjosibm0" path="res://scenes/ocean.tscn" id="1_w4k60"]
+[ext_resource type="Material" uid="uid://bs25fi7wsq2se" path="res://materials/skybox.tres" id="2_0yfkc"]
+[ext_resource type="PackedScene" uid="uid://5s1lc3ilur82" path="res://scenes/tower_1.tscn" id="3_ix032"]
+[ext_resource type="PackedScene" uid="uid://2em4xfx4w0d8" path="res://scenes/player.tscn" id="4_hxblr"]
+
+[sub_resource type="Sky" id="Sky_e1wwx"]
+sky_material = ExtResource("2_0yfkc")
+
+[sub_resource type="Environment" id="Environment_ggapm"]
+background_mode = 2
+sky = SubResource("Sky_e1wwx")
+ambient_light_source = 3
+ambient_light_color = Color(0.0509804, 0.192157, 0.403922, 1)
+reflected_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+glow_bloom = 0.75
+fog_enabled = true
+fog_light_color = Color(0.176471, 0.247059, 0.423529, 1)
+fog_light_energy = 0.5
+fog_aerial_perspective = 0.95
+fog_sky_affect = 0.05
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.243137, 0.333333, 0.552941, 1)
+volumetric_fog_emission = Color(0.145098, 0.180392, 0.298039, 1)
+volumetric_fog_anisotropy = 0.75
+volumetric_fog_length = 15.0
+volumetric_fog_detail_spread = 1.18921
+volumetric_fog_ambient_inject = 14.0
+volumetric_fog_sky_affect = 0.5
+
+[node name="Main" type="Node3D"]
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 65, 7.5, 0)
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="AmbientLight" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 50, 0)
+light_color = Color(0.521569, 0.67451, 0.933333, 1)
+light_energy = 0.25
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_ggapm")
+
+[node name="Ocean" parent="." instance=ExtResource("1_w4k60")]
+
+[node name="Tower_1" parent="." instance=ExtResource("3_ix032")]
+
+[node name="Player" parent="." instance=ExtResource("4_hxblr")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 31, 12.5, 0)

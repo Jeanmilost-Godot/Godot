@@ -1,0 +1,78 @@
+[gd_scene load_steps=6 format=3 uid="uid://5s1lc3ilur82"]
+
+[ext_resource type="Texture2D" uid="uid://c6yqa7xfeurq2" path="res://assets/textures/towers/1/wall-4-granite-DISPLACEMENT.jpg" id="1_nh5y7"]
+[ext_resource type="Texture2D" uid="uid://bua5oowegm3uf" path="res://assets/textures/towers/1/wall-4-granite-NORMAL.jpg" id="2_73o55"]
+[ext_resource type="PackedScene" uid="uid://do5piopw3k381" path="res://scenes/tower_platform.tscn" id="3_86oqn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6rgi"]
+albedo_color = Color(0.623529, 0.831373, 0.980392, 1)
+albedo_texture = ExtResource("1_nh5y7")
+normal_enabled = true
+normal_texture = ExtResource("2_73o55")
+uv1_scale = Vector3(25, 25, 25)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_y6i2i"]
+material = SubResource("StandardMaterial3D_s6rgi")
+top_radius = 25.0
+bottom_radius = 25.0
+height = 50.0
+
+[node name="Tower_1" type="Node3D"]
+
+[node name="Tower" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+mesh = SubResource("CylinderMesh_y6i2i")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.76, 20, 0)
+light_indirect_energy = 1.5
+omni_range = 15.0
+omni_attenuation = 0.420448
+
+[node name="Tower_Platform" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+
+[node name="Tower_Platform2" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(0.92388, 0, -0.382683, 0, 1, 0, 0.382683, 0, 0.92388, 0, 7, 0)
+
+[node name="Tower_Platform3" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 7, 0)
+
+[node name="Tower_Platform4" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(0.382683, 0, -0.92388, 0, 1, 0, 0.92388, 0, 0.382683, 0, 7, 0)
+
+[node name="Tower_Platform5" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 7, 0)
+
+[node name="Tower_Platform6" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-0.382683, 0, -0.92388, 0, 1, 0, 0.92388, 0, -0.382683, 0, 7, 0)
+
+[node name="Tower_Platform7" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 0, 7, 0)
+
+[node name="Tower_Platform8" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-0.923879, 0, -0.382683, 0, 1, 0, 0.382683, 0, -0.923879, 0, 7, 0)
+
+[node name="Tower_Platform9" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 7, 0)
+
+[node name="Tower_Platform10" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-0.92388, 0, 0.382683, 0, 1, 0, -0.382683, 0, -0.92388, 0, 7, 0)
+
+[node name="Tower_Platform11" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 7, 0)
+
+[node name="Tower_Platform12" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(-0.382684, 0, 0.923879, 0, 1, 0, -0.923879, 0, -0.382684, 0, 7, 0)
+
+[node name="Tower_Platform13" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(1.19249e-08, 0, 1, 0, 1, 0, -1, 0, 1.19249e-08, 0, 7, 0)
+
+[node name="Tower_Platform14" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(0.382684, 0, 0.923879, 0, 1, 0, -0.923879, 0, 0.382684, 0, 7, 0)
+
+[node name="Tower_Platform15" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 7, 0)
+
+[node name="Tower_Platform16" parent="." instance=ExtResource("3_86oqn")]
+transform = Transform3D(0.92388, 0, 0.382683, 0, 1, 0, -0.382683, 0, 0.92388, 0, 7, 0)
