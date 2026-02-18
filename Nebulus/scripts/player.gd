@@ -6,12 +6,14 @@ extends CharacterBody3D
 @onready var m_Animations: AnimationTree     = $AnimationTree
 
 # variables
-var m_AngleX =  0.0
-var m_AngleY =  PI / 2.0
-var m_Offset = -1.0
+var m_AngleX  =  0.0
+var m_AngleY  =  PI / 2.0
+var m_Offset  = -1.0
+var m_LastDir = -1.0
+var m_Turning =  false
 
 # constants
-const m_CameraRadius      = 65.0
+const m_CameraRadius      = 55.0
 const m_PlayerRadius      = 31.0
 const m_PlayerVelocity    = 1.25
 const m_JumpVelocity      = 50.0
@@ -49,8 +51,10 @@ func MovePlayer():
 #param walking - if true, the player is walking
 ##
 func AnimatePlayer(walking):
-	m_Animations.set("parameters/conditions/walk", true)
-	m_Animations.active = walking
+	#m_Animations.set("parameters/conditions/walk", true)
+	#m_Animations.active = walking
+	m_Animations.set("parameters/conditions/walk",  walking)
+	m_Animations.set("parameters/conditions/idle", !walking)
 
 ###
 # Plays the walk sound
@@ -75,18 +79,25 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var walking   = false
+	var dir       = m_LastDir
 
 	if input_dir.x < 0.0:
-		m_AngleY =  m_AngleY - (delta * m_PlayerVelocity)
-		m_Offset = -1.0
+		if (!m_Turning):
+			m_AngleY =  m_AngleY - (delta * m_PlayerVelocity)
 		walking  =  true
+
+		#REM m_Offset = -1.0
+		dir = -1.0
 
 		AnimatePlayer(true)
 		PlayWalkSound()
 	elif input_dir.x > 0.0:
-		m_AngleY =  m_AngleY + (delta * m_PlayerVelocity)
-		m_Offset =  1.0
-		walking  =  true
+		if (!m_Turning):
+			m_AngleY =  m_AngleY + (delta * m_PlayerVelocity)
+			walking  =  true
+
+		#REM m_Offset =  1.0
+		dir =  1.0
 
 		AnimatePlayer(true)
 		PlayWalkSound()
@@ -94,12 +105,36 @@ func _physics_process(delta):
 		AnimatePlayer(false)
 		StopWalkSound()
 
+	if (dir != m_LastDir):
+		m_LastDir = dir
+		m_Turning = true
+
+	if (m_Turning):
+		AnimatePlayer(false)
+		StopWalkSound()
+
+		if (m_LastDir > 0.0):
+			m_Offset += (5.0 * delta)
+
+			if (m_Offset >= 1.0):
+				m_Offset  =  1.0
+				m_Turning =  false
+		else:
+			m_Offset -= (5.0 * delta)
+
+			if (m_Offset <= -1.0):
+				m_Offset  = -1.0
+				m_Turning =  false
+
 	MoveCamera()
 	MovePlayer()
 
 	# apply gravity when not on floor
 	if not is_on_floor():
 		velocity.y -= m_Gravity * (delta * m_GravityMultiplier)
+
+		AnimatePlayer(false)
+		StopWalkSound()
 	else:
 		# handle jump
 		if input_dir.y != 0.0 and walking:
