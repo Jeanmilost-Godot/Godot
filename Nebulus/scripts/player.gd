@@ -1,9 +1,10 @@
 extends CharacterBody3D
 
 # components
-@onready var m_Camera:     Camera3D          = $"../Camera"
-@onready var m_WalkSound:  AudioStreamPlayer = $WalkSound
-@onready var m_Animations: AnimationTree     = $AnimationTree
+@onready var m_Camera:     Camera3D           = $"../Camera"
+@onready var m_WalkSound:  AudioStreamPlayer  = $WalkSound
+@onready var m_Animations: AnimationTree      = $AnimationTree
+@onready var m_Highlight:  DirectionalLight3D = $SilhouetteHighlight
 
 # variables
 var m_AngleX  =  0.0
@@ -15,7 +16,7 @@ var m_Turning =  false
 # constants
 const m_CameraRadius      = 55.0
 const m_PlayerRadius      = 31.0
-const m_PlayerVelocity    = 1.25
+const m_PlayerVelocity    = 1.2
 const m_JumpVelocity      = 50.0
 const m_GravityMultiplier = 12.5
 
@@ -46,13 +47,14 @@ func MovePlayer():
 	position   = playerPos
 	rotation.y = m_AngleY + (PI / 2.0) * m_Offset;
 
+	m_Highlight.global_position = global_position
+	m_Highlight.look_at(Vector3.ZERO, Vector3.UP)
+
 ###
 # Animates the player, or stops the animation
 #param walking - if true, the player is walking
 ##
 func AnimatePlayer(walking):
-	#m_Animations.set("parameters/conditions/walk", true)
-	#m_Animations.active = walking
 	m_Animations.set("parameters/conditions/walk",  walking)
 	m_Animations.set("parameters/conditions/idle", !walking)
 
@@ -72,31 +74,31 @@ func StopWalkSound():
 	if m_WalkSound.is_playing():
 		m_WalkSound.stop();
 
-#func _ready():
-	#m_Animations.active = true
-
+###
+# Called every frame at a fixed rate, which allows any processing that requires the physics values
+#@param delta - elapsed time in seconds since the previous call
+##
 func _physics_process(delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	var walking   = false
 	var dir       = m_LastDir
 
+	# move player around the tower
 	if input_dir.x < 0.0:
 		if (!m_Turning):
-			m_AngleY =  m_AngleY - (delta * m_PlayerVelocity)
-		walking  =  true
+			m_AngleY = m_AngleY - (delta * m_PlayerVelocity)
+			walking  = true
 
-		#REM m_Offset = -1.0
 		dir = -1.0
 
 		AnimatePlayer(true)
 		PlayWalkSound()
 	elif input_dir.x > 0.0:
 		if (!m_Turning):
-			m_AngleY =  m_AngleY + (delta * m_PlayerVelocity)
-			walking  =  true
+			m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
+			walking  = true
 
-		#REM m_Offset =  1.0
 		dir =  1.0
 
 		AnimatePlayer(true)
@@ -105,10 +107,12 @@ func _physics_process(delta):
 		AnimatePlayer(false)
 		StopWalkSound()
 
+	# if direction changes, start to turn the player model
 	if (dir != m_LastDir):
 		m_LastDir = dir
 		m_Turning = true
 
+	# turn the player model to point the walking direction
 	if (m_Turning):
 		AnimatePlayer(false)
 		StopWalkSound()
@@ -126,6 +130,7 @@ func _physics_process(delta):
 				m_Offset  = -1.0
 				m_Turning =  false
 
+	# apply player and camera movements
 	MoveCamera()
 	MovePlayer()
 

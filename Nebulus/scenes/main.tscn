@@ -10,11 +10,16 @@ sky_material = ExtResource("2_0yfkc")
 
 [sub_resource type="Environment" id="Environment_ggapm"]
 background_mode = 2
+background_energy_multiplier = 0.45
 sky = SubResource("Sky_e1wwx")
 ambient_light_source = 3
-ambient_light_color = Color(0.0509804, 0.192157, 0.403922, 1)
+ambient_light_color = Color(0.980392, 0.937255, 0.870588, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 0.2
 reflected_light_source = 2
-tonemap_mode = 2
+tonemap_mode = 3
+tonemap_exposure = 1.5
+tonemap_white = 0.5
 glow_enabled = true
 glow_bloom = 0.75
 fog_enabled = true
@@ -31,6 +36,9 @@ volumetric_fog_length = 25.0
 volumetric_fog_detail_spread = 1.18921
 volumetric_fog_ambient_inject = 14.0
 volumetric_fog_sky_affect = 0.5
+adjustment_enabled = true
+adjustment_brightness = 1.5
+adjustment_saturation = 1.1
 
 [node name="Main" type="Node3D"]
 
@@ -44,6 +52,8 @@ transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 50, 0
 light_color = Color(0.521569, 0.67451, 0.933333, 1)
 light_energy = 0.25
 shadow_enabled = true
+shadow_blur = 1.5
+sky_mode = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_ggapm")

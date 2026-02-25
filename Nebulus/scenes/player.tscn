@@ -1,9 +1,9 @@
 [gd_scene load_steps=40 format=3 uid="uid://2em4xfx4w0d8"]
 
-[ext_resource type="Texture2D" uid="uid://c0jdrxy3wqnem" path="res://assets/robot/Robot_gray-4x4.png" id="1_cmje2"]
+[ext_resource type="Texture2D" uid="uid://c0jdrxy3wqnem" path="res://assets/models/robot/Robot_gray-4x4.png" id="1_cmje2"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_nj5ea"]
-[ext_resource type="Texture2D" uid="uid://cpugtwnvf4fjg" path="res://assets/robot/Robot_light-gray-4x4.png" id="2_fe3b5"]
-[ext_resource type="Texture2D" uid="uid://ba24abi3blqr" path="res://assets/robot/Robot_light-red-4x4.png" id="3_2ypdp"]
+[ext_resource type="Texture2D" uid="uid://cpugtwnvf4fjg" path="res://assets/models/robot/Robot_light-gray-4x4.png" id="2_fe3b5"]
+[ext_resource type="Texture2D" uid="uid://ba24abi3blqr" path="res://assets/models/robot/Robot_light-red-4x4.png" id="3_2ypdp"]
 [ext_resource type="AudioStream" uid="uid://6f2vdeklsm2l" path="res://assets/sounds/player/footsteps_metal.mp3" id="6_gv8wk"]
 [ext_resource type="Texture2D" uid="uid://bpfg8m4d4s2s" path="res://assets/textures/details/camera_lens.png" id="6_xav2w"]
 
@@ -130,7 +130,7 @@ animation = &"ArmatureAction"
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_e1ti8"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_l6vjm"]
-graph_offset = Vector2(-637.304, 21.6604)
+graph_offset = Vector2(-484.367, 41.562)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_l3cch")
 nodes/Animation/position = Vector2(-380, 140)
 nodes/Speed/node = SubResource("AnimationNodeTimeScale_e1ti8")
@@ -172,8 +172,8 @@ roughness = 0.5
 resource_name = "Material.001"
 cull_mode = 2
 albedo_texture = ExtResource("2_fe3b5")
-metallic = 0.785455
-roughness = 0.3
+metallic = 0.75
+roughness = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1l8ib"]
 resource_name = "Material.003"
@@ -487,7 +487,7 @@ tree_root = SubResource("AnimationNodeStateMachine_nvq0a")
 anim_player = NodePath("../Model/AnimationPlayer")
 parameters/conditions/idle = true
 parameters/conditions/walk = false
-parameters/walk_bt/Speed/scale = 4.0
+parameters/walk_bt/Speed/scale = 5.5
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
@@ -625,3 +625,11 @@ libraries = {
 
 [node name="WalkSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_gv8wk")
+
+[node name="SilhouetteHighlight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+light_energy = 0.075
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+directional_shadow_mode = 0
+sky_mode = 1

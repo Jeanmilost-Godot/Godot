@@ -1,9 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7ks1x3fg6vqp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5w8u5"]
-albedo_color = Color(0.419608, 0.419608, 0.47451, 1)
-metallic = 0.75
+albedo_color = Color(0.568627, 0.568627, 0.623529, 1)
+metallic = 0.5
 metallic_specular = 0.75
+roughness = 0.25
 clearcoat_enabled = true
 clearcoat_roughness = 0.2
 
