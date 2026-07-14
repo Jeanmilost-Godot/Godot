@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://doan6fo577rk4"]
+[gd_scene load_steps=35 format=3 uid="uid://doan6fo577rk4"]
 
 [ext_resource type="Script" path="res://scripts/camera.gd" id="1_lw3oy"]
 [ext_resource type="PackedScene" uid="uid://cnmdq3bwax2d4" path="res://scenes/ocean.tscn" id="2_rcnpr"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://wga4vfps8xqm" path="res://assets/models/landscape/coast cliff part 3/coast.glb" id="6_rjdr2"]
 [ext_resource type="PackedScene" uid="uid://by8g8d1oq0ki1" path="res://scenes/animated_tree.tscn" id="9_gvr25"]
 [ext_resource type="PackedScene" uid="uid://bcyolk6jvhb6p" path="res://scenes/lighthouse.tscn" id="9_j8lc6"]
+[ext_resource type="Script" path="res://scripts/debug_camera.gd" id="10_hb70b"]
 [ext_resource type="PackedScene" uid="uid://c5olpw00qblwu" path="res://scenes/rusty_old_truck.tscn" id="10_py6o7"]
 [ext_resource type="PackedScene" uid="uid://d3g1x6qftdy6m" path="res://scenes/animated_tree_2.tscn" id="11_2w13r"]
 [ext_resource type="Texture2D" uid="uid://cjcxqbjq6jj8o" path="res://assets/textures/sky/overcast_soil_puresky_4k.exr" id="14_lid1c"]
@@ -192,6 +193,10 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
+
+[node name="Camera (Debug)" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 10, 12.795)
+script = ExtResource("10_hb70b")
 
 [node name="coast" parent="." instance=ExtResource("5_grcex")]
 transform = Transform3D(-2.18557e-07, 0, 5, 0, 5, 0, -5, 0, -2.18557e-07, -125, -3.75, -600)

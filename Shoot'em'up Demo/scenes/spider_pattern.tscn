@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cc8m58ewvg22c"]
+
+[ext_resource type="Script" path="res://scripts/spider_path.gd" id="1_02370"]
+[ext_resource type="Script" path="res://scripts/path_follow.gd" id="1_pi806"]
+[ext_resource type="PackedScene" uid="uid://dmoy7vr3wgmcc" path="res://scenes/spider.tscn" id="2_q2eot"]
+
+[sub_resource type="Curve3D" id="Curve3D_clofn"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 7.25, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Spider_Pattern" type="Node3D"]
+
+[node name="Path" type="Path3D" parent="."]
+curve = SubResource("Curve3D_clofn")
+script = ExtResource("1_02370")
+
+[node name="PathFollow" type="PathFollow3D" parent="Path"]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 35, 0)
+script = ExtResource("1_pi806")
+
+[node name="Spider" parent="Path/PathFollow" instance=ExtResource("2_q2eot")]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)

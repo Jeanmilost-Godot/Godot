@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://ouuaq0aqy6ou"]
+
+[ext_resource type="Script" path="res://scripts/spider_thread.gd" id="1_t25j1"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pf5ct"]
+height = 50.0
+radius = 0.125
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sy0q5"]
+transparency = 1
+albedo_color = Color(0.658824, 0.658824, 0.658824, 0.501961)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e8por"]
+material = SubResource("StandardMaterial3D_sy0q5")
+top_radius = 0.125
+bottom_radius = 0.125
+height = 50.0
+
+[node name="SpiderThread" type="StaticBody3D"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_t25j1")
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_pf5ct")
+
+[node name="Model" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_e8por")
