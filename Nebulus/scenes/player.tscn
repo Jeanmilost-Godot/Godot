@@ -130,7 +130,7 @@ animation = &"ArmatureAction"
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_e1ti8"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_l6vjm"]
-graph_offset = Vector2(-484.367, 41.562)
+graph_offset = Vector2(-748.202, 92.28)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_l3cch")
 nodes/Animation/position = Vector2(-380, 140)
 nodes/Speed/node = SubResource("AnimationNodeTimeScale_e1ti8")
@@ -487,7 +487,7 @@ tree_root = SubResource("AnimationNodeStateMachine_nvq0a")
 anim_player = NodePath("../Model/AnimationPlayer")
 parameters/conditions/idle = true
 parameters/conditions/walk = false
-parameters/walk_bt/Speed/scale = 5.5
+parameters/walk_bt/Speed/scale = 4.5
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)

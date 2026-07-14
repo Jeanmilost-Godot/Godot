@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3n3hiqtabvxx"]
+
+[ext_resource type="Texture2D" uid="uid://c6yqa7xfeurq2" path="res://assets/textures/towers/1/wall-4-granite-DISPLACEMENT.jpg" id="1_smmv0"]
+[ext_resource type="Texture2D" uid="uid://bua5oowegm3uf" path="res://assets/textures/towers/1/wall-4-granite-NORMAL.jpg" id="2_ylkr8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6rgi"]
+albedo_color = Color(0.623529, 0.831373, 0.980392, 1)
+albedo_texture = ExtResource("1_smmv0")
+normal_enabled = true
+normal_texture = ExtResource("2_ylkr8")
+uv1_scale = Vector3(25, 3.5, 25)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dbnj2"]
+material = SubResource("StandardMaterial3D_s6rgi")
+top_radius = 25.0
+bottom_radius = 25.0
+height = 7.0
+
+[node name="Tower_Body" type="Node3D"]
+
+[node name="Tower" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+mesh = SubResource("CylinderMesh_dbnj2")

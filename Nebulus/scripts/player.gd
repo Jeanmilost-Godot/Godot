@@ -6,18 +6,22 @@ extends CharacterBody3D
 @onready var m_Animations: AnimationTree      = $AnimationTree
 @onready var m_Highlight:  DirectionalLight3D = $SilhouetteHighlight
 
+# classes
+var m_StateMachine: PlayerStateMachine
+
 # variables
-var m_AngleX  =  0.0
-var m_AngleY  =  PI / 2.0
-var m_Offset  = -1.0
-var m_LastDir = -1.0
-var m_Turning =  false
+var m_AngleX       =  0.0
+var m_AngleY       =  PI / 2.0
+var m_Offset       = -1.0
+var m_LastDir      = -1.0
+var m_Turning      =  false
+var m_PortalOpened =  false
 
 # constants
 const m_CameraRadius      = 55.0
 const m_PlayerRadius      = 31.0
-const m_PlayerVelocity    = 1.2
-const m_JumpVelocity      = 50.0
+const m_PlayerVelocity    = 0.6 #1.2
+const m_JumpVelocity      = 40.0
 const m_GravityMultiplier = 12.5
 
 # get the gravity from the project settings to be synced with RigidBody nodes.
@@ -75,17 +79,37 @@ func StopWalkSound():
 		m_WalkSound.stop();
 
 ###
+# Called when the node enters the scene tree for the first time
+##
+func _ready():
+	m_StateMachine = PlayerStateMachine.new()
+
+###
 # Called every frame at a fixed rate, which allows any processing that requires the physics values
 #@param delta - elapsed time in seconds since the previous call
 ##
 func _physics_process(delta):
-	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var inputDir = Vector2.ZERO
+
+	# do move the player to the left or right?
+	if Input.is_action_pressed("left"):
+		inputDir.x = -1.0
+	elif Input.is_action_pressed("right"):
+		inputDir.x = 1.0
+
+	if Input.is_action_pressed("up") && m_PortalOpened:
+		inputDir.y = 0.0
+
+	# do move the player to the top or bottom?
+	if Input.is_action_pressed("jump_or_fire"):
+		inputDir.y = -1.0
+
+	var direction = (transform.basis * Vector3(inputDir.x, 0, inputDir.y)).normalized()
 	var walking   = false
 	var dir       = m_LastDir
 
 	# move player around the tower
-	if input_dir.x < 0.0:
+	if inputDir.x < 0.0:
 		if (!m_Turning):
 			m_AngleY = m_AngleY - (delta * m_PlayerVelocity)
 			walking  = true
@@ -94,7 +118,7 @@ func _physics_process(delta):
 
 		AnimatePlayer(true)
 		PlayWalkSound()
-	elif input_dir.x > 0.0:
+	elif inputDir.x > 0.0:
 		if (!m_Turning):
 			m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
 			walking  = true
@@ -142,10 +166,22 @@ func _physics_process(delta):
 		StopWalkSound()
 	else:
 		# handle jump
-		if input_dir.y != 0.0 and walking:
-			velocity.y = -input_dir.y * m_JumpVelocity
+		if inputDir.y != 0.0 and walking:
+			velocity.y = -inputDir.y * m_JumpVelocity
 		else:
 			velocity.y = 0.0
 
 	# apply the velocity and check the collisions
 	move_and_slide()
+
+###
+# Called when a portal is opened and the player may enter in it
+##
+func _on_portal_open():
+	m_PortalOpened = true;
+
+###
+# Called when a portal is closed and the player may no longer enter in it
+##
+func _on_portal_close():
+	m_PortalOpened = false;
