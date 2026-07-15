@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5p4b2bmjlle7"]
+
+[ext_resource type="PackedScene" uid="uid://bo7gfn5u77nre" path="res://scenes/ocean.tscn" id="1_jbpj6"]
+[ext_resource type="Shader" path="res://shader/underwater.gdshader" id="1_rg5nq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c5y4f"]
+albedo_color = Color(0.2, 0.235294, 0.717647, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_hjglp"]
+material = SubResource("StandardMaterial3D_c5y4f")
+inner_radius = 8.841
+outer_radius = 23.245
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kf8aw"]
+render_priority = 0
+shader = ExtResource("1_rg5nq")
+shader_parameter/sea_height = 1.3
+shader_parameter/sea_choppy = 4.0
+shader_parameter/sea_speed = 1.5
+shader_parameter/sea_freq = 0.08
+shader_parameter/height_offset = 0.0
+shader_parameter/underwater_color = Color(0.02, 0.18, 0.25, 1)
+shader_parameter/absorption_strength = 0.35
+shader_parameter/deep_tint_strength = 0.65
+shader_parameter/refraction_amount = 0.004
+shader_parameter/refraction_speed = 0.7
+shader_parameter/water_level_fudge = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_opa0e"]
+material = SubResource("ShaderMaterial_kf8aw")
+size = Vector2(500, 500)
+
+[node name="Main" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.783357, 0.621572, 0, -0.621572, 0.783357, 0, 0, 0, 1, 0, -11.1753, 0)
+mesh = SubResource("TorusMesh_hjglp")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.821149, 0.570714, 0, -0.570714, 0.821149, 0, 5.594, 45.795)
+
+[node name="Underwater" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+mesh = SubResource("QuadMesh_opa0e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.896687, 0.442664, 0, -0.442664, 0.896687, 3, 6.13352, -5)
+
+[node name="Ocean" parent="." instance=ExtResource("1_jbpj6")]
