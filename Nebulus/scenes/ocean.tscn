@@ -3,7 +3,7 @@
 [ext_resource type="Shader" path="res://shader/ocean.gdshader" id="1_7fgu1"]
 [ext_resource type="Texture2D" uid="uid://cng0v0qrvr1jk" path="res://assets/textures/water/caust00.png" id="2_rwxcb"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u66mm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iohnc"]
 render_priority = 0
 shader = ExtResource("1_7fgu1")
 shader_parameter/max_depth = 10.0
@@ -45,10 +45,10 @@ shader_parameter/voronoi_strength = 0.8
 shader_parameter/caustics_texture = ExtResource("2_rwxcb")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rkclj"]
-material = SubResource("ShaderMaterial_u66mm")
-size = Vector2(10000, 10000)
-subdivide_width = 2500
-subdivide_depth = 2500
+material = SubResource("ShaderMaterial_iohnc")
+size = Vector2(1000, 1000)
+subdivide_width = 250
+subdivide_depth = 250
 
 [node name="Ocean" type="Node3D"]
 
