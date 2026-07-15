@@ -60,6 +60,12 @@ environment = SubResource("Environment_ggapm")
 
 [node name="Ocean" parent="." instance=ExtResource("1_w4k60")]
 
+[node name="Light" type="DirectionalLight3D" parent="Ocean"]
+transform = Transform3D(0.755259, 2.86496e-08, -0.655427, 0.655427, -3.30134e-08, 0.755259, 0, -1, -4.37114e-08, 0, 0, 0)
+light_color = Color(0.121569, 0.462745, 0.627451, 1)
+light_cull_mask = 4294967294
+sky_mode = 1
+
 [node name="Tower_1" parent="." instance=ExtResource("3_ix032")]
 
 [node name="Player" parent="." instance=ExtResource("4_hxblr")]

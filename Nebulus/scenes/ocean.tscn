@@ -53,5 +53,6 @@ subdivide_depth = 250
 [node name="Ocean" type="Node3D"]
 
 [node name="Model" type="MeshInstance3D" parent="."]
+layers = 2
 sorting_offset = -10.0
 mesh = SubResource("PlaneMesh_rkclj")
