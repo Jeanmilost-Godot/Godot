@@ -60,6 +60,10 @@ uniform vec2 foam_edge_offset = vec2(0.02, 0.02);
 uniform float voronoi_scale   : hint_range(0.0, 50.0) = 9.0;
 uniform float voronoi_strength : hint_range(0.0, 8.0) = 0.8;
 
+uniform vec3 horizon_color : source_color = vec3(0.75, 0.82, 0.88); // sample this from your sky at the horizon
+uniform float fog_density : hint_range(0.0, 0.05) = 0.01;
+uniform float fog_start : hint_range(0.0, 500.0) = 50.0;
+
 varying vec3 world_vert;
 varying float wave_height;
 varying vec3 vertex_normal_world;
@@ -374,6 +378,14 @@ void fragment() {
     // apply foam
     ALBEDO = mix(ALBEDO, foam_edge_color, foam_mask_shadow);
     ALBEDO = mix(ALBEDO, foam_color, foam_mask_primary * bubble_alpha);
+
+    //world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+    float dist = distance(world_vert, CAMERA_POSITION_WORLD);
+
+    float fog_amount = 1.0 - exp(-fog_density * max(dist - fog_start, 0.0));
+    fog_amount = clamp(fog_amount, 0.0, 1.0);
+
+    ALBEDO = mix(ALBEDO, horizon_color, fog_amount);
 
     // make foam rougher
     ROUGHNESS = mix(roughness, 0.8, (foam_mask_primary * bubble_alpha) + foam_mask_shadow);

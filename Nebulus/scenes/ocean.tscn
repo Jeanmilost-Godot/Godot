@@ -42,17 +42,68 @@ shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
 shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
 shader_parameter/voronoi_scale = 9.0
 shader_parameter/voronoi_strength = 0.8
+shader_parameter/horizon_color = Color(0.0117647, 0.0509804, 0.192157, 1)
+shader_parameter/fog_density = 0.025
+shader_parameter/fog_start = 167.5
 shader_parameter/caustics_texture = ExtResource("2_rwxcb")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rkclj"]
 material = SubResource("ShaderMaterial_iohnc")
-size = Vector2(1000, 1000)
-subdivide_width = 250
-subdivide_depth = 250
+size = Vector2(100, 100)
+subdivide_width = 25
+subdivide_depth = 25
 
 [node name="Ocean" type="Node3D"]
 
 [node name="Model" type="MeshInstance3D" parent="."]
-layers = 2
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -100)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, -100)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 100)
+layers = 524288
+sorting_offset = -10.0
+mesh = SubResource("PlaneMesh_rkclj")
+
+[node name="Model9" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 100)
+layers = 524288
 sorting_offset = -10.0
 mesh = SubResource("PlaneMesh_rkclj")
