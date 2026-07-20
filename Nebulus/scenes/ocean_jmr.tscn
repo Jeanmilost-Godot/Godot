@@ -1,52 +1,40 @@
-[gd_scene load_steps=6 format=3 uid="uid://bo7gfn5u77nre"]
+[gd_scene load_steps=6 format=3 uid="uid://cwddmeie45rra"]
 
-[ext_resource type="Shader" path="res://shader/ocean.gdshader" id="1_7fgu1"]
-[ext_resource type="Texture2D" uid="uid://cng0v0qrvr1jk" path="res://assets/textures/water/caust00.png" id="2_rwxcb"]
-[ext_resource type="AudioStream" uid="uid://ddekiw1p7pwtg" path="res://assets/sounds/ocean/ocean.mp3" id="3_3nh33"]
+[ext_resource type="Shader" path="res://shader/ocean_jmr.gdshader" id="1_eqci3"]
+[ext_resource type="Texture2D" uid="uid://cng0v0qrvr1jk" path="res://assets/textures/water/caust00.png" id="2_paueu"]
+[ext_resource type="AudioStream" uid="uid://ddekiw1p7pwtg" path="res://assets/sounds/ocean/ocean.mp3" id="3_bnh4d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iohnc"]
 render_priority = 0
-shader = ExtResource("1_7fgu1")
-shader_parameter/max_depth = 10.0
-shader_parameter/water_level = 0.0
-shader_parameter/underwater_fog_color = Color(0, 0.05, 0.1, 1)
-shader_parameter/fade_start_depth = 0.5
-shader_parameter/sea_height = 2.0
-shader_parameter/sea_choppy = 4.0
-shader_parameter/sea_speed = 1.5
-shader_parameter/sea_freq = 0.08
-shader_parameter/ITER_GEOMETRY = 3
-shader_parameter/ITER_FRAGMENT = 5
-shader_parameter/refraction_strength = 1.0
-shader_parameter/refraction_distance_fade = 5.0
-shader_parameter/normal_epsilon = 0.01
-shader_parameter/normal_smoothness_dist = 50.0
-shader_parameter/base_tint_color = Color(0.439, 0.973, 1, 1)
-shader_parameter/deep_color = Color(0, 0.341, 0.29, 1)
-shader_parameter/water_absorption = Color(0.3, 0.06, 0.02, 1)
-shader_parameter/roughness = 0.125
+shader = ExtResource("1_eqci3")
+shader_parameter/wave_strength = 0.9
+shader_parameter/roughness = 0.08
 shader_parameter/metallic = 0.0
 shader_parameter/specular = 0.5
-shader_parameter/caustics_scale = 2.0
+shader_parameter/water_color = Color(0.623529, 0.839216, 0.929412, 1)
+shader_parameter/deep_water_color = Color(0, 0.482353, 0.658824, 1)
+shader_parameter/water_absorption = Color(0.3, 0.06, 0.02, 1)
+shader_parameter/max_depth = 10.0
+shader_parameter/fade_start_depth = 2.4
+shader_parameter/refraction_strength = 1.62
+shader_parameter/refraction_distance_fade = 1.0
+shader_parameter/caustics_scale = 0.1
 shader_parameter/caustics_speed = 0.1
-shader_parameter/caustics_intensity = 0.8
-shader_parameter/caustics_depth_fade = 0.7
-shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/caustics_intensity = 0.5
+shader_parameter/caustics_depth_fade = 0.02
+shader_parameter/caustics_texture = ExtResource("2_paueu")
+shader_parameter/foam_color = Color(0.686275, 0.933333, 1, 1)
+shader_parameter/foam_edge_color = Color(0.005, 0.01, 0.03, 1)
 shader_parameter/foam_depth_start = 0.8
 shader_parameter/foam_depth_end = 0.0
-shader_parameter/foam_noise_scale = 2.0
+shader_parameter/foam_noise_scale = 6.1
 shader_parameter/foam_noise_speed = 1.0
-shader_parameter/foam_cutoff = 0.9
-shader_parameter/foam_crest_threshold = 0.7
-shader_parameter/foam_crest_amount = 2.0
-shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
+shader_parameter/foam_cutoff = 0.4
+shader_parameter/foam_crest_threshold = 0.27
+shader_parameter/foam_crest_amount = 5.0
 shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
-shader_parameter/voronoi_scale = 9.0
-shader_parameter/voronoi_strength = 0.8
-shader_parameter/horizon_color = Color(0.0117647, 0.0509804, 0.192157, 1)
-shader_parameter/fog_density = 0.025
-shader_parameter/fog_start = 167.5
-shader_parameter/caustics_texture = ExtResource("2_rwxcb")
+shader_parameter/voronoi_scale = 17.013
+shader_parameter/voronoi_strength = 1.569
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rkclj"]
 material = SubResource("ShaderMaterial_iohnc")
@@ -110,7 +98,7 @@ sorting_offset = -10.0
 mesh = SubResource("PlaneMesh_rkclj")
 
 [node name="Sound" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_3nh33")
+stream = ExtResource("3_bnh4d")
 volume_db = 35.0
 autoplay = true
 max_distance = 200.0

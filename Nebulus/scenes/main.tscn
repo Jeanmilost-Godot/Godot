@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdkru0rfmtlyt"]
+[gd_scene load_steps=8 format=3 uid="uid://bdkru0rfmtlyt"]
 
 [ext_resource type="PackedScene" uid="uid://bo7gfn5u77nre" path="res://scenes/ocean.tscn" id="1_w4k60"]
 [ext_resource type="Material" uid="uid://bs25fi7wsq2se" path="res://materials/skybox.tres" id="2_0yfkc"]
+[ext_resource type="PackedScene" uid="uid://cwddmeie45rra" path="res://scenes/ocean_jmr.tscn" id="3_4lxv7"]
 [ext_resource type="PackedScene" uid="uid://5s1lc3ilur82" path="res://scenes/tower_1.tscn" id="3_ix032"]
 [ext_resource type="PackedScene" uid="uid://2em4xfx4w0d8" path="res://scenes/player.tscn" id="4_hxblr"]
 
@@ -66,6 +67,18 @@ light_color = Color(0.121569, 0.462745, 0.627451, 1)
 light_energy = 5.0
 light_indirect_energy = 16.0
 light_volumetric_fog_energy = 0.0
+light_cull_mask = 4294443008
+sky_mode = 1
+
+[node name="Ocean_JMR" parent="." instance=ExtResource("3_4lxv7")]
+visible = false
+
+[node name="Light" type="DirectionalLight3D" parent="Ocean_JMR"]
+transform = Transform3D(0.755259, 2.86496e-08, -0.655427, 0.655427, -3.30134e-08, 0.755259, 0, -1, -4.37114e-08, 0, 0, 0)
+light_color = Color(0.121569, 0.462745, 0.627451, 1)
+light_energy = 0.1
+light_volumetric_fog_energy = 0.0
+light_bake_mode = 1
 light_cull_mask = 4294443008
 sky_mode = 1
 
