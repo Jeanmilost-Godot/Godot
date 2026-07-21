@@ -37,24 +37,6 @@ func ParseDataLine(dataIndex, line):
 			m_TabChar: index += 4
 			" ":       index += 1
 
-			"#":
-				# create a portal and attach it to the scene. NOTE the portal is always set above a
-				# platform in the level files, for that reason it is located lower on the y axis
-				var portal = preload("res://scenes/portal.tscn").instantiate()
-				add_child(portal)
-
-				# connect the portal opening signals to the player
-				portal.portal_open.connect(m_Player._on_portal_open)
-				portal.portal_close.connect(m_Player._on_portal_close)
-
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 0.5
-				portal.global_position = Vector3(0.0, posY, 0.0)
-
-				var rotY = deg_to_rad(m_PlatformAngle * index)
-				portal.global_rotation = Vector3(0.0, rotY, 0.0)
-
-				index += 1
-
 			"-":
 				# create a platform and attach it to the scene
 				var platform = preload("res://scenes/tower_platform.tscn").instantiate()
