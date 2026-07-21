@@ -12,10 +12,10 @@ This demo experiments a simple terrain generation based on heightmap, with a mat
 
 ![Mountains Demo Screenshot](Screenshots/MountainsDemo.png)
 
-### Survival demo
-This is a small demo showing a survival game scene, where a character need to explore a laboratory.
+### Nebulus
+This demo exposes a base for a Nebulus game.
 
-![Survival Demo Screenshot](Screenshots/SurvivalDemo.png)
+![Nebulus Demo Screenshot](Screenshots/NebulusDemo.png)
 
 ### Paperclip
 This project is a simple ambient demo around an idea I have for a game.
@@ -26,3 +26,8 @@ This project is a simple ambient demo around an idea I have for a game.
 This project is a shoot'em'up demo, inspired on games like Agony for the Amiga.
 
 ![Survival Demo Screenshot](Screenshots/ShootEmUpDemo.png)
+
+### Survival demo
+This is a small demo showing a survival game scene, where a character need to explore a laboratory.
+
+![Survival Demo Screenshot](Screenshots/SurvivalDemo.png)
