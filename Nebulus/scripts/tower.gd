@@ -12,6 +12,17 @@ const m_TabChar       = "\t"
 const m_RowHeight     = 7
 const m_PlatformAngle = 22.5
 
+###
+# Create the tower fundation (i.e. the underwater part)
+##
+func CreateTowerFundation():
+	for x in range(4):
+		var towerBody = preload("res://scenes/tower_body.tscn").instantiate()
+		add_child(towerBody)
+
+		var towerPosY = 0 - (m_RowHeight * x)
+		towerBody.global_position = Vector3(0.0, towerPosY, 0.0)
+
 func ParseColor(line):
 	pass
 
@@ -77,6 +88,9 @@ func ParseDemoLine(demoIndex, line):
 #@param fileName - tower level file name
 ##
 func LoadLevel(fileName):
+	# create the tower fundation (the underwater part)
+	CreateTowerFundation()
+
 	# open the tower level file
 	var file = FileAccess.open(fileName, FileAccess.READ)
 
