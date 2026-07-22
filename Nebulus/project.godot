@@ -48,3 +48,8 @@ jump_or_fire={
 , Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":false,"script":null)
 ]
 }
+
+[rendering]
+
+anti_aliasing/scale=1.0
+anti_aliasing/mode=0

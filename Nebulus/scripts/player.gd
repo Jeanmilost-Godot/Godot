@@ -10,12 +10,12 @@ extends CharacterBody3D
 var m_StateMachine: PlayerStateMachine
 
 # variables
-var m_AngleX       =  0.0
-var m_AngleY       =  PI / 2.0
-var m_Offset       = -1.0
-var m_LastDir      = -1.0
-var m_Turning      =  false
-var m_PortalOpened =  false
+var m_AngleX         =  0.0
+var m_AngleY         =  PI / 2.0
+var m_Offset         = -1.0
+var m_LastDir        = -1.0
+var m_Turning        =  false
+var m_CanEnterPortal =  false
 
 # constants
 const m_CameraRadius      = 55.0
@@ -97,7 +97,7 @@ func _physics_process(delta):
 	elif Input.is_action_pressed("right"):
 		inputDir.x = 1.0
 
-	if Input.is_action_pressed("up") && m_PortalOpened:
+	if Input.is_action_pressed("up") && m_CanEnterPortal:
 		inputDir.y = 0.0
 
 	# do move the player to the top or bottom?
@@ -175,13 +175,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 ###
-# Called when a portal is opened and the player may enter in it
+# Called when the player enters or leaves the trigger zone of a portal
 ##
-func _on_portal_open():
-	m_PortalOpened = true;
-
-###
-# Called when a portal is closed and the player may no longer enter in it
-##
-func _on_portal_close():
-	m_PortalOpened = false;
+func _on_can_enter_portal(canEnter):
+	m_CanEnterPortal = canEnter;
