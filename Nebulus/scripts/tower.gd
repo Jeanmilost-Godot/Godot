@@ -38,7 +38,9 @@ func ParseDataLine(dataIndex, line):
 	var towerPosY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 	towerBody.global_position = Vector3(0.0, towerPosY, 0.0)
 
-	var index = 0;
+	var index   = 0;
+	var portal1 = null
+	var portal2 = null
 
 	for x in range(line.length()):
 		var ch = line[x]
@@ -62,6 +64,14 @@ func ParseDataLine(dataIndex, line):
 
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				portal.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				# keep portals in order to associate them
+				if (portal1 == null):
+					portal1 = portal
+				elif (portal2 == null):
+					portal2 = portal
+				else:
+					print("Loading level - ERROR - too many portals on the same row")
 
 				index += 1
 
@@ -95,6 +105,13 @@ func ParseDataLine(dataIndex, line):
 				# default, unknown char, log and skip
 				print("Loading level - unknown char found - " + ch)
 				index += 1
+
+	# bind portals together
+	if (portal1 and portal2):
+		portal1.m_ConnectedPortal = portal2
+		portal2.m_ConnectedPortal = portal1
+	elif (portal1 or portal2):
+		print("Loading level - ERROR - only one portal on the row - cannot bind")
 
 func ParseDemoLine(demoIndex, line):
 	var value = line.to_int()

@@ -1,9 +1,9 @@
 [gd_scene load_steps=15 format=3 uid="uid://dtbfwc4vh3iop"]
 
 [ext_resource type="Script" path="res://scripts/portal.gd" id="1_qa50g"]
-[ext_resource type="Texture2D" uid="uid://b1mri1s6dy8yt" path="res://assets/textures/metal/brushed-metal_albedo.png" id="6_visxa"]
-[ext_resource type="Texture2D" uid="uid://cg4bim8jb4cey" path="res://assets/textures/metal/brushed-metal_ao.png" id="7_cgi4r"]
-[ext_resource type="Texture2D" uid="uid://35ty8ugu482k" path="res://assets/textures/metal/brushed-metal_normal-ogl.png" id="7_g7cjw"]
+[ext_resource type="Texture2D" uid="uid://t57rtikloo6t" path="res://assets/textures/metal/brushed-metal_albedo.png" id="6_visxa"]
+[ext_resource type="Texture2D" uid="uid://doifsoo7o1hvh" path="res://assets/textures/metal/brushed-metal_ao.png" id="7_cgi4r"]
+[ext_resource type="Texture2D" uid="uid://drmtatiqppeui" path="res://assets/textures/metal/brushed-metal_normal-ogl.png" id="7_g7cjw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e4ivl"]
 transparency = 1
