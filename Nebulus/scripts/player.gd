@@ -19,9 +19,7 @@ var m_Offset                = -1.0
 var m_LastDir               = -1.0
 var m_PortalAngle           =  0.0
 var m_TargetPortalAngle     =  0.0
-var m_Turning               =  false
 var m_CanEnterPortal        =  false
-var m_MoveThroughPortal     =  false
 var m_Portal                =  null
 var m_TargetPortal          =  null
 var m_PortalState: IEPortal = IEPortal.P_Aligning
@@ -95,6 +93,10 @@ func MoveCamera():
 	m_Camera.position   = cameraPos
 	m_Camera.rotation.y = m_AngleY
 
+	# also move the focus light
+	m_Highlight.global_position = m_Camera.global_position
+	m_Highlight.look_at(Vector3.ZERO, Vector3.UP)
+
 ###
 # Moves the player position around the tower
 ##
@@ -106,9 +108,6 @@ func MovePlayer():
 
 	position   = playerPos
 	rotation.y = m_AngleY + (PI / 2.0) * m_Offset;
-
-	m_Highlight.global_position = global_position
-	m_Highlight.look_at(Vector3.ZERO, Vector3.UP)
 
 ###
 # Rotates the player while turning
@@ -125,16 +124,16 @@ func RotatePlayer(delta):
 
 		# end reached?
 		if (m_Offset >= 1.0):
-			m_Offset  = 1.0
-			m_Turning = false
+			m_Offset = 1.0
+			m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
 	else:
 		# rotate to the left
 		m_Offset -= (m_RotationVelocity * delta)
 
 		# end reached?
 		if (m_Offset <= -1.0):
-			m_Offset  = -1.0
-			m_Turning =  false
+			m_Offset = -1.0
+			m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
 
 ###
 # Animates the player, or stops the animation
@@ -167,7 +166,7 @@ func StopWalkSound():
 ##
 func MoveToPortal(delta) -> bool:
 	# is player turning?
-	if (m_Turning):
+	if (m_StateMachine.get_substate() == PlayerStateMachine.IESubState.S_Turning):
 		AnimatePlayer(false)
 		StopWalkSound()
 		RotatePlayer(delta)
@@ -180,7 +179,7 @@ func MoveToPortal(delta) -> bool:
 	# check if the player is looking to the correct direction, turn it if not
 	if (dir != m_LastDir and not TargetAngleReached(m_AngleY, m_PortalAngle + (PI / 2.0))):
 		m_LastDir = dir
-		m_Turning = true
+		m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Turning)
 		return false
 
 	# calculate the next angle position
@@ -238,6 +237,7 @@ func RotatePlayerToFacePortal(delta) -> bool:
 			endReached = true
 
 	MovePlayer()
+	MoveCamera()
 	return endReached
 
 ###
@@ -335,6 +335,7 @@ func RotatePlayerAfterExitPortal(delta) -> bool:
 			endReached = true
 
 	MovePlayer()
+	MoveCamera()
 	return endReached
 
 ###
@@ -349,112 +350,112 @@ func _ready():
 ##
 func _physics_process(delta):
 	# is player walking through a portal?
-	if (m_MoveThroughPortal):
-		# dispatch currently running portal animation part
-		match (m_PortalState):
-			IEPortal.P_Aligning:
-				if (MoveToPortal(delta)):
-					m_PortalState = IEPortal.P_RotateTo
+	match (m_StateMachine.m_State):
+		PlayerStateMachine.IEState.S_Crossing_Portal:
+			# dispatch currently running portal animation part
+			match (m_PortalState):
+				IEPortal.P_Aligning:
+					if (MoveToPortal(delta)):
+						m_PortalState = IEPortal.P_RotateTo
 
-			IEPortal.P_RotateTo:
-				if (RotatePlayerToFacePortal(delta)):
-					m_PortalState = IEPortal.P_Enter
+				IEPortal.P_RotateTo:
+					if (RotatePlayerToFacePortal(delta)):
+						m_PortalState = IEPortal.P_Enter
 
-			IEPortal.P_Enter:
-				if (EnterPortal(delta)):
-					m_PortalState = IEPortal.P_RotateTower
+				IEPortal.P_Enter:
+					if (EnterPortal(delta)):
+						m_PortalState = IEPortal.P_RotateTower
 
-			IEPortal.P_RotateTower:
-				if (RotateTower(delta)):
-					# locate the player beyond the portal to exit
-					global_position.x = (m_WalkStopDist - 1.0) * sin(m_AngleY) * cos(m_AngleX)
-					global_position.z = (m_WalkStopDist - 1.0) * cos(m_AngleY) * cos(m_AngleX)
-					m_PortalState     = IEPortal.P_Exit
+				IEPortal.P_RotateTower:
+					if (RotateTower(delta)):
+						# locate the player beyond the portal to exit
+						global_position.x = (m_WalkStopDist - 1.0) * sin(m_AngleY) * cos(m_AngleX)
+						global_position.z = (m_WalkStopDist - 1.0) * cos(m_AngleY) * cos(m_AngleX)
+						m_PortalState     = IEPortal.P_Exit
 
-			IEPortal.P_Exit:
-				if (LeavePortal(delta)):
-					m_LastDir     = sign(GetRotationAngle(m_AngleY + (PI / 2.0), m_TargetPortalAngle))
-					m_PortalState = IEPortal.P_RotateFrom
+				IEPortal.P_Exit:
+					if (LeavePortal(delta)):
+						m_LastDir     = sign(GetRotationAngle(m_AngleY + (PI / 2.0), m_TargetPortalAngle))
+						m_PortalState = IEPortal.P_RotateFrom
 
-			IEPortal.P_RotateFrom:
-				if (RotatePlayerAfterExitPortal(delta)):
-					m_Turning           = false
-					m_MoveThroughPortal = false
+				IEPortal.P_RotateFrom:
+					if (RotatePlayerAfterExitPortal(delta)):
+						m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
+						m_StateMachine.set_state(PlayerStateMachine.IEState.S_Idle)
 
-		return
+		_:
+			var inputDir = Vector2.ZERO
 
-	var inputDir = Vector2.ZERO
+			# do move the player to the left or right?
+			if Input.is_action_pressed("left"):
+				inputDir.x = -1.0
+			elif Input.is_action_pressed("right"):
+				inputDir.x = 1.0
 
-	# do move the player to the left or right?
-	if Input.is_action_pressed("left"):
-		inputDir.x = -1.0
-	elif Input.is_action_pressed("right"):
-		inputDir.x = 1.0
+			if Input.is_action_pressed("up") && m_CanEnterPortal:
+				inputDir.y    = 0.0
+				m_PortalState = IEPortal.P_Aligning
+				m_StateMachine.set_state(PlayerStateMachine.IEState.S_Crossing_Portal)
 
-	if Input.is_action_pressed("up") && m_CanEnterPortal:
-		inputDir.y          = 0.0
-		m_PortalState       = IEPortal.P_Aligning
-		m_MoveThroughPortal = true
+			# do move the player to the top or bottom?
+			if Input.is_action_pressed("jump_or_fire"):
+				inputDir.y = -1.0
 
-	# do move the player to the top or bottom?
-	if Input.is_action_pressed("jump_or_fire"):
-		inputDir.y = -1.0
+			var direction = (transform.basis * Vector3(inputDir.x, 0, inputDir.y)).normalized()
+			var walking   = false
+			var dir       = m_LastDir
 
-	var direction = (transform.basis * Vector3(inputDir.x, 0, inputDir.y)).normalized()
-	var walking   = false
-	var dir       = m_LastDir
+			# move player around the tower
+			if inputDir.x < 0.0:
+				if (m_StateMachine.get_substate() != PlayerStateMachine.IESubState.S_Turning):
+					m_AngleY = m_AngleY - (delta * m_PlayerVelocity)
+					walking  = true
 
-	# move player around the tower
-	if inputDir.x < 0.0:
-		if (!m_Turning):
-			m_AngleY = m_AngleY - (delta * m_PlayerVelocity)
-			walking  = true
+				dir = -1.0
 
-		dir = -1.0
+				AnimatePlayer(true)
+				PlayWalkSound()
+			elif inputDir.x > 0.0:
+				if (m_StateMachine.get_substate() != PlayerStateMachine.IESubState.S_Turning):
+					m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
+					walking  = true
 
-		AnimatePlayer(true)
-		PlayWalkSound()
-	elif inputDir.x > 0.0:
-		if (!m_Turning):
-			m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
-			walking  = true
+				dir = 1.0
 
-		dir = 1.0
+				AnimatePlayer(true)
+				PlayWalkSound()
+			else:
+				AnimatePlayer(false)
+				StopWalkSound()
 
-		AnimatePlayer(true)
-		PlayWalkSound()
-	else:
-		AnimatePlayer(false)
-		StopWalkSound()
+			# if direction changes, start to turn the player model
+			if (dir != m_LastDir):
+				m_LastDir = dir
+				m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Turning)
 
-	# if direction changes, start to turn the player model
-	if (dir != m_LastDir):
-		m_LastDir = dir
-		m_Turning = true
+			# turn the player model to point the walking direction
+			if (m_StateMachine.get_substate() == PlayerStateMachine.IESubState.S_Turning):
+				RotatePlayer(delta)
 
-	# turn the player model to point the walking direction
-	if (m_Turning):
-		RotatePlayer(delta)
+			# apply player and camera movements
+			MoveCamera()
+			MovePlayer()
 
-	# apply player and camera movements
-	MoveCamera()
-	MovePlayer()
+			# apply gravity when not on floor
+			if not is_on_floor():
+				velocity.y -= m_Gravity * (delta * m_GravityMultiplier)
 
-	# apply gravity when not on floor
-	if not is_on_floor():
-		velocity.y -= m_Gravity * (delta * m_GravityMultiplier)
+				AnimatePlayer(false)
+				StopWalkSound()
+			else:
+				# handle jump
+				if inputDir.y != 0.0 and walking:
+					velocity.y = -inputDir.y * m_JumpVelocity
+				else:
+					velocity.y = 0.0
 
-		AnimatePlayer(false)
-		StopWalkSound()
-	else:
-		# handle jump
-		if inputDir.y != 0.0 and walking:
-			velocity.y = -inputDir.y * m_JumpVelocity
-		else:
-			velocity.y = 0.0
-
-	# apply the velocity and check the collisions
-	move_and_slide()
+			# apply the velocity and check the collisions
+			move_and_slide()
 
 ###
 # Called when the player enters or leaves the trigger zone of a portal
