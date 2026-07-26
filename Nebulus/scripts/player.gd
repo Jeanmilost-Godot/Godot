@@ -178,7 +178,7 @@ func MoveToPortal(delta) -> bool:
 	var dir = sign(GetRotationAngle(m_PortalAngle, m_AngleY + (PI / 2.0)))
 
 	# check if the player is looking to the correct direction, turn it if not
-	if (dir != m_LastDir):
+	if (dir != m_LastDir and not TargetAngleReached(m_AngleY, m_PortalAngle + (PI / 2.0))):
 		m_LastDir = dir
 		m_Turning = true
 		return false
@@ -373,10 +373,12 @@ func _physics_process(delta):
 
 			IEPortal.P_Exit:
 				if (LeavePortal(delta)):
+					m_LastDir     = sign(GetRotationAngle(m_AngleY + (PI / 2.0), m_TargetPortalAngle))
 					m_PortalState = IEPortal.P_RotateFrom
 
 			IEPortal.P_RotateFrom:
 				if (RotatePlayerAfterExitPortal(delta)):
+					m_Turning           = false
 					m_MoveThroughPortal = false
 
 		return
