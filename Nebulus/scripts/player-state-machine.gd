@@ -7,10 +7,10 @@ class_name PlayerStateMachine
 extends RefCounted
 
 # states
-enum IEState {S_Idle, S_Crossing_Portal, S_Using_Elevator, S_Falling}
+enum IEState {S_Idle, S_Crossing_Portal, S_Using_Elevator}
 
 # sub-states
-enum IESubState {S_Idle, S_Turning}
+enum IESubState {S_Idle, S_Turning, S_Falling}
 
 # variables
 var m_State:    IEState
