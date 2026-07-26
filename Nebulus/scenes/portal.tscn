@@ -66,7 +66,7 @@ material = SubResource("StandardMaterial3D_a6lxj")
 size = Vector2(9, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6jhu8"]
-size = Vector3(5.25, 6, 5.5)
+size = Vector3(2, 4.8, 5.5)
 
 [node name="Portal" type="Node3D"]
 script = ExtResource("1_qa50g")
@@ -120,7 +120,7 @@ skeleton = NodePath("../..")
 transform = Transform3D(-8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 0, -0.75, 0)
 
 [node name="CollisionBox" type="CollisionShape3D" parent="Mesh/TriggerZone"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.68434e-14, 3.31833, 2.81177)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.68434e-14, 2.72507, 2.81177)
 shape = SubResource("BoxShape3D_6jhu8")
 
 [connection signal="body_entered" from="Mesh/TriggerZone" to="." method="_on_trigger_zone_body_entered"]
