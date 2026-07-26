@@ -127,7 +127,7 @@ func rotate_player(delta):
 		# end reached?
 		if (m_Offset >= 1.0):
 			m_Offset = 1.0
-			m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
+			m_StateMachine.set_state(PlayerStateMachine.IEState.S_Idle)
 	else:
 		# rotate to the left
 		m_Offset -= (m_RotationVelocity * delta)
@@ -135,7 +135,7 @@ func rotate_player(delta):
 		# end reached?
 		if (m_Offset <= -1.0):
 			m_Offset = -1.0
-			m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
+			m_StateMachine.set_state(PlayerStateMachine.IEState.S_Idle)
 
 ###
 # Animates the player, or stops the animation
@@ -168,7 +168,7 @@ func stop_walk_sound():
 ##
 func move_to_portal(delta) -> bool:
 	# is player turning?
-	if (m_StateMachine.get_substate() == PlayerStateMachine.IESubState.S_Turning):
+	if (m_StateMachine.get_state() == PlayerStateMachine.IEState.S_Turning):
 		animate_player(false)
 		stop_walk_sound()
 		rotate_player(delta)
@@ -181,7 +181,7 @@ func move_to_portal(delta) -> bool:
 	# check if the player is looking to the correct direction, turn it if not
 	if (dir != m_LastDir and not target_angle_reached(m_AngleY, m_PortalAngle + (PI / 2.0), 0.05)):
 		m_LastDir = dir
-		m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Turning)
+		m_StateMachine.set_state(PlayerStateMachine.IEState.S_Turning)
 		return false
 
 	# calculate the next angle position
@@ -351,8 +351,8 @@ func _ready():
 ##
 func _physics_process(delta):
 	# is player walking through a portal?
-	match (m_StateMachine.m_State):
-		PlayerStateMachine.IEState.S_Crossing_Portal:
+	match (m_StateMachine.get_action()):
+		PlayerStateMachine.IEAction.A_Crossing_Portal:
 			# dispatch currently running portal animation part
 			match (m_PortalState):
 				IEPortal.P_Aligning:
@@ -381,8 +381,8 @@ func _physics_process(delta):
 
 				IEPortal.P_RotateFrom:
 					if (rotate_player_after_exit_portal(delta)):
-						m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
 						m_StateMachine.set_state(PlayerStateMachine.IEState.S_Idle)
+						m_StateMachine.set_action(PlayerStateMachine.IEAction.A_None)
 
 		_:
 			var inputDir = Vector2.ZERO
@@ -396,7 +396,7 @@ func _physics_process(delta):
 			if Input.is_action_pressed("up") && m_CanEnterPortal:
 				inputDir.y    = 0.0
 				m_PortalState = IEPortal.P_Aligning
-				m_StateMachine.set_state(PlayerStateMachine.IEState.S_Crossing_Portal)
+				m_StateMachine.set_action(PlayerStateMachine.IEAction.A_Crossing_Portal)
 
 			# do move the player to the top or bottom?
 			if Input.is_action_pressed("jump_or_fire"):
@@ -408,7 +408,7 @@ func _physics_process(delta):
 
 			# move player around the tower
 			if inputDir.x < 0.0:
-				if (m_StateMachine.get_substate() != PlayerStateMachine.IESubState.S_Turning):
+				if (m_StateMachine.get_state() != PlayerStateMachine.IEState.S_Turning):
 					m_AngleY = m_AngleY - (delta * m_PlayerVelocity)
 					walking  = true
 
@@ -417,7 +417,7 @@ func _physics_process(delta):
 				animate_player(true)
 				play_walk_sound()
 			elif inputDir.x > 0.0:
-				if (m_StateMachine.get_substate() != PlayerStateMachine.IESubState.S_Turning):
+				if (m_StateMachine.get_state() != PlayerStateMachine.IEState.S_Turning):
 					m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
 					walking  = true
 
@@ -432,10 +432,10 @@ func _physics_process(delta):
 			# if direction changes, start to turn the player model
 			if (dir != m_LastDir):
 				m_LastDir = dir
-				m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Turning)
+				m_StateMachine.set_state(PlayerStateMachine.IEState.S_Turning)
 
 			# turn the player model to point the walking direction
-			if (m_StateMachine.get_substate() == PlayerStateMachine.IESubState.S_Turning):
+			if (m_StateMachine.get_state() == PlayerStateMachine.IEState.S_Turning):
 				rotate_player(delta)
 
 			# apply player and camera movements

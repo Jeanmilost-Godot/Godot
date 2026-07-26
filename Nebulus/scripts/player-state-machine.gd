@@ -6,47 +6,47 @@ class_name PlayerStateMachine
 
 extends RefCounted
 
-# states
-enum IEState {S_Idle, S_Crossing_Portal, S_Using_Elevator}
+# actions
+enum IEAction {A_None, A_Crossing_Portal, A_Using_Elevator}
 
 # sub-states
-enum IESubState {S_Idle, S_Turning, S_Falling}
+enum IEState {S_Idle, S_Turning, S_Falling}
 
 # variables
-var m_State:    IEState
-var m_SubState: IESubState
+var m_Action: IEAction
+var m_State:  IEState
 
 ###
 # Constructor
 ##
 func _init():
-	self.m_State    = IEState.S_Idle
-	self.m_SubState = IESubState.S_Idle
+	self.m_Action = IEAction.A_None
+	self.m_State  = IEState.S_Idle
 
 ###
-# Gets current machine state
-#@return current machine state
+# Gets current action
+#@return current action
+##
+func get_action() -> IEAction:
+	return self.m_Action
+
+###
+# Sets scurrent action
+#@param action - current action
+##
+func set_action(action: IEAction):
+	self.m_Action = action
+
+###
+# Gets current state
+#@return current state
 ##
 func get_state() -> IEState:
 	return self.m_State
 
 ###
-# Set scurrent machine state
-#@param state - current machine state
+# Sets scurrent state
+#@param state - current state
 ##
 func set_state(state: IEState):
 	self.m_State = state
-
-###
-# Gets current machine sub-state
-#@return current machine sub-state
-##
-func get_substate() -> IESubState:
-	return self.m_SubState
-
-###
-# Set scurrent machine state
-#@param state - current machine state
-##
-func set_substate(state: IESubState):
-	self.m_SubState = state
