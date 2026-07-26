@@ -4,7 +4,6 @@ extends CharacterBody3D
 @onready var m_Camera:     Camera3D           = $"../Camera"
 @onready var m_WalkSound:  AudioStreamPlayer  = $WalkSound
 @onready var m_Animations: AnimationTree      = $AnimationTree
-@onready var m_Highlight:  DirectionalLight3D = $SilhouetteHighlight
 
 # classes
 var m_StateMachine: PlayerStateMachine
@@ -44,7 +43,7 @@ var m_Gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 #@param endAngle - end angle to calculate to
 #@return the rotation angle, between -PI and PI
 ##
-func GetRotationAngle(startAngle, endAngle) -> float:
+func get_rotation_angle(startAngle, endAngle) -> float:
 	# calculate the rotation angle, which is the shortest signed distance from start angle to end angle
 	return wrapf(endAngle - startAngle, -PI, PI)
 
@@ -55,10 +54,10 @@ func GetRotationAngle(startAngle, endAngle) -> float:
 #@param threshold - threshold which determines if target angle is reached
 #@return true if angle reached target angle, otherwise false
 ##
-func TargetAngleReached(angle, targetAngle, threshold = 0.01) -> bool:
+func target_angle_reached(angle, targetAngle, threshold = 0.01) -> bool:
 	# by calculating the rotation angle between the current angle and the target one, it's possible
 	# to determine if the target is reached if the rotation angle is lower than a given threshold
-	return (abs(GetRotationAngle(angle, targetAngle)) < threshold)
+	return (abs(get_rotation_angle(angle, targetAngle)) < threshold)
 
 ###
 # Gets the next position for the current angle when rotation between start and end angles
@@ -69,8 +68,8 @@ func TargetAngleReached(angle, targetAngle, threshold = 0.01) -> bool:
 #@param curAngle - current angle for which the next position should be calculated
 #@return the next current angle position
 ##
-func GetNextAngle(delta, rotationVelocity, startAngle, endAngle, curAngle) -> float:
-	var rotationAngle = GetRotationAngle(startAngle, endAngle)
+func get_next_angle(delta, rotationVelocity, startAngle, endAngle, curAngle) -> float:
+	var rotationAngle = get_rotation_angle(startAngle, endAngle)
 
 	# extract the rotation direction
 	var direction = sign(rotationAngle)
@@ -84,7 +83,7 @@ func GetNextAngle(delta, rotationVelocity, startAngle, endAngle, curAngle) -> fl
 ###
 # Moves the camera position around the tower
 ##
-func MoveCamera():
+func move_camera():
 	var cameraPos = Vector3.ZERO
 	cameraPos.x   = m_CameraRadius * sin(m_AngleY) * cos(m_AngleX)
 	cameraPos.y   = position.y
@@ -93,14 +92,10 @@ func MoveCamera():
 	m_Camera.position   = cameraPos
 	m_Camera.rotation.y = m_AngleY
 
-	# also move the focus light
-	m_Highlight.global_position = m_Camera.global_position
-	m_Highlight.look_at(Vector3.ZERO, Vector3.UP)
-
 ###
 # Moves the player position around the tower
 ##
-func MovePlayer():
+func move_player():
 	var playerPos = Vector3.ZERO
 	playerPos.x   = m_PlayerRadius * sin(m_AngleY) * cos(m_AngleX)
 	playerPos.y   = position.y
@@ -110,12 +105,19 @@ func MovePlayer():
 	rotation.y = m_AngleY + (PI / 2.0) * m_Offset;
 
 ###
+# Moves the both player and camera position around the tower
+##
+func move_player_and_camera():
+	move_player()
+	move_camera()
+
+###
 # Rotates the player while turning
 #@param delta - elapsed time in seconds since the previous call
 ##
-func RotatePlayer(delta):
-	AnimatePlayer(false)
-	StopWalkSound()
+func rotate_player(delta):
+	animate_player(false)
+	stop_walk_sound()
 
 	# is player walking to the left or to the right?
 	if (m_LastDir > 0.0):
@@ -139,14 +141,14 @@ func RotatePlayer(delta):
 # Animates the player, or stops the animation
 #param walking - if true, the player is walking
 ##
-func AnimatePlayer(walking):
+func animate_player(walking):
 	m_Animations.set("parameters/conditions/walk",  walking)
 	m_Animations.set("parameters/conditions/idle", !walking)
 
 ###
 # Plays the walk sound
 ##
-func PlayWalkSound():
+func play_walk_sound():
 	# play the walking sound
 	if !m_WalkSound.is_playing():
 		m_WalkSound.play();
@@ -154,7 +156,7 @@ func PlayWalkSound():
 ###
 # Stops the walk sound
 ##
-func StopWalkSound():
+func stop_walk_sound():
 	# stop the walking sound
 	if m_WalkSound.is_playing():
 		m_WalkSound.stop();
@@ -164,26 +166,26 @@ func StopWalkSound():
 #@param delta - elapsed time in seconds since the previous call
 #@return true once the player has arrived, otherwise false
 ##
-func MoveToPortal(delta) -> bool:
+func move_to_portal(delta) -> bool:
 	# is player turning?
 	if (m_StateMachine.get_substate() == PlayerStateMachine.IESubState.S_Turning):
-		AnimatePlayer(false)
-		StopWalkSound()
-		RotatePlayer(delta)
-		MovePlayer()
+		animate_player(false)
+		stop_walk_sound()
+		rotate_player(delta)
+		move_player_and_camera()
 		return false
 
 	# get direction to which the player should move
-	var dir = sign(GetRotationAngle(m_PortalAngle, m_AngleY + (PI / 2.0)))
+	var dir = sign(get_rotation_angle(m_PortalAngle, m_AngleY + (PI / 2.0)))
 
 	# check if the player is looking to the correct direction, turn it if not
-	if (dir != m_LastDir and not TargetAngleReached(m_AngleY, m_PortalAngle + (PI / 2.0))):
+	if (dir != m_LastDir and not target_angle_reached(m_AngleY, m_PortalAngle + (PI / 2.0), 0.05)):
 		m_LastDir = dir
 		m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Turning)
 		return false
 
 	# calculate the next angle position
-	m_AngleY = GetNextAngle(delta, m_PlayerVelocity, m_PortalAngle, m_AngleY + (PI / 2.0), m_AngleY)
+	m_AngleY = get_next_angle(delta, m_PlayerVelocity, m_PortalAngle, m_AngleY + (PI / 2.0), m_AngleY)
 
 	var playerAngle = wrapf(m_AngleY,                   -PI, PI)
 	var endAngle    = wrapf(m_PortalAngle + (PI / 2.0), -PI, PI)
@@ -191,15 +193,14 @@ func MoveToPortal(delta) -> bool:
 
 	# by calculating the rotation angle between the current player position and the target, it's possible
 	# to determine if the target is reached if the angle is lower than a given threshold
-	if (TargetAngleReached(playerAngle, endAngle)):
+	if (target_angle_reached(playerAngle, endAngle)):
 		m_AngleY   = endAngle
 		endReached = true
 
 	# apply the changes
-	MoveCamera()
-	MovePlayer()
-	AnimatePlayer(true)
-	PlayWalkSound()
+	move_player_and_camera()
+	animate_player(true)
+	play_walk_sound()
 
 	return endReached
 
@@ -208,9 +209,9 @@ func MoveToPortal(delta) -> bool:
 #@param delta - elapsed time in seconds since the previous call
 #@return true when rotation finished, otherwise false
 ##
-func RotatePlayerToFacePortal(delta) -> bool:
-	AnimatePlayer(false)
-	StopWalkSound()
+func rotate_player_to_face_portal(delta) -> bool:
+	animate_player(false)
+	stop_walk_sound()
 
 	var endReached = false
 
@@ -236,8 +237,7 @@ func RotatePlayerToFacePortal(delta) -> bool:
 			m_Offset   = 2.0
 			endReached = true
 
-	MovePlayer()
-	MoveCamera()
+	move_player_and_camera()
 	return endReached
 
 ###
@@ -245,13 +245,14 @@ func RotatePlayerToFacePortal(delta) -> bool:
 #@param delta - elapsed time in seconds since the previous call
 #@return true when move finished, otherwise false
 ##
-func EnterPortal(delta) -> bool:
+func enter_portal(delta) -> bool:
 	# move the player toward the portal
 	global_position.x -= delta * m_WalkVelocity * sin(m_AngleY) * cos(m_AngleX)
 	global_position.z -= delta * m_WalkVelocity * cos(m_AngleY) * cos(m_AngleX)
 
-	AnimatePlayer(true)
-	PlayWalkSound()
+	move_camera()
+	animate_player(true)
+	play_walk_sound()
 
 	# final pos reached?
 	return global_position.length() < m_WalkStopDist
@@ -261,9 +262,9 @@ func EnterPortal(delta) -> bool:
 #@param delta - elapsed time in seconds since the previous call
 #@return true when rotation finished, otherwise false
 ##
-func RotateTower(delta):
+func rotate_tower(delta):
 	# calculate the next angle position
-	m_AngleY = GetNextAngle(delta, m_TowerRotationVelocity, m_PortalAngle, m_TargetPortalAngle, m_AngleY)
+	m_AngleY = get_next_angle(delta, m_TowerRotationVelocity, m_PortalAngle, m_TargetPortalAngle, m_AngleY)
 
 	var playerAngle = wrapf(m_AngleY,                         -PI, PI)
 	var endAngle    = wrapf(m_TargetPortalAngle + (PI / 2.0), -PI, PI)
@@ -271,13 +272,13 @@ func RotateTower(delta):
 
 	# by calculating the rotation angle between the current player position and the target, it's possible
 	# to determine if the target is reached if the angle is lower than a given threshold
-	if (TargetAngleReached(playerAngle, endAngle)):
+	if (target_angle_reached(playerAngle, endAngle)):
 		m_AngleY   = endAngle
 		endReached = true
 
 	# apply the changes
-	MoveCamera()
-	PlayWalkSound()
+	move_camera()
+	play_walk_sound()
 
 	return endReached
 
@@ -286,7 +287,7 @@ func RotateTower(delta):
 #@param delta - elapsed time in seconds since the previous call
 #@return true when move finished, otherwise false
 ##
-func LeavePortal(delta) -> bool:
+func leave_portal(delta) -> bool:
 	# force the character to look at the camera
 	m_Offset = 0.0
 
@@ -294,8 +295,9 @@ func LeavePortal(delta) -> bool:
 	global_position.x += delta * m_WalkVelocity * sin(m_AngleY) * cos(m_AngleX)
 	global_position.z += delta * m_WalkVelocity * cos(m_AngleY) * cos(m_AngleX)
 
-	AnimatePlayer(true)
-	PlayWalkSound()
+	move_camera()
+	animate_player(true)
+	play_walk_sound()
 
 	# final pos reached?
 	if (global_position.length() >= m_PlayerRadius):
@@ -310,9 +312,9 @@ func LeavePortal(delta) -> bool:
 #@param delta - elapsed time in seconds since the previous call
 #@return true when rotation finished, otherwise false
 ##
-func RotatePlayerAfterExitPortal(delta) -> bool:
-	AnimatePlayer(false)
-	StopWalkSound()
+func rotate_player_after_exit_portal(delta) -> bool:
+	animate_player(false)
+	stop_walk_sound()
 
 	var endReached = false
 
@@ -334,8 +336,7 @@ func RotatePlayerAfterExitPortal(delta) -> bool:
 			m_Offset   = m_LastDir
 			endReached = true
 
-	MovePlayer()
-	MoveCamera()
+	move_player_and_camera()
 	return endReached
 
 ###
@@ -355,31 +356,31 @@ func _physics_process(delta):
 			# dispatch currently running portal animation part
 			match (m_PortalState):
 				IEPortal.P_Aligning:
-					if (MoveToPortal(delta)):
+					if (move_to_portal(delta)):
 						m_PortalState = IEPortal.P_RotateTo
 
 				IEPortal.P_RotateTo:
-					if (RotatePlayerToFacePortal(delta)):
+					if (rotate_player_to_face_portal(delta)):
 						m_PortalState = IEPortal.P_Enter
 
 				IEPortal.P_Enter:
-					if (EnterPortal(delta)):
+					if (enter_portal(delta)):
 						m_PortalState = IEPortal.P_RotateTower
 
 				IEPortal.P_RotateTower:
-					if (RotateTower(delta)):
+					if (rotate_tower(delta)):
 						# locate the player beyond the portal to exit
 						global_position.x = (m_WalkStopDist - 1.0) * sin(m_AngleY) * cos(m_AngleX)
 						global_position.z = (m_WalkStopDist - 1.0) * cos(m_AngleY) * cos(m_AngleX)
 						m_PortalState     = IEPortal.P_Exit
 
 				IEPortal.P_Exit:
-					if (LeavePortal(delta)):
-						m_LastDir     = sign(GetRotationAngle(m_AngleY + (PI / 2.0), m_TargetPortalAngle))
+					if (leave_portal(delta)):
+						m_LastDir     = sign(get_rotation_angle(m_AngleY + (PI / 2.0), m_TargetPortalAngle))
 						m_PortalState = IEPortal.P_RotateFrom
 
 				IEPortal.P_RotateFrom:
-					if (RotatePlayerAfterExitPortal(delta)):
+					if (rotate_player_after_exit_portal(delta)):
 						m_StateMachine.set_substate(PlayerStateMachine.IESubState.S_Idle)
 						m_StateMachine.set_state(PlayerStateMachine.IEState.S_Idle)
 
@@ -413,8 +414,8 @@ func _physics_process(delta):
 
 				dir = -1.0
 
-				AnimatePlayer(true)
-				PlayWalkSound()
+				animate_player(true)
+				play_walk_sound()
 			elif inputDir.x > 0.0:
 				if (m_StateMachine.get_substate() != PlayerStateMachine.IESubState.S_Turning):
 					m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
@@ -422,11 +423,11 @@ func _physics_process(delta):
 
 				dir = 1.0
 
-				AnimatePlayer(true)
-				PlayWalkSound()
+				animate_player(true)
+				play_walk_sound()
 			else:
-				AnimatePlayer(false)
-				StopWalkSound()
+				animate_player(false)
+				stop_walk_sound()
 
 			# if direction changes, start to turn the player model
 			if (dir != m_LastDir):
@@ -435,18 +436,17 @@ func _physics_process(delta):
 
 			# turn the player model to point the walking direction
 			if (m_StateMachine.get_substate() == PlayerStateMachine.IESubState.S_Turning):
-				RotatePlayer(delta)
+				rotate_player(delta)
 
 			# apply player and camera movements
-			MoveCamera()
-			MovePlayer()
+			move_player_and_camera()
 
 			# apply gravity when not on floor
 			if not is_on_floor():
 				velocity.y -= m_Gravity * (delta * m_GravityMultiplier)
 
-				AnimatePlayer(false)
-				StopWalkSound()
+				animate_player(false)
+				stop_walk_sound()
 			else:
 				# handle jump
 				if inputDir.y != 0.0 and walking:

@@ -45,6 +45,17 @@ adjustment_saturation = 1.1
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 55, 7.5, 0)
 
+[node name="SilhouetteHighlight" type="SpotLight3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+light_energy = 0.75
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+light_specular = 0.0
+spot_range = 25.0
+spot_attenuation = 0.450627
+spot_angle = 95.0
+spot_angle_attenuation = 0.25
+
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="AmbientLight" type="DirectionalLight3D" parent="Environment"]
