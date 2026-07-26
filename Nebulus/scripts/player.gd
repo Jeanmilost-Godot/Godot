@@ -33,6 +33,7 @@ const m_WalkVelocity          = 9.0
 const m_JumpVelocity          = 40.0
 const m_GravityMultiplier     = 12.5
 const m_WalkStopDist          = 25.0
+const m_CameraMinY            = 12.5
 
 # get the gravity from the project settings to be synced with RigidBody nodes.
 var m_Gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -86,7 +87,7 @@ func get_next_angle(delta, rotationVelocity, startAngle, endAngle, curAngle) -> 
 func move_camera():
 	var cameraPos = Vector3.ZERO
 	cameraPos.x   = m_CameraRadius * sin(m_AngleY) * cos(m_AngleX)
-	cameraPos.y   = position.y
+	cameraPos.y   = position.y if position.y >= m_CameraMinY else m_CameraMinY
 	cameraPos.z   = m_CameraRadius * cos(m_AngleY) * cos(m_AngleX)
 
 	m_Camera.position   = cameraPos
