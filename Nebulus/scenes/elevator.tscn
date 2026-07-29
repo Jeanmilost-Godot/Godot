@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cbv5kcjk01dqv"]
+[gd_scene load_steps=20 format=3 uid="uid://cbv5kcjk01dqv"]
 
 [ext_resource type="Texture2D" uid="uid://dwltgdf5lvx8j" path="res://assets/textures/metal/worn-walkway-metal_albedo.png" id="1_6el6i"]
 [ext_resource type="Script" path="res://scripts/elevator.gd" id="1_ml1ak"]
@@ -9,6 +9,22 @@
 [ext_resource type="Texture2D" uid="uid://doifsoo7o1hvh" path="res://assets/textures/metal/brushed-metal_ao.png" id="6_w4wk3"]
 [ext_resource type="Texture2D" uid="uid://drmtatiqppeui" path="res://assets/textures/metal/brushed-metal_normal-ogl.png" id="7_w1t7x"]
 [ext_resource type="PackedScene" uid="uid://b13fxgmdf6yx6" path="res://scenes/flash_light.tscn" id="8_ieor0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yp3qp"]
+albedo_texture = ExtResource("5_pov1r")
+metallic = 0.75
+metallic_specular = 0.35
+roughness = 0.5
+normal_enabled = true
+normal_texture = ExtResource("7_w1t7x")
+ao_enabled = true
+ao_texture = ExtResource("6_w4wk3")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wo16s"]
+material = SubResource("StandardMaterial3D_yp3qp")
+top_radius = 1.0
+bottom_radius = 1.0
+height = 1.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jwn3e"]
 albedo_color = Color(0.937255, 0.839216, 0.780392, 1)
@@ -76,16 +92,20 @@ script = ExtResource("1_ml1ak")
 [node name="Model" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 
+[node name="Base" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.65, 0)
+mesh = SubResource("CylinderMesh_wo16s")
+
 [node name="Floor" type="MeshInstance3D" parent="Model"]
 mesh = SubResource("CylinderMesh_oho6y")
 skeleton = NodePath("../..")
 
-[node name="Tube1" type="MeshInstance3D" parent="Model"]
+[node name="LightSupport1" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, 0.95, 4.3)
 mesh = SubResource("CylinderMesh_1lhql")
 skeleton = NodePath("../..")
 
-[node name="Tube2" type="MeshInstance3D" parent="Model"]
+[node name="LightSupport2" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 0.95, -4.3)
 mesh = SubResource("CylinderMesh_uxhe7")
 skeleton = NodePath("../..")

@@ -3,11 +3,13 @@ extends Node3D
 # components
 @onready var m_Player: CharacterBody3D = $"../Player"
 
+# variables
 var m_Name     = ""
 var m_Time     = 0
 var m_Robot    = 0
 var m_RowCount = 0
 
+# constants
 const m_TabChar       = "\t"
 const m_RowHeight     = 7
 const m_PlatformAngle = 22.5
@@ -15,7 +17,7 @@ const m_PlatformAngle = 22.5
 ###
 # Create the tower fundation (i.e. the underwater part)
 ##
-func CreateTowerFundation():
+func create_tower_fundation():
 	for x in range(4):
 		var towerBody = preload("res://scenes/tower_body.tscn").instantiate()
 		add_child(towerBody)
@@ -26,7 +28,7 @@ func CreateTowerFundation():
 func ParseColor(line):
 	pass
 
-func ParseDataLine(dataIndex, line):
+func parse_data_line(dataIndex, line):
 	# first data is the tower row count
 	if (dataIndex == 0):
 		m_RowCount = line.to_int()
@@ -131,7 +133,7 @@ func ParseDataLine(dataIndex, line):
 	elif (portal1 or portal2):
 		print("Loading level - ERROR - only one portal on the row - cannot bind")
 
-func ParseDemoLine(demoIndex, line):
+func parse_demo_line(demoIndex, line):
 	var value = line.to_int()
 	#print("Demo value:", value)
 
@@ -139,9 +141,9 @@ func ParseDemoLine(demoIndex, line):
 # Loads a tower level
 #@param fileName - tower level file name
 ##
-func LoadLevel(fileName):
+func load_level(fileName):
 	# create the tower fundation (the underwater part)
-	CreateTowerFundation()
+	create_tower_fundation()
 
 	# open the tower level file
 	var file = FileAccess.open(fileName, FileAccess.READ)
@@ -168,18 +170,18 @@ func LoadLevel(fileName):
 			"[robot]": m_Robot = line.to_int()
 			
 			"[data]":
-				ParseDataLine(dataIndex, line)
+				parse_data_line(dataIndex, line)
 				dataIndex += 1
 
 			"[demo]":
-				ParseDemoLine(demoIndex, line)
+				parse_demo_line(demoIndex, line)
 				demoIndex += 1
 
 ###
 # Called when the node enters the scene tree for the first time
 ##
 func _ready():
-	LoadLevel("res://levels/tower1.txt")
+	load_level("res://levels/tower1.txt")
 
 ###
 # Called every frame at a fixed rate, which allows any processing that requires the physics values

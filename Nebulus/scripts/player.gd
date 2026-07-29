@@ -32,7 +32,7 @@ const m_TowerRotationVelocity = 1.8
 const m_WalkVelocity          = 9.0
 const m_JumpVelocity          = 40.0
 const m_GravityMultiplier     = 12.5
-const m_WalkStopDist          = 25.0
+const m_WalkStopDist          = 20.0
 const m_CameraMinY            = 12.5
 
 # get the gravity from the project settings to be synced with RigidBody nodes.
@@ -255,8 +255,12 @@ func enter_portal(delta) -> bool:
 	animate_player(true)
 	play_walk_sound()
 
+	# need to remove the y position otherwise it will bias the length
+	var globalPos: Vector3 = global_position
+	globalPos.y            = 0.0
+
 	# final pos reached?
-	return global_position.length() < m_WalkStopDist
+	return globalPos.length() < m_WalkStopDist
 
 ###
 # Rotates the tower between the source portal to the target one
