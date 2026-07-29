@@ -47,8 +47,9 @@ func ParseDataLine(dataIndex, line):
 
 		match ch:
 			# skip empty spaces
-			m_TabChar: index += 4
+			m_TabChar: index  = (index + 4) - (index % 4)
 			" ":       index += 1
+			"|":       index += 1
 
 			"#":
 				# create a portal and attach it to the scene. NOTE the portal is always set above a
@@ -75,9 +76,26 @@ func ParseDataLine(dataIndex, line):
 
 				index += 1
 
+			"^":
+				# create an elevator and attach it to the scene. NOTE the elevator is always set above
+				# a platform in the level files, for that reason it is located lower on the y axis
+				var elevator = preload("res://scenes/elevator.tscn").instantiate()
+				add_child(elevator)
+
+				# connect the portal opening signals to the player
+				#portal.can_enter_portal.connect(m_Player._on_can_enter_portal)
+
+				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 1.5
+				elevator.global_position = Vector3(0.0, posY, 0.0)
+
+				var rotY = deg_to_rad(m_PlatformAngle * index)
+				elevator.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				index += 1
+
 			"-":
 				# create a platform and attach it to the scene
-				var platform = preload("res://scenes/tower_platform.tscn").instantiate()
+				var platform = preload("res://scenes/platform.tscn").instantiate()
 				add_child(platform)
 
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
@@ -163,6 +181,9 @@ func LoadLevel(fileName):
 func _ready():
 	LoadLevel("res://levels/tower1.txt")
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+###
+# Called every frame at a fixed rate, which allows any processing that requires the physics values
+#@param delta - elapsed time in seconds since the previous call
+##
 func _process(delta):
 	pass

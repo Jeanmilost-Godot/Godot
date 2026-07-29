@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://b13fxgmdf6yx6"]
+
+[ext_resource type="Script" path="res://scripts/flash_light.gd" id="1_phoax"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xi7xe"]
+transparency = 1
+albedo_color = Color(0.854902, 0.0666667, 0, 0.501961)
+metallic = 0.5
+metallic_specular = 0.75
+roughness = 0.25
+emission = Color(0.886275, 0.164706, 0, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xpjie"]
+material = SubResource("StandardMaterial3D_xi7xe")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wxmmh"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bop3d"]
+material = SubResource("StandardMaterial3D_wxmmh")
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8g4r3"]
+albedo_color = Color(0.203922, 0.00392157, 0.00784314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_t5gq2"]
+material = SubResource("StandardMaterial3D_8g4r3")
+radius = 0.3
+
+[sub_resource type="FogMaterial" id="FogMaterial_ah84d"]
+density = 0.025
+albedo = Color(0.968627, 0.2, 0.0823529, 1)
+emission = Color(0.796078, 0.2, 0.0666667, 1)
+height_falloff = 0.403424
+edge_fade = 0.292817
+
+[node name="FlashLight" type="Node3D"]
+script = ExtResource("1_phoax")
+
+[node name="Bulb" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_xpjie")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+mesh = SubResource("CylinderMesh_bop3d")
+
+[node name="Core" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_t5gq2")
+
+[node name="Light" type="SpotLight3D" parent="Core"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+light_color = Color(0.988235, 0.329412, 0, 1)
+light_energy = 2.3
+spot_range = 27.576
+spot_attenuation = 0.615573
+spot_angle = 71.34
+spot_angle_attenuation = 1.23114
+
+[node name="FogVolume" type="FogVolume" parent="Core/Light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+size = Vector3(7.5, 7.5, 7.5)
+shape = 0
+material = SubResource("FogMaterial_ah84d")
+
+[node name="CounterLight" type="SpotLight3D" parent="Core"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -0.5)
+light_color = Color(0.878431, 0, 0.180392, 1)
+light_energy = 15.0
+spot_range = 1.5
+spot_attenuation = 1.5
+spot_angle = 60.0
+spot_angle_attenuation = 0.0150927

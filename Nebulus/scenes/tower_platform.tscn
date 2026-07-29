@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://do5piopw3k381"]
-
-[ext_resource type="PackedScene" uid="uid://c7ks1x3fg6vqp" path="res://scenes/platform.tscn" id="1_ajx3v"]
-
-[node name="Tower_Platform" type="Node3D"]
-
-[node name="Platform" parent="." instance=ExtResource("1_ajx3v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)

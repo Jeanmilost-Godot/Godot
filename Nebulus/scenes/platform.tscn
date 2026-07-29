@@ -21,7 +21,9 @@ radius = 6.1
 [node name="Platform" type="StaticBody3D"]
 
 [node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 mesh = SubResource("CylinderMesh_b8mo6")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 shape = SubResource("CylinderShape3D_jyq3s")
