@@ -5,6 +5,9 @@ extends CharacterBody3D
 @onready var m_WalkSound:  AudioStreamPlayer  = $WalkSound
 @onready var m_Animations: AnimationTree      = $AnimationTree
 
+# exported variables
+@export var hard_stop_mask: int = 1 << 4  # bit for layer 5 (0-indexed, so layer 5 = bit 4)
+
 # classes
 var m_StateMachine: PlayerStateMachine
 
@@ -351,6 +354,27 @@ func rotate_player_after_exit_portal(delta) -> bool:
 	return endReached
 
 ###
+# Tests if moving to a candidate angle would hit something on the hard-stop layer
+#@param testAngleY - the angle to test moving to
+#@return true if blocked, false if clear
+##
+func would_hit_hard_stop(testAngleY: float) -> bool:
+	var testPos = Vector3.ZERO
+	testPos.x   = m_PlayerRadius * sin(testAngleY) * cos(m_AngleX)
+	testPos.y   = position.y
+	testPos.z   = m_PlayerRadius * cos(testAngleY) * cos(m_AngleX)
+
+	var motion: Vector3 = testPos - global_position
+
+	var normal_mask := collision_mask
+	collision_mask = hard_stop_mask
+
+	var blocked := test_move(global_transform, motion)
+	collision_mask = normal_mask
+
+	return blocked
+
+###
 # Called when the node enters the scene tree for the first time
 ##
 func _ready():
@@ -421,29 +445,41 @@ func _physics_process(delta):
 			var direction = (transform.basis * Vector3(inputDir.x, 0, inputDir.y)).normalized()
 			var walking   = false
 			var dir       = m_LastDir
+			var newAngleY = m_AngleY
 
 			# move player around the tower
 			if inputDir.x < 0.0:
 				if (m_StateMachine.get_state() != PlayerStateMachine.IEState.S_Turning):
-					m_AngleY = m_AngleY - (delta * m_PlayerVelocity)
-					walking  = true
+					newAngleY = m_AngleY - (delta * m_PlayerVelocity)
+					walking   = true
 
 				dir = -1.0
-
-				animate_player(true)
-				play_walk_sound()
 			elif inputDir.x > 0.0:
 				if (m_StateMachine.get_state() != PlayerStateMachine.IEState.S_Turning):
-					m_AngleY = m_AngleY + (delta * m_PlayerVelocity)
-					walking  = true
+					newAngleY = m_AngleY + (delta * m_PlayerVelocity)
+					walking   = true
 
 				dir = 1.0
 
+			var hardStop = false
+
+			# hard stop check, cancel the move if the player hits a blocking collider,
+			# e.g. the under platform collider
+			if walking and would_hit_hard_stop(newAngleY):
+				walking   = false
+				newAngleY = m_AngleY
+				hardStop  = true
+
+			# animate the player if walking, otherwise turn it idle
+			if walking or hardStop:
 				animate_player(true)
 				play_walk_sound()
 			else:
 				animate_player(false)
 				stop_walk_sound()
+
+			# apply the new angle
+			m_AngleY = newAngleY
 
 			# if direction changes, start to turn the player model
 			if (dir != m_LastDir):

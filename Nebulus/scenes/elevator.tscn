@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cbv5kcjk01dqv"]
+[gd_scene load_steps=21 format=3 uid="uid://cbv5kcjk01dqv"]
 
 [ext_resource type="Texture2D" uid="uid://dwltgdf5lvx8j" path="res://assets/textures/metal/worn-walkway-metal_albedo.png" id="1_6el6i"]
 [ext_resource type="Script" path="res://scripts/elevator.gd" id="1_ml1ak"]
@@ -82,6 +82,10 @@ bottom_radius = 0.1
 height = 0.1
 radius = 6.0
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xifuh"]
+height = 1.0
+radius = 6.0
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_duv81"]
 height = 3.0
 radius = 2.0
@@ -119,6 +123,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 2.9, -4.3)
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 shape = SubResource("CylinderShape3D_dxotj")
+
+[node name="UnderPlatformBody" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, -0.65, 0)
+collision_layer = 16
+
+[node name="UnderPlatformCollider" type="CollisionShape3D" parent="UnderPlatformBody"]
+shape = SubResource("CylinderShape3D_xifuh")
 
 [node name="TriggerZone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)

@@ -1,10 +1,11 @@
 extends StaticBody3D
 
 # components
-@onready var m_TopFlashLight:    Node3D = $Model/Light1
-@onready var m_BottomFlashLight: Node3D = $Model/Light2
-@onready var m_Base:             Node3D = $Model/Base
-@onready var m_IdleTimer:        Timer  = $IdleTimer
+@onready var m_TopFlashLight:         Node3D           = $Model/Light1
+@onready var m_BottomFlashLight:      Node3D           = $Model/Light2
+@onready var m_Base:                  Node3D           = $Model/Base
+@onready var m_UnderPlatformCollider: CollisionShape3D = $UnderPlatformBody/UnderPlatformCollider
+@onready var m_IdleTimer:             Timer            = $IdleTimer
 
 # states
 enum IEState {S_Idle, S_MoveUp, S_MoveDown}
@@ -46,6 +47,31 @@ func set_base_height(height: float):
 		mesh        = mesh.duplicate()
 		mesh.height = height
 		m_Base.mesh = mesh
+
+###
+# Gets the elevator base height
+#@return the elevator base height
+##
+func get_under_platform_collider_height() -> float:
+	var collider := m_UnderPlatformCollider.shape as CylinderShape3D
+
+	if collider:
+		return collider.height
+
+	return 1.25
+
+###
+# Sets the elevator base height
+#@param height - the elevator base height
+##
+func set_under_platform_collider_height(height: float):
+	var collider := m_UnderPlatformCollider.shape as CylinderShape3D
+
+	if collider:
+		# create a standalone copy, otherwise all the colliders in each elevators will be affected
+		collider                      = collider.duplicate()
+		collider.height               = height
+		m_UnderPlatformCollider.shape = collider
 
 ###
 # Uses the elevator
@@ -100,10 +126,12 @@ func _process(delta):
 
 			var velocity = m_Velocity * delta
 
-			global_position.y        += velocity
-			m_Base.global_position.y -= velocity / 2.0
+			global_position.y                         += velocity
+			m_Base.global_position.y                  -= velocity / 2.0
+			m_UnderPlatformCollider.global_position.y -= velocity / 2.0
 
-			set_base_height(get_base_height() + velocity)
+			set_base_height                   (get_base_height()                    + velocity)
+			set_under_platform_collider_height(get_under_platform_collider_height() + velocity)
 
 		IEState.S_MoveDown:
 			if (not m_Active):
@@ -119,11 +147,12 @@ func _process(delta):
 
 			var velocity = m_Velocity * delta
 
-			global_position.y        -= m_Velocity * delta
-			m_Base.global_position.y += velocity / 2.0
+			global_position.y                         -= m_Velocity * delta
+			m_Base.global_position.y                  += velocity / 2.0
+			m_UnderPlatformCollider.global_position.y += velocity / 2.0
 
-			set_base_height(get_base_height() - velocity)
-
+			set_base_height                   (get_base_height()                    - velocity)
+			set_under_platform_collider_height(get_under_platform_collider_height() - velocity)
 
 ###
 # Called when the idle timer, which is run after elevator hits the top, triggers

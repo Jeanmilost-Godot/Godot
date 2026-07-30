@@ -114,6 +114,19 @@ func parse_data_line(dataIndex, line):
 
 				index += 1
 
+			">":
+				# create a platform and attach it to the scene
+				var platform = preload("res://scenes/platform.tscn").instantiate()
+				add_child(platform)
+
+				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				platform.global_position = Vector3(0.0, posY, 0.0)
+
+				var rotY = deg_to_rad(m_PlatformAngle * index)
+				platform.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				index += 1
+
 			"-":
 				# create a platform and attach it to the scene
 				var platform = preload("res://scenes/platform.tscn").instantiate()

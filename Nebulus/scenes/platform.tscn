@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c7ks1x3fg6vqp"]
+[gd_scene load_steps=8 format=3 uid="uid://c7ks1x3fg6vqp"]
 
 [ext_resource type="Texture2D" uid="uid://t57rtikloo6t" path="res://assets/textures/metal/brushed-metal_albedo.png" id="1_44mrd"]
 [ext_resource type="Texture2D" uid="uid://doifsoo7o1hvh" path="res://assets/textures/metal/brushed-metal_ao.png" id="2_do36q"]
@@ -26,6 +26,10 @@ height = 2.5
 height = 2.5
 radius = 6.1
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_eyyhj"]
+height = 5.0
+radius = 6.1
+
 [node name="Platform" type="StaticBody3D"]
 
 [node name="Model" type="MeshInstance3D" parent="."]
@@ -35,3 +39,11 @@ mesh = SubResource("CylinderMesh_b8mo6")
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 shape = SubResource("CylinderShape3D_jyq3s")
+
+[node name="UnderPlatform" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, -3.25, 0)
+collision_layer = 16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="UnderPlatform"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("CylinderShape3D_eyyhj")

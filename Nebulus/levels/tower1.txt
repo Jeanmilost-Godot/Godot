@@ -7,11 +7,8 @@ Tower of eyes
 [robot]
 0
 [data]
-48
+45
 				|
-				|
-	T           |
-	T           |
  #  T    #      |
  ----    --v6   |
  !        !     |
