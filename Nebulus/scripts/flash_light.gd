@@ -19,15 +19,15 @@ const m_Velocity:           float = 10.0
 ##
 func light_fade_in(duration := 0.1):
 	# fade in the light
-	m_Light.visible = true
+	m_Light.visible      = true
 	m_Light.light_energy = 0.0
-	var lightTween = create_tween()
+	var lightTween       = create_tween()
 	lightTween.tween_property(m_Light, "light_energy", m_LightEnergy, duration)
 
 	# fade in the counter light
-	m_CounterLight.visible = true
+	m_CounterLight.visible      = true
 	m_CounterLight.light_energy = 0.0
-	var counterLightTween = create_tween()
+	var counterLightTween       = create_tween()
 	counterLightTween.tween_property(m_CounterLight, "light_energy", m_CounterLightEnergy, duration)
 
 	m_Enabled = true

@@ -19,8 +19,10 @@ var m_LastDir               = -1.0
 var m_PortalAngle           =  0.0
 var m_TargetPortalAngle     =  0.0
 var m_CanEnterPortal        =  false
+var m_CanUseElevator        =  false
 var m_Portal                =  null
 var m_TargetPortal          =  null
+var m_Elevator              =  null
 var m_PortalState: IEPortal = IEPortal.P_Aligning
 
 # constants
@@ -395,21 +397,26 @@ func _physics_process(delta):
 
 		_:
 			var inputDir = Vector2.ZERO
+			var canMove  = !m_Elevator or !m_Elevator.is_using()
 
-			# do move the player to the left or right?
-			if Input.is_action_pressed("left"):
-				inputDir.x = -1.0
-			elif Input.is_action_pressed("right"):
-				inputDir.x = 1.0
+			if (canMove):
+				# do move the player to the left or right?
+				if Input.is_action_pressed("left"):
+					inputDir.x = -1.0
+				elif Input.is_action_pressed("right"):
+					inputDir.x = 1.0
 
-			if Input.is_action_pressed("up") && m_CanEnterPortal:
-				inputDir.y    = 0.0
-				m_PortalState = IEPortal.P_Aligning
-				m_StateMachine.set_action(PlayerStateMachine.IEAction.A_Crossing_Portal)
+				if Input.is_action_pressed("up"):
+					if (m_CanEnterPortal):
+						inputDir.y    = 0.0
+						m_PortalState = IEPortal.P_Aligning
+						m_StateMachine.set_action(PlayerStateMachine.IEAction.A_Crossing_Portal)
+					elif (m_CanUseElevator and m_Elevator):
+						m_Elevator.use()
 
-			# do move the player to the top or bottom?
-			if Input.is_action_pressed("jump_or_fire"):
-				inputDir.y = -1.0
+				# do move the player to the top or bottom?
+				if Input.is_action_pressed("jump_or_fire"):
+					inputDir.y = -1.0
 
 			var direction = (transform.basis * Vector3(inputDir.x, 0, inputDir.y)).normalized()
 			var walking   = false
@@ -482,3 +489,12 @@ func _on_can_enter_portal(canEnter, portal, targetPortal):
 
 	if (m_TargetPortal):
 		m_TargetPortalAngle = m_TargetPortal.global_rotation.y
+
+###
+# Called when the player enters or leaves the trigger zone of an elevator
+#@param canUse - if true, player can use the elevator
+#@param elevator - elevator on which the user is located, null if canUse is false
+##
+func _on_can_use_elevator(canUse, elevator):
+	m_CanUseElevator = canUse
+	m_Elevator       = elevator

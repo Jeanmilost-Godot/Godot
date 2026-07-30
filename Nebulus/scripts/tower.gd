@@ -9,6 +9,8 @@ var m_Time     = 0
 var m_Robot    = 0
 var m_RowCount = 0
 
+var m_ElevatorEndArray: Array[int] = []
+
 # constants
 const m_TabChar       = "\t"
 const m_RowHeight     = 7
@@ -34,9 +36,12 @@ func parse_data_line(dataIndex, line):
 		m_RowCount = line.to_int()
 		return
 
+	# add a new tower body section to the scene
 	var towerBody = preload("res://scenes/tower_body.tscn").instantiate()
 	add_child(towerBody)
 
+	# calculate the tower row position, remember that the file is read from top to bottom, whereas
+	# the tower is built from the bottom to the top
 	var towerPosY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 	towerBody.global_position = Vector3(0.0, towerPosY, 0.0)
 
@@ -44,11 +49,14 @@ func parse_data_line(dataIndex, line):
 	var portal1 = null
 	var portal2 = null
 
+	# iterate through line chars
 	for x in range(line.length()):
+		# get next char
 		var ch = line[x]
 
+		# dispatch it
 		match ch:
-			# skip empty spaces
+			# skip empty spaces and line end marker
 			m_TabChar: index  = (index + 4) - (index % 4)
 			" ":       index += 1
 			"|":       index += 1
@@ -59,7 +67,7 @@ func parse_data_line(dataIndex, line):
 				var portal = preload("res://scenes/portal.tscn").instantiate()
 				add_child(portal)
 
-				# connect the portal opening signals to the player
+				# connect the portal signals to the player
 				portal.can_enter_portal.connect(m_Player._on_can_enter_portal)
 
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 0.5
@@ -78,20 +86,31 @@ func parse_data_line(dataIndex, line):
 
 				index += 1
 
+			"v":
+				# keep the last known elevator end, will be used later to define the elevator max height limit
+				m_ElevatorEndArray[index] = dataIndex
+				index += 1
+
 			"^":
 				# create an elevator and attach it to the scene. NOTE the elevator is always set above
 				# a platform in the level files, for that reason it is located lower on the y axis
 				var elevator = preload("res://scenes/elevator.tscn").instantiate()
 				add_child(elevator)
 
-				# connect the portal opening signals to the player
-				#portal.can_enter_portal.connect(m_Player._on_can_enter_portal)
+				# connect the elevator signals to the player
+				elevator.can_use_elevator.connect(m_Player._on_can_use_elevator)
 
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 1.5
 				elevator.global_position = Vector3(0.0, posY, 0.0)
 
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				elevator.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				elevator.m_StartY     = elevator.global_position.y
+				elevator.m_StartBaseY = elevator.m_Base.global_position.y
+
+				# calculate the elevator end position
+				elevator.m_EndY = (m_RowCount * m_RowHeight) - (m_RowHeight * m_ElevatorEndArray[index]) + 1.2
 
 				index += 1
 
@@ -181,6 +200,8 @@ func load_level(fileName):
 # Called when the node enters the scene tree for the first time
 ##
 func _ready():
+	m_ElevatorEndArray.resize(16)
+
 	load_level("res://levels/tower1.txt")
 
 ###

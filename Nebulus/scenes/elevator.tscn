@@ -127,5 +127,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("CylinderShape3D_duv81")
 
+[node name="IdleTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="body_entered" from="TriggerZone" to="." method="_on_trigger_zone_body_entered"]
 [connection signal="body_exited" from="TriggerZone" to="." method="_on_trigger_zone_body_exited"]
