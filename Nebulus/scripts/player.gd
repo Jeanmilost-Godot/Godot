@@ -304,8 +304,12 @@ func leave_portal(delta) -> bool:
 	animate_player(true)
 	play_walk_sound()
 
+	# need to remove the y position otherwise it will bias the length
+	var globalPos: Vector3 = global_position
+	globalPos.y            = 0.0
+
 	# final pos reached?
-	if (global_position.length() >= m_PlayerRadius):
+	if (globalPos.length() >= m_PlayerRadius):
 		global_position.x = m_PlayerRadius * sin(m_AngleY) * cos(m_AngleX)
 		global_position.z = m_PlayerRadius * cos(m_AngleY) * cos(m_AngleX)
 		return true

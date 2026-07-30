@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdkru0rfmtlyt"]
+[gd_scene load_steps=9 format=3 uid="uid://bdkru0rfmtlyt"]
 
 [ext_resource type="Material" uid="uid://bs25fi7wsq2se" path="res://materials/skybox.tres" id="2_0yfkc"]
 [ext_resource type="PackedScene" uid="uid://cwddmeie45rra" path="res://scenes/ocean.tscn" id="3_4lxv7"]
@@ -40,6 +40,18 @@ adjustment_enabled = true
 adjustment_brightness = 1.5
 adjustment_saturation = 1.1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f0a07"]
+albedo_color = Color(0, 0.168627, 0.866667, 1)
+metallic = 0.65
+metallic_specular = 0.8
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e3x6o"]
+material = SubResource("StandardMaterial3D_f0a07")
+top_radius = 10000.0
+bottom_radius = 10000.0
+height = 0.001
+
 [node name="Main" type="Node3D"]
 
 [node name="Camera" type="Camera3D" parent="."]
@@ -55,6 +67,9 @@ spot_range = 25.0
 spot_attenuation = 0.450627
 spot_angle = 95.0
 spot_angle_attenuation = 0.25
+
+[node name="AudioListener3D" type="AudioListener3D" parent="Camera"]
+current = true
 
 [node name="Environment" type="Node3D" parent="."]
 
@@ -73,8 +88,7 @@ environment = SubResource("Environment_ggapm")
 
 [node name="Light" type="DirectionalLight3D" parent="Ocean"]
 transform = Transform3D(0.755259, 2.86496e-08, -0.655427, 0.655427, -3.30134e-08, 0.755259, 0, -1, -4.37114e-08, 0, 0, 0)
-light_color = Color(0.121569, 0.462745, 0.627451, 1)
-light_energy = 0.1
+light_color = Color(0.254902, 0.607843, 0.976471, 1)
 light_volumetric_fog_energy = 0.0
 light_bake_mode = 1
 light_cull_mask = 4294443008
@@ -84,3 +98,7 @@ sky_mode = 1
 
 [node name="Player" parent="." instance=ExtResource("4_hxblr")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 31, 12.5, 0)
+
+[node name="Horizon" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+mesh = SubResource("CylinderMesh_e3x6o")

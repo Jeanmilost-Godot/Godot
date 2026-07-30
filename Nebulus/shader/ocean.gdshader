@@ -3,48 +3,52 @@ render_mode depth_draw_always;
 
 // --- Uniforms ---
 group_uniforms Matrices;
-uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
-uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D DEPTH_TEXTURE:  hint_depth_texture,  filter_linear_mipmap;
+uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
 
 group_uniforms Wave_Settings;
-uniform float wave_strength : hint_range(0.0, 2.0, 0.05) = 1.0;
+uniform float wave_strength: hint_range(0.0, 2.0, 0.05) = 1.0;
 
 group_uniforms Material_PBR;
-uniform float roughness : hint_range(0.0, 1.0) = 0.08;
-uniform float metallic : hint_range(0.0, 1.0) = 0.0;
-uniform float specular : hint_range(0.0, 1.0) = 0.5;
+uniform float roughness: hint_range(0.0, 1.0) = 0.08;
+uniform float metallic:  hint_range(0.0, 1.0) = 0.0;
+uniform float specular:  hint_range(0.0, 1.0) = 0.5;
 
 group_uniforms Color_Settings;
-uniform vec3 water_color : source_color = vec3(0.01, 0.05, 0.07);
-uniform vec3 deep_water_color : source_color = vec3(0.0, 0.01, 0.02);
-uniform vec3 water_absorption : source_color = vec3(0.3, 0.06, 0.02);
-uniform float max_depth : hint_range(0.1, 50.0, 0.1) = 15.0;
-uniform float fade_start_depth : hint_range(0.0, 50.0, 0.1) = 0.5;
+uniform vec3  water_color:      source_color = vec3(0.01, 0.05, 0.07);
+uniform vec3  deep_water_color: source_color = vec3(0.0, 0.01, 0.02);
+uniform vec3  water_absorption: source_color = vec3(0.3, 0.06, 0.02);
+uniform float max_depth:        hint_range(0.1, 50.0, 0.1) = 15.0;
+uniform float fade_start_depth: hint_range(0.0, 50.0, 0.1) = 0.5;
 
 group_uniforms Refraction;
-uniform float refraction_strength : hint_range(0.0, 2.0, 0.01) = 0.5;
-uniform float refraction_distance_fade : hint_range(0.0, 100.0, 1.0) = 10.0;
+uniform float refraction_strength:      hint_range(0.0, 2.0, 0.01)  = 0.5;
+uniform float refraction_distance_fade: hint_range(0.0, 100.0, 1.0) = 10.0;
 
 group_uniforms Caustics;
-uniform sampler2D caustics_texture : filter_linear_mipmap, repeat_enable;
-uniform float caustics_scale : hint_range(0.1, 10.0, 0.1) = 2.0;
-uniform float caustics_speed : hint_range(0.0, 1.0, 0.01) = 0.1;
-uniform float caustics_intensity : hint_range(0.0, 2.0, 0.1) = 0.8;
-uniform float caustics_depth_fade : hint_range(0.0, 1.0, 0.01) = 0.7;
+uniform sampler2D caustics_texture:    filter_linear_mipmap, repeat_enable;
+uniform float     caustics_scale:      hint_range(0.1, 10.0, 0.1) = 2.0;
+uniform float     caustics_speed:      hint_range(0.0, 1.0, 0.01) = 0.1;
+uniform float     caustics_intensity:  hint_range(0.0, 2.0, 0.1)  = 0.8;
+uniform float     caustics_depth_fade: hint_range(0.0, 1.0, 0.01) = 0.7;
 
 group_uniforms Foam;
-uniform vec3 foam_color : source_color = vec3(1.0, 1.0, 1.0);
-uniform vec3 foam_edge_color : source_color = vec3(0.005, 0.01, 0.03);
-uniform float foam_depth_start : hint_range(0.0, 5.0, 0.01) = 0.8;
-uniform float foam_depth_end   : hint_range(0.0, 5.0, 0.01) = 0.0;
-uniform float foam_noise_scale : hint_range(0.0, 10.0, 0.01) = 2.0;
-uniform float foam_noise_speed : hint_range(0.0, 2.0, 0.01) = 1.0;
-uniform float foam_cutoff      : hint_range(0.0, 1.0, 0.01) = 0.7;
-uniform float foam_crest_threshold : hint_range(0.0, 1.0, 0.01) = 0.7;
-uniform float foam_crest_amount    : hint_range(0.0, 10.0, 0.1) = 2.0;
-uniform vec2 foam_edge_offset = vec2(0.02, 0.02);
-uniform float voronoi_scale   : hint_range(0.0, 50.0) = 9.0;
-uniform float voronoi_strength : hint_range(0.0, 8.0) = 0.8;
+uniform vec3  foam_color:           source_color                = vec3(1.0, 1.0, 1.0);
+uniform vec3  foam_edge_color:      source_color                = vec3(0.005, 0.01, 0.03);
+uniform float foam_depth_start:     hint_range(0.0, 5.0, 0.01)  = 0.8;
+uniform float foam_depth_end:       hint_range(0.0, 5.0, 0.01)  = 0.0;
+uniform float foam_noise_scale:     hint_range(0.0, 10.0, 0.01) = 2.0;
+uniform float foam_noise_speed:     hint_range(0.0, 2.0, 0.01)  = 1.0;
+uniform float foam_cutoff:          hint_range(0.0, 1.0, 0.01)  = 0.7;
+uniform float foam_crest_threshold: hint_range(0.0, 1.0, 0.01)  = 0.7;
+uniform float foam_crest_amount:    hint_range(0.0, 10.0, 0.1)  = 2.0;
+uniform vec2  foam_edge_offset                                  = vec2(0.02, 0.02);
+uniform float voronoi_scale:        hint_range(0.0, 50.0)       = 9.0;
+uniform float voronoi_strength:     hint_range(0.0, 8.0)        = 0.8;
+
+group_uniforms Horizon;
+uniform float fade_start_radius = 150.0;
+uniform float fade_end_radius   = 300.0;
 
 // --- Varyings ---
 varying vec3 world_vert;
@@ -364,4 +368,10 @@ void fragment()
     ROUGHNESS = mix(roughness, 0.8, (foam_mask_primary * bubble_alpha) + foam_mask_shadow);
     METALLIC  = metallic;
     SPECULAR  = specular;
+
+    // horizon fade out
+    float dist = length(VERTEX.xz); // or use a UV-based radial distance
+    float fade = 1.0 - smoothstep(fade_start_radius, fade_end_radius, dist);
+
+    ALPHA *= fade;
 }
