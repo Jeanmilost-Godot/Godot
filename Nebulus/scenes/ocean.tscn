@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwddmeie45rra"]
+[gd_scene load_steps=5 format=3 uid="uid://cwddmeie45rra"]
 
 [ext_resource type="Shader" path="res://shader/ocean.gdshader" id="1_eqci3"]
 [ext_resource type="Texture2D" uid="uid://cng0v0qrvr1jk" path="res://assets/textures/water/caust00.png" id="2_paueu"]
-[ext_resource type="AudioStream" uid="uid://ddekiw1p7pwtg" path="res://assets/sounds/ocean/ocean.mp3" id="3_bnh4d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iohnc"]
 render_priority = 0
@@ -98,11 +97,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, -100)
 layers = 524288
 sorting_offset = -10.0
 mesh = SubResource("PlaneMesh_rkclj")
-
-[node name="Sound" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_bnh4d")
-volume_db = 35.0
-unit_size = 0.75
-max_db = 0.0
-autoplay = true
-max_distance = 200.0

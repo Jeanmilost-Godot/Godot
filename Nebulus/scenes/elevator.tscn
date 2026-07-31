@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cbv5kcjk01dqv"]
+[gd_scene load_steps=23 format=3 uid="uid://cbv5kcjk01dqv"]
 
 [ext_resource type="Texture2D" uid="uid://dwltgdf5lvx8j" path="res://assets/textures/metal/worn-walkway-metal_albedo.png" id="1_6el6i"]
 [ext_resource type="Script" path="res://scripts/elevator.gd" id="1_ml1ak"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://doifsoo7o1hvh" path="res://assets/textures/metal/brushed-metal_ao.png" id="6_w4wk3"]
 [ext_resource type="Texture2D" uid="uid://drmtatiqppeui" path="res://assets/textures/metal/brushed-metal_normal-ogl.png" id="7_w1t7x"]
 [ext_resource type="PackedScene" uid="uid://b13fxgmdf6yx6" path="res://scenes/flash_light.tscn" id="8_ieor0"]
+[ext_resource type="AudioStream" uid="uid://bp2wkug88c4kv" path="res://assets/sounds/elevator/elevator.mp3" id="10_80djx"]
+[ext_resource type="AudioStream" uid="uid://covgaboex2263" path="res://assets/sounds/elevator/alarm.mp3" id="11_p5r0u"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yp3qp"]
 albedo_texture = ExtResource("5_pov1r")
@@ -140,6 +142,22 @@ shape = SubResource("CylinderShape3D_duv81")
 
 [node name="IdleTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Elevator" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
+stream = ExtResource("10_80djx")
+volume_db = 5.0
+unit_size = 1.0
+max_distance = 50.0
+attenuation_filter_db = -40.0
+
+[node name="Alarm" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
+stream = ExtResource("11_p5r0u")
+volume_db = 2.5
+unit_size = 1.0
+max_distance = 50.0
+attenuation_filter_db = -40.0
 
 [connection signal="body_entered" from="TriggerZone" to="." method="_on_trigger_zone_body_entered"]
 [connection signal="body_exited" from="TriggerZone" to="." method="_on_trigger_zone_body_exited"]

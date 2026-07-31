@@ -12,20 +12,64 @@ var m_RowCount = 0
 var m_ElevatorEndArray: Array[int] = []
 
 # constants
-const m_TabChar       = "\t"
-const m_RowHeight     = 7
-const m_PlatformAngle = 22.5
+const m_TabChar             = "\t"
+const m_RowHeight           = 2.5
+const m_PlatformAngle       = 22.5
+const m_TextureRepeatOffset = 2.0
+
+###
+# Gets the material associated to the mesh
+#@param meshInst - mesh instance for which the material should be get
+#@return material, null if not found or on error
+##
+func get_material(meshInst: MeshInstance3D) -> StandardMaterial3D:
+	if (!meshInst):
+		return null
+
+	var mat := meshInst.get_surface_override_material(0)
+
+	if (!mat):
+		mat = meshInst.mesh.surface_get_material(0)
+
+	return mat
+
+###
+#Configures the tower row texture in a such manner it repeats perfectly with other rows
+#@param towerRow - tower row for which the texture should be configured
+#@param towerPosY - current y position of the tower row
+##
+func configure_tower_tower_row_texture(towerRow: Node3D, towerPosY: float):
+	var towerNode:    MeshInstance3D     = towerRow.get_node("Tower")
+	var towerBodyMat: StandardMaterial3D = get_material(towerNode)
+
+	if (!towerBodyMat):
+		return
+
+	# make material unique per tower instance, otherwise every row shares (and fights over) the same
+	# material resource and they'll all show the same offset/scale
+	towerBodyMat = towerBodyMat.duplicate()
+	towerNode.set_surface_override_material(0, towerBodyMat)
+
+	# stretch the Y tiling so one full texture repeat spans every repeat offset
+	towerBodyMat.uv1_scale.y = m_RowHeight / m_TextureRepeatOffset
+
+	# offset in that same rescaled space, using the tower's world Y, so consecutive rows continue
+	# the same repeating pattern instead of each restarting at UV 0
+	towerBodyMat.uv1_offset.y = fposmod(towerPosY / m_TextureRepeatOffset, 1.0)
 
 ###
 # Create the tower fundation (i.e. the underwater part)
 ##
 func create_tower_fundation():
-	for x in range(4):
-		var towerBody = preload("res://scenes/tower_body.tscn").instantiate()
-		add_child(towerBody)
+	for x in range(10):
+		var towerRow = preload("res://scenes/tower_row.tscn").instantiate()
+		add_child(towerRow)
 
-		var towerPosY = 0 - (m_RowHeight * x)
-		towerBody.global_position = Vector3(0.0, towerPosY, 0.0)
+		var towerPosY            = 0 - (m_RowHeight * x)
+		towerRow.global_position = Vector3(0.0, towerPosY, 0.0)
+
+		# configure the tower row texture in a such manner it repeats harmoniously in the whole tower
+		configure_tower_tower_row_texture(towerRow, towerPosY)
 
 func ParseColor(line):
 	pass
@@ -36,14 +80,17 @@ func parse_data_line(dataIndex, line):
 		m_RowCount = line.to_int()
 		return
 
-	# add a new tower body section to the scene
-	var towerBody = preload("res://scenes/tower_body.tscn").instantiate()
-	add_child(towerBody)
+	# add a new tower row to the scene
+	var towerRow = preload("res://scenes/tower_row.tscn").instantiate()
+	add_child(towerRow)
 
 	# calculate the tower row position, remember that the file is read from top to bottom, whereas
 	# the tower is built from the bottom to the top
 	var towerPosY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
-	towerBody.global_position = Vector3(0.0, towerPosY, 0.0)
+	towerRow.global_position = Vector3(0.0, towerPosY, 0.0)
+
+	# configure the tower row texture in a such manner it repeats harmoniously in the whole tower
+	configure_tower_tower_row_texture(towerRow, towerPosY)
 
 	var index   = 0;
 	var portal1 = null

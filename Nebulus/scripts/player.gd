@@ -6,7 +6,7 @@ extends CharacterBody3D
 @onready var m_Animations: AnimationTree      = $AnimationTree
 
 # exported variables
-@export var hard_stop_mask: int = 1 << 4  # bit for layer 5 (0-indexed, so layer 5 = bit 4)
+@export var HardStopMask: int = 1 << 4  # bit for layer 5 (0-indexed, so layer 5 = bit 4)
 
 # classes
 var m_StateMachine: PlayerStateMachine
@@ -366,10 +366,10 @@ func would_hit_hard_stop(testAngleY: float) -> bool:
 
 	var motion: Vector3 = testPos - global_position
 
-	var normal_mask := collision_mask
-	collision_mask = hard_stop_mask
+	var normal_mask = collision_mask
+	collision_mask  = HardStopMask
 
-	var blocked := test_move(global_transform, motion)
+	var blocked    = test_move(global_transform, motion)
 	collision_mask = normal_mask
 
 	return blocked
@@ -430,7 +430,7 @@ func _physics_process(delta):
 				elif Input.is_action_pressed("right"):
 					inputDir.x = 1.0
 
-				if Input.is_action_pressed("up"):
+				if Input.is_action_pressed("up") and is_on_floor():
 					if (m_CanEnterPortal):
 						inputDir.y    = 0.0
 						m_PortalState = IEPortal.P_Aligning

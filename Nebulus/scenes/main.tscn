@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bdkru0rfmtlyt"]
+[gd_scene load_steps=11 format=3 uid="uid://bdkru0rfmtlyt"]
 
 [ext_resource type="Material" uid="uid://bs25fi7wsq2se" path="res://materials/skybox.tres" id="2_0yfkc"]
 [ext_resource type="PackedScene" uid="uid://cwddmeie45rra" path="res://scenes/ocean.tscn" id="3_4lxv7"]
 [ext_resource type="PackedScene" uid="uid://5s1lc3ilur82" path="res://scenes/tower_1.tscn" id="3_ix032"]
+[ext_resource type="AudioStream" uid="uid://ddekiw1p7pwtg" path="res://assets/sounds/ocean/ocean.mp3" id="3_wqyux"]
+[ext_resource type="Script" path="res://scripts/ocean_sound.gd" id="4_bux3t"]
 [ext_resource type="PackedScene" uid="uid://2em4xfx4w0d8" path="res://scenes/player.tscn" id="4_hxblr"]
 
 [sub_resource type="Sky" id="Sky_e1wwx"]
@@ -68,9 +70,6 @@ spot_attenuation = 0.450627
 spot_angle = 95.0
 spot_angle_attenuation = 0.25
 
-[node name="AudioListener3D" type="AudioListener3D" parent="Camera"]
-current = true
-
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="AmbientLight" type="DirectionalLight3D" parent="Environment"]
@@ -94,10 +93,22 @@ light_bake_mode = 1
 light_cull_mask = 4294443008
 sky_mode = 1
 
+[node name="Sound" type="AudioStreamPlayer" parent="Ocean" node_paths=PackedStringArray("ListenerNode")]
+stream = ExtResource("3_wqyux")
+volume_db = 35.0
+autoplay = true
+script = ExtResource("4_bux3t")
+ListenerNode = NodePath("../../Camera")
+MaxFadeHeight = 40.0
+
 [node name="Tower_1" parent="." instance=ExtResource("3_ix032")]
 
 [node name="Player" parent="." instance=ExtResource("4_hxblr")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 31, 12.5, 0)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 31, 7.95, 0)
+
+[node name="AudioListener" type="AudioListener3D" parent="Player"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.333334, -0.15, 3.64262e-07)
+current = true
 
 [node name="Horizon" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)

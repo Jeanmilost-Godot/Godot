@@ -1,11 +1,13 @@
 extends StaticBody3D
 
 # components
-@onready var m_TopFlashLight:         Node3D           = $Model/Light1
-@onready var m_BottomFlashLight:      Node3D           = $Model/Light2
-@onready var m_Base:                  Node3D           = $Model/Base
-@onready var m_UnderPlatformCollider: CollisionShape3D = $UnderPlatformBody/UnderPlatformCollider
-@onready var m_IdleTimer:             Timer            = $IdleTimer
+@onready var m_TopFlashLight:         Node3D              = $Model/Light1
+@onready var m_BottomFlashLight:      Node3D              = $Model/Light2
+@onready var m_Base:                  Node3D              = $Model/Base
+@onready var m_UnderPlatformCollider: CollisionShape3D    = $UnderPlatformBody/UnderPlatformCollider
+@onready var m_ElevatorSound:         AudioStreamPlayer3D = $Elevator
+@onready var m_AlarmSound:            AudioStreamPlayer3D = $Alarm
+@onready var m_IdleTimer:             Timer               = $IdleTimer
 
 # states
 enum IEState {S_Idle, S_MoveUp, S_MoveDown}
@@ -91,6 +93,30 @@ func is_using() -> bool:
 	return (m_State != IEState.S_Idle)
 
 ###
+# Plays the elevator sound
+##
+func play_elevator_sound():
+	# play the elevator sound
+	if !m_ElevatorSound.is_playing():
+		m_ElevatorSound.play();
+
+	# play the alarm sound
+	if !m_AlarmSound.is_playing():
+		m_AlarmSound.play();
+
+###
+# Stops the elevator sound
+##
+func stop_elevator_sound():
+	# stop the elevator sound
+	if m_ElevatorSound.is_playing():
+		m_ElevatorSound.stop();
+
+	# stop the alarm sound
+	if m_AlarmSound.is_playing():
+		m_AlarmSound.stop();
+
+###
 # Called when the node enters the scene tree for the first time
 ##
 func _ready():
@@ -107,6 +133,7 @@ func _process(delta):
 				# disable the lights
 				m_TopFlashLight.light_fade_out()
 				m_BottomFlashLight.light_fade_out()
+				stop_elevator_sound()
 				m_Active = false
 
 		IEState.S_MoveUp:
@@ -114,6 +141,7 @@ func _process(delta):
 				# enable the lights
 				m_TopFlashLight.light_fade_in()
 				m_BottomFlashLight.light_fade_in()
+				play_elevator_sound()
 				m_Active = true
 
 			if (global_position.y >= m_EndY):
@@ -138,6 +166,7 @@ func _process(delta):
 				# enable the lights
 				m_TopFlashLight.light_fade_in()
 				m_BottomFlashLight.light_fade_in()
+				play_elevator_sound()
 				m_Active = true
 
 			if (global_position.y <= m_StartY):
