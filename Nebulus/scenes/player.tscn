@@ -574,18 +574,23 @@ skin = SubResource("Skin_uwhep")
 mesh = SubResource("ArrayMesh_c883h")
 skin = SubResource("Skin_uwhep")
 
-[node name="Left-Camera-Lens" type="MeshInstance3D" parent="Model/Armature/Skeleton3D"]
-transform = Transform3D(0.3, 0, 0, 0, -1.31134e-08, -0.3, 0, 0.3, -1.31134e-08, -0.4, 0.5, 0.96)
+[node name="AdditionalItems" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+transform = Transform3D(0, -1, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0)
+bone_name = "Bone.001"
+bone_idx = 1
+
+[node name="Left-Camera-Lens" type="MeshInstance3D" parent="Model/Armature/Skeleton3D/AdditionalItems"]
+transform = Transform3D(0, -0.3, 1.31134e-08, -0.3, 0, 0, 0, -1.31134e-08, -0.3, -0.96, 0.4, 0.5)
 mesh = SubResource("PlaneMesh_lp8wb")
-skeleton = NodePath("../../../..")
+skeleton = NodePath("../../../../..")
 
-[node name="Right-Camera-Lens" type="MeshInstance3D" parent="Model/Armature/Skeleton3D"]
-transform = Transform3D(0.3, 0, 0, 0, -1.31134e-08, -0.3, 0, 0.3, -1.31134e-08, 0.4, 0.5, 0.96)
+[node name="Right-Camera-Lens" type="MeshInstance3D" parent="Model/Armature/Skeleton3D/AdditionalItems"]
+transform = Transform3D(0, -0.3, 1.31134e-08, -0.3, 0, 0, 0, -1.31134e-08, -0.3, -0.96, -0.4, 0.5)
 mesh = SubResource("PlaneMesh_4ac2i")
-skeleton = NodePath("../../../..")
+skeleton = NodePath("../../../../..")
 
-[node name="Left-Camera-Light" type="SpotLight3D" parent="Model/Armature/Skeleton3D"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.4, 0.5, 0.75)
+[node name="Left-Camera-Light" type="SpotLight3D" parent="Model/Armature/Skeleton3D/AdditionalItems"]
+transform = Transform3D(-8.74228e-08, 0, 1, 1, 0, 8.74228e-08, 0, 1, 0, -0.75, 0.4, 0.5)
 light_color = Color(0.976471, 0.266667, 0.380392, 1)
 light_energy = 0.5
 light_indirect_energy = 0.5
@@ -595,14 +600,14 @@ spot_attenuation = 0.189465
 spot_angle = 75.0
 spot_angle_attenuation = 0.170755
 
-[node name="FogVolume" type="FogVolume" parent="Model/Armature/Skeleton3D/Left-Camera-Light"]
+[node name="FogVolume" type="FogVolume" parent="Model/Armature/Skeleton3D/AdditionalItems/Left-Camera-Light"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2.5)
 size = Vector3(3, 5, 3)
 shape = 1
 material = SubResource("FogMaterial_njdoq")
 
-[node name="Right-Camera-Light" type="SpotLight3D" parent="Model/Armature/Skeleton3D"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.4, 0.5, 0.75)
+[node name="Right-Camera-Light" type="SpotLight3D" parent="Model/Armature/Skeleton3D/AdditionalItems"]
+transform = Transform3D(-8.74228e-08, 0, 1, 1, 0, 8.74228e-08, 0, 1, 0, -0.75, -0.4, 0.5)
 light_color = Color(0.976471, 0.266667, 0.380392, 1)
 light_energy = 0.5
 light_indirect_energy = 0.5
@@ -612,7 +617,7 @@ spot_attenuation = 0.189465
 spot_angle = 75.0
 spot_angle_attenuation = 0.170755
 
-[node name="FogVolume" type="FogVolume" parent="Model/Armature/Skeleton3D/Right-Camera-Light"]
+[node name="FogVolume" type="FogVolume" parent="Model/Armature/Skeleton3D/AdditionalItems/Right-Camera-Light"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -2.5)
 size = Vector3(3, 5, 3)
 shape = 1
