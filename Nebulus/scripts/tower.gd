@@ -9,13 +9,15 @@ var m_Time     = 0
 var m_Robot    = 0
 var m_RowCount = 0
 
-var m_ElevatorEndArray: Array[int] = []
+var m_ElevatorEndArray: Array[int]   = []
+var m_StairsArray:      Array[Array] = []
 
 # constants
-const m_TabChar             = "\t"
-const m_RowHeight           = 2.5
-const m_PlatformAngle       = 22.5
-const m_TextureRepeatOffset = 2.0
+const m_TabChar:                   = "\t"
+const m_ColumnCount:         int   = 16
+const m_RowHeight:           float = 2.5
+const m_PlatformAngle:       float = 22.5
+const m_TextureRepeatOffset: float = 2.0
 
 ###
 # Gets the material associated to the mesh
@@ -58,18 +60,71 @@ func configure_tower_tower_row_texture(towerRow: Node3D, towerPosY: float):
 	towerBodyMat.uv1_offset.y = fposmod(towerPosY / m_TextureRepeatOffset, 1.0)
 
 ###
-# Create the tower fundation (i.e. the underwater part)
+# Creates the tower fundation (i.e. the underwater part)
 ##
 func create_tower_fundation():
+	# iterate through rows to create
 	for x in range(10):
+		# create a row
 		var towerRow = preload("res://scenes/tower_row.tscn").instantiate()
 		add_child(towerRow)
 
+		# set its position
 		var towerPosY            = 0 - (m_RowHeight * x)
 		towerRow.global_position = Vector3(0.0, towerPosY, 0.0)
 
 		# configure the tower row texture in a such manner it repeats harmoniously in the whole tower
 		configure_tower_tower_row_texture(towerRow, towerPosY)
+
+###
+# Enables a ramp collider which allows the platform to acts as a stair
+#@param platform - platform which may acts as a stair
+#@param row - current row on which the platform is
+#@param col - current column on which the platform is
+##
+func enable_stairs(platform: Node3D, row: int, col: int):
+	var nextRow = row + 1
+
+	# can ignore the last rows, there are no platform above them
+	if (nextRow >= m_RowCount):
+		return
+
+	# do enable left ramp?
+	if (m_StairsArray[row + 1][((col + m_ColumnCount) - 1) % m_ColumnCount]):
+		var ramp = platform.get_node("LeftRamp")
+
+		if (ramp):
+			ramp.disabled = false
+		else:
+			print("Load level - FAILED - Cannot find platform left ramp collider - row - " + str(row) + " - col - " + str(col))
+
+	# do enable right ramp?
+	if (m_StairsArray[row + 1][(col + 1) % m_ColumnCount]):
+		var ramp = platform.get_node("RightRamp")
+
+		if (ramp):
+			ramp.disabled = false
+		else:
+			print("Load level - FAILED - Cannot find platform right ramp collider - row - " + str(row) + " - col - " + str(col))
+
+###
+# Finalizes the level geometry after fully loaded
+##
+func finalize_level_geometry():
+	# get all spawned platforms via the group tag
+	var platforms = get_tree().get_nodes_in_group("LevelPlatforms")
+
+	# iterate through platforms
+	for platform in platforms:
+		var row = platform.get_meta("row")
+		var col = platform.get_meta("col")
+		
+		# prevent out of bounds checks on row 0
+		if row <= 0:
+			continue
+
+		# check if the ramp collider should be enabled on the platform left or right to turn it a stair
+		enable_stairs(platform, row, col)
 
 func ParseColor(line):
 	pass
@@ -77,7 +132,21 @@ func ParseColor(line):
 func parse_data_line(dataIndex, line):
 	# first data is the tower row count
 	if (dataIndex == 0):
+		# get total row count
 		m_RowCount = line.to_int()
+
+		# resize the arrays used to read the file
+		m_ElevatorEndArray.resize(m_ColumnCount)
+		m_StairsArray.resize(m_RowCount)
+
+		# for each stairs, resize the row array
+		for i in m_StairsArray:
+			i.resize(m_ColumnCount)
+
+			#initialize it with default value
+			for j in i:
+				j = false
+
 		return
 
 	# add a new tower row to the scene
@@ -166,11 +235,20 @@ func parse_data_line(dataIndex, line):
 				var platform = preload("res://scenes/platform.tscn").instantiate()
 				add_child(platform)
 
+				# tag the platform node with its level grid coordinates
+				platform.set_meta("row", dataIndex)
+				platform.set_meta("col", index)
+				platform.add_to_group("LevelPlatforms")
+
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				platform.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				m_StairsArray[dataIndex][index] = true
+
+				enable_stairs(platform, dataIndex, index)
 
 				index += 1
 
@@ -179,11 +257,20 @@ func parse_data_line(dataIndex, line):
 				var platform = preload("res://scenes/platform.tscn").instantiate()
 				add_child(platform)
 
+				# tag the platform node with its level grid coordinates
+				platform.set_meta("row", dataIndex)
+				platform.set_meta("col", index)
+				platform.add_to_group("LevelPlatforms")
+
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				platform.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				m_StairsArray[dataIndex][index] = true
+
+				enable_stairs(platform, dataIndex, index)
 
 				index += 1
 
@@ -256,12 +343,12 @@ func load_level(fileName):
 				parse_demo_line(demoIndex, line)
 				demoIndex += 1
 
+	finalize_level_geometry()
+
 ###
 # Called when the node enters the scene tree for the first time
 ##
 func _ready():
-	m_ElevatorEndArray.resize(16)
-
 	load_level("res://levels/tower1.txt")
 
 ###

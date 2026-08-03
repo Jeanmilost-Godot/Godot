@@ -104,7 +104,7 @@ MaxFadeHeight = 40.0
 [node name="Tower_1" parent="." instance=ExtResource("3_ix032")]
 
 [node name="Player" parent="." instance=ExtResource("4_hxblr")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 31, 7.95, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 7.95, 0)
 
 [node name="AudioListener" type="AudioListener3D" parent="Player"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.333334, -0.15, 3.64262e-07)

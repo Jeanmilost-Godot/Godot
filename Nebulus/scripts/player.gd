@@ -100,21 +100,41 @@ func move_camera():
 
 ###
 # Moves the player position around the tower
+#@param delta - elapsed time in seconds since the previous call
+#@param ignorePhysics - if true, the physics engine will be ignored while player is moving
+#@note Physics enging may be ignored e.g. while transition animation is running
 ##
-func move_player():
-	var playerPos = Vector3.ZERO
-	playerPos.x   = m_PlayerRadius * sin(m_AngleY) * cos(m_AngleX)
-	playerPos.y   = position.y
-	playerPos.z   = m_PlayerRadius * cos(m_AngleY) * cos(m_AngleX)
+func move_player(delta: float, ignorePhysics: bool):
+	# do ignore the physics engine?
+	if (ignorePhysics):
+		var playerPos = Vector3.ZERO
+		playerPos.x   = m_PlayerRadius * sin(m_AngleY) * cos(m_AngleX)
+		playerPos.y   = position.y
+		playerPos.z   = m_PlayerRadius * cos(m_AngleY) * cos(m_AngleX)
 
-	position   = playerPos
-	rotation.y = m_AngleY + (PI / 2.0) * m_Offset;
+		position   = playerPos
+		rotation.y = m_AngleY + (PI / 2.0) * m_Offset;
+
+		return
+
+	# move the player and update the physics engine
+	var target = Vector3.ZERO
+	target.x   = m_PlayerRadius * sin(m_AngleY) * cos(m_AngleX)
+	target.z   = m_PlayerRadius * cos(m_AngleY) * cos(m_AngleX)
+
+	var horizontalDelta = Vector3(target.x - position.x, 0.0, target.z - position.z)
+	velocity.x          = horizontalDelta.x / delta
+	velocity.z          = horizontalDelta.z / delta
+	rotation.y          = m_AngleY + (PI / 2.0) * m_Offset
 
 ###
 # Moves the both player and camera position around the tower
+#@param delta - elapsed time in seconds since the previous call
+#@param ignorePhysics - if true, the physics engine will be ignored while player is moving
+#@note Physics enging may be ignored e.g. while transition animation is running
 ##
-func move_player_and_camera():
-	move_player()
+func move_player_and_camera(delta: float, ignorePhysics: bool):
+	move_player(delta, ignorePhysics)
 	move_camera()
 
 ###
@@ -178,7 +198,7 @@ func move_to_portal(delta) -> bool:
 		animate_player(false)
 		stop_walk_sound()
 		rotate_player(delta)
-		move_player_and_camera()
+		move_player_and_camera(delta, true)
 		return false
 
 	# get direction to which the player should move
@@ -204,7 +224,7 @@ func move_to_portal(delta) -> bool:
 		endReached = true
 
 	# apply the changes
-	move_player_and_camera()
+	move_player_and_camera(delta, true)
 	animate_player(true)
 	play_walk_sound()
 
@@ -243,7 +263,7 @@ func rotate_player_to_face_portal(delta) -> bool:
 			m_Offset   = 2.0
 			endReached = true
 
-	move_player_and_camera()
+	move_player_and_camera(delta, true)
 	return endReached
 
 ###
@@ -350,7 +370,7 @@ func rotate_player_after_exit_portal(delta) -> bool:
 			m_Offset   = m_LastDir
 			endReached = true
 
-	move_player_and_camera()
+	move_player_and_camera(delta, true)
 	return endReached
 
 ###
@@ -491,7 +511,7 @@ func _physics_process(delta):
 				rotate_player(delta)
 
 			# apply player and camera movements
-			move_player_and_camera()
+			move_player_and_camera(delta, false)
 
 			# apply gravity when not on floor
 			if not is_on_floor():

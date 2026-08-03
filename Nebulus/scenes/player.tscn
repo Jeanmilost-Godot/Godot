@@ -159,8 +159,8 @@ states/walk_bt/position = Vector2(712, 100)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_7jsfy"), "Idle", "walk_bt", SubResource("AnimationNodeStateMachineTransition_upb21"), "walk_bt", "Idle", SubResource("AnimationNodeStateMachineTransition_pvo1c")]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8p50w"]
-radius = 1.0
-height = 2.4
+radius = 3.0
+height = 7.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bfn6g"]
 resource_name = "Material.006"
@@ -490,10 +490,11 @@ parameters/conditions/walk = false
 parameters/walk_bt/Speed/scale = 4.5
 
 [node name="Collider" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
 shape = SubResource("CapsuleShape3D_8p50w")
 
 [node name="Model" type="Node3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="Armature" type="Node3D" parent="Model"]
 
