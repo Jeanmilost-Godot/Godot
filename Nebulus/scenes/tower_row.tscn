@@ -16,7 +16,7 @@ top_radius = 25.0
 bottom_radius = 25.0
 height = 2.5
 
-[node name="Tower_Body" type="Node3D"]
+[node name="TowerRow" type="Node3D"]
 
 [node name="Tower" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)

@@ -21,6 +21,8 @@ var m_Offset                = -1.0
 var m_LastDir               = -1.0
 var m_PortalAngle           =  0.0
 var m_TargetPortalAngle     =  0.0
+var m_SwippingVelocity      =  0.0
+var m_SwippingCount         =  0
 var m_CanEnterPortal        =  false
 var m_CanUseElevator        =  false
 var m_Portal                =  null
@@ -449,6 +451,8 @@ func _physics_process(delta):
 					inputDir.x = -1.0
 				elif Input.is_action_pressed("right"):
 					inputDir.x = 1.0
+				elif (m_SwippingCount > 0):
+					m_AngleY += m_SwippingVelocity
 
 				if Input.is_action_pressed("up") and is_on_floor():
 					if (m_CanEnterPortal):
@@ -554,3 +558,26 @@ func _on_can_enter_portal(canEnter, portal, targetPortal):
 func _on_can_use_elevator(canUse, elevator):
 	m_CanUseElevator = canUse
 	m_Elevator       = elevator
+
+###
+# Called when the player enters or leaves a swipping zone
+#@param swip - if true, player is in a swipping zone
+#@param velocity - swipping velocity
+##
+func _on_do_player_swip(swip, velocity):
+	# is swipping?
+	if (swip):
+		# increment the swip count
+		m_SwippingCount += 1
+	else:
+		# decrement the swip count
+		m_SwippingCount -= 1
+
+	# exited all the swipping areas?
+	if (m_SwippingCount <= 0):
+		# reset the values
+		m_SwippingCount    = 0
+		m_SwippingVelocity = 0.0
+	elif (velocity != 0.0):
+		# otherwise set the swipping velocity
+		m_SwippingVelocity = velocity

@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://y8ehwjqkb4gh"]
+
+[ext_resource type="Shader" path="res://shader/pulsing_red_light.gdshader" id="1_ebd2b"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xxae4"]
+height = 2.5
+radius = 6.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8ghwo"]
+render_priority = 0
+shader = ExtResource("1_ebd2b")
+shader_parameter/color_a = Color(1, 0.34902, 0.286275, 1)
+shader_parameter/color_b = Color(0.152941, 0, 0, 1)
+shader_parameter/albedo_color = Color(0.176471, 0.00392157, 0.00392157, 1)
+shader_parameter/pulse_speed = 0.25
+shader_parameter/emission_energy = 1.0
+shader_parameter/min_intensity = 0.25
+shader_parameter/use_smooth_pulse = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_d16ba"]
+material = SubResource("ShaderMaterial_8ghwo")
+top_radius = 4.5
+bottom_radius = 4.5
+height = 2.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8dvr5"]
+albedo_color = Color(0.0117647, 0.0117647, 0.00784314, 1)
+metallic = 0.9
+metallic_specular = 0.25
+roughness = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gqtbb"]
+material = SubResource("StandardMaterial3D_8dvr5")
+top_radius = 5.0
+bottom_radius = 5.0
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vsq3y"]
+albedo_color = Color(0.0117647, 0.0117647, 0.00784314, 1)
+metallic = 0.9
+metallic_specular = 0.25
+roughness = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_x01pp"]
+material = SubResource("StandardMaterial3D_vsq3y")
+top_radius = 5.0
+bottom_radius = 5.0
+height = 0.5
+
+[node name="Blocker" type="StaticBody3D"]
+collision_layer = 16
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
+shape = SubResource("CylinderShape3D_xxae4")
+
+[node name="Mesh" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
+
+[node name="Center" type="MeshInstance3D" parent="Mesh"]
+mesh = SubResource("CylinderMesh_d16ba")
+skeleton = NodePath("../..")
+
+[node name="Top" type="MeshInstance3D" parent="Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CylinderMesh_gqtbb")
+
+[node name="Bottom" type="MeshInstance3D" parent="Mesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+mesh = SubResource("CylinderMesh_x01pp")

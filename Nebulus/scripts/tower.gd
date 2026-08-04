@@ -20,6 +20,36 @@ const m_PlatformAngle:       float = 22.5
 const m_TextureRepeatOffset: float = 2.0
 
 ###
+# Loads and assigns the ice material to the mesh
+#@param meshInst - mesh instance for which the material should be loaded and applied
+##
+func load_ice_material(meshInst: MeshInstance3D):
+	if (!meshInst):
+		return
+
+	var mat = meshInst.get_surface_override_material(0)
+
+	if mat == null:
+		mat = meshInst.mesh.surface_get_material(0).duplicate()
+		meshInst.set_surface_override_material(0, mat)
+
+	# change albedo
+	mat.albedo_texture = load("res://assets/textures/ice/ice_field_albedo.png")
+
+	# change normal map
+	mat.normal_enabled = true
+	mat.normal_texture = load("res://assets/textures/ice/ice_field_normal-ogl.png")
+
+	# change ambient occlusion
+	mat.ao_enabled = true
+	mat.ao_texture = load("res://assets/textures/ice/ice_field_ao.png")
+
+	# change height / parallax
+	mat.heightmap_enabled = true
+	mat.heightmap_texture = load("res://assets/textures/ice/ice_field_height.png")
+	mat.heightmap_scale   = 0.05
+
+###
 # Gets the material associated to the mesh
 #@param meshInst - mesh instance for which the material should be get
 #@return material, null if not found or on error
@@ -177,6 +207,19 @@ func parse_data_line(dataIndex, line):
 			" ":       index += 1
 			"|":       index += 1
 
+			"!":
+				# create a platform and attach it to the scene
+				var platform = preload("res://scenes/blocker.tscn").instantiate()
+				add_child(platform)
+
+				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				platform.global_position = Vector3(0.0, posY, 0.0)
+
+				var rotY = deg_to_rad(m_PlatformAngle * index)
+				platform.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				index += 1
+
 			"#":
 				# create a portal and attach it to the scene. NOTE the portal is always set above a
 				# platform in the level files, for that reason it is located lower on the y axis
@@ -230,25 +273,35 @@ func parse_data_line(dataIndex, line):
 
 				index += 1
 
-			">":
+			">", "<":
 				# create a platform and attach it to the scene
 				var platform = preload("res://scenes/platform.tscn").instantiate()
 				add_child(platform)
 
+				var platformNode: MeshInstance3D = platform.get_node("Model")
+				load_ice_material(platformNode)
+				
 				# tag the platform node with its level grid coordinates
 				platform.set_meta("row", dataIndex)
 				platform.set_meta("col", index)
 				platform.add_to_group("LevelPlatforms")
 
+				# connect the platform signals to the player
+				platform.do_player_swip.connect(m_Player._on_do_player_swip)
+
+				# set platform swipping velocity
+				platform.m_Velocity = 0.01 if ch == ">" else -0.01
+
+				# set platform position
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
+				# set platform rotation
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				platform.global_rotation = Vector3(0.0, rotY, 0.0)
 
+				# activate platform in the stairs array at row and column
 				m_StairsArray[dataIndex][index] = true
-
-				enable_stairs(platform, dataIndex, index)
 
 				index += 1
 
@@ -262,15 +315,16 @@ func parse_data_line(dataIndex, line):
 				platform.set_meta("col", index)
 				platform.add_to_group("LevelPlatforms")
 
+				# set platform position
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
+				# set platform rotation
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				platform.global_rotation = Vector3(0.0, rotY, 0.0)
 
+				# activate platform in the stairs array at row and column
 				m_StairsArray[dataIndex][index] = true
-
-				enable_stairs(platform, dataIndex, index)
 
 				index += 1
 
