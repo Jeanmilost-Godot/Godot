@@ -13,7 +13,7 @@ var m_ElevatorEndArray: Array[int]   = []
 var m_StairsArray:      Array[Array] = []
 
 # constants
-const m_TabChar:                   = "\t"
+const m_TabChar                    = "\t"
 const m_ColumnCount:         int   = 16
 const m_RowHeight:           float = 2.5
 const m_PlatformAngle:       float = 22.5
