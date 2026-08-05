@@ -1,13 +1,16 @@
 extends StaticBody3D
 
 # components
-@onready var m_Platform: MeshInstance3D   = $Model
-@onready var m_Collider: CollisionShape3D = $Collider
+@onready var m_Platform:           MeshInstance3D      = $Model
+@onready var m_Hologram:           MeshInstance3D      = $Hologram
+@onready var m_Collider:           CollisionShape3D    = $Collider
+@onready var m_HologramBreakSound: AudioStreamPlayer3D = $HologramBreakSound
 
 # variables
-var m_Velocity:     float = 0.0
-var m_FadeDuration: float = 0.2
-var m_IsHologram:   bool  = false
+var m_Velocity:       float = 0.0
+var m_FadeDuration:   float = 0.2
+var m_IsHologram:     bool  = false
+var m_HologramBroken: bool  = false
 
 # signals
 signal do_player_swip(swip, dir)
@@ -16,7 +19,7 @@ signal do_player_swip(swip, dir)
 # Ensures that transparency is enabled in mesh material
 #@param meshInst - mesh instance for which the transparency should be enabled
 #@note MeshInstance3D.transparency only has visible effect if the material's transparency mode 
-#      allows it (Alpha or Alpha Scissor).
+#      allows it (Alpha or Alpha Scissor)
 ##
 func ensure_transparent(meshInst: MeshInstance3D):
 	var mat := meshInst.get_surface_override_material(0)
@@ -32,8 +35,8 @@ func ensure_transparent(meshInst: MeshInstance3D):
 # Sets the platform an hologram
 ##
 func set_hologram():
-	ensure_transparent(m_Platform)
-	m_Platform.transparency = 0.0
+	m_Platform.visible = false
+	m_Hologram.visible = true
 
 	m_IsHologram = true
 
@@ -72,18 +75,20 @@ func _on_swip_trigger_zone_body_exited(body):
 #param body - body which entered in the hologram trigger zone
 ##
 func _on_hologram_trigger_zone_body_entered(body):
-	# not an hologram, ignore
-	if (!m_IsHologram):
+	# not an hologram, or already broken, ignore
+	if (!m_IsHologram or m_HologramBroken):
 		return
 
 	# ignore any body but player
 	if body.name != "Player":
 		return
 
+	m_Hologram.visible = false
+
 	# disable the platform collider
 	m_Collider.set_deferred("disabled", true)
 
-	# fade out the platform, and delete it at end
-	var tween = create_tween()
-	tween.tween_property(m_Platform, "transparency", 1.0, m_FadeDuration)
-	tween.tween_callback(func(): self.queue_free())
+	if (!m_HologramBreakSound.is_playing()):
+		m_HologramBreakSound.play()
+
+	m_HologramBroken = true
