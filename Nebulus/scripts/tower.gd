@@ -229,9 +229,11 @@ func parse_data_line(dataIndex, line):
 				# connect the portal signals to the player
 				portal.can_enter_portal.connect(m_Player._on_can_enter_portal)
 
+				# set portal position
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 0.5
 				portal.global_position = Vector3(0.0, posY, 0.0)
 
+				# set portal rotation
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				portal.global_rotation = Vector3(0.0, rotY, 0.0)
 
@@ -259,12 +261,15 @@ func parse_data_line(dataIndex, line):
 				# connect the elevator signals to the player
 				elevator.can_use_elevator.connect(m_Player._on_can_use_elevator)
 
+				# set elevator position
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 1.5
 				elevator.global_position = Vector3(0.0, posY, 0.0)
 
+				# set elevator rotation
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				elevator.global_rotation = Vector3(0.0, rotY, 0.0)
 
+				# configure elevator start position
 				elevator.m_StartY     = elevator.global_position.y
 				elevator.m_StartBaseY = elevator.m_Base.global_position.y
 
@@ -328,14 +333,34 @@ func parse_data_line(dataIndex, line):
 
 				index += 1
 
+			".":
+				# create a platform and attach it to the scene
+				var platform = preload("res://scenes/platform.tscn").instantiate()
+				add_child(platform)
+
+				# set hologram platforms
+				platform.set_hologram()
+
+				# set platform position
+				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				platform.global_position = Vector3(0.0, posY, 0.0)
+
+				# set platform rotation
+				var rotY = deg_to_rad(m_PlatformAngle * index)
+				platform.global_rotation = Vector3(0.0, rotY, 0.0)
+
+				index += 1
+
 			"L":
 				# create a lamp and attach it to the scene
 				var lamp = preload("res://scenes/wall_lamp.tscn").instantiate()
 				add_child(lamp)
 
+				# set lamp position
 				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				lamp.global_position = Vector3(0.0, posY, 0.0)
 
+				# set lamp rotation
 				var rotY = deg_to_rad(m_PlatformAngle * index)
 				lamp.global_rotation = Vector3(0.0, rotY, 0.0)
 
@@ -404,10 +429,3 @@ func load_level(fileName):
 ##
 func _ready():
 	load_level("res://levels/tower1.txt")
-
-###
-# Called every frame at a fixed rate, which allows any processing that requires the physics values
-#@param delta - elapsed time in seconds since the previous call
-##
-func _process(delta):
-	pass

@@ -123,7 +123,7 @@ func _ready():
 	m_IdleTimer.timeout.connect(_on_idle_timer_timeout)
 
 ###
-# Called every frame at a fixed rate, which allows any processing that requires the physics values
+# Called once per rendered frame
 #@param delta - elapsed time in seconds since the previous call
 ##
 func _process(delta):
