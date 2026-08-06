@@ -466,7 +466,6 @@ func _physics_process(delta):
 				if Input.is_action_pressed("jump_or_fire"):
 					inputDir.y = -1.0
 
-			var direction = (transform.basis * Vector3(inputDir.x, 0, inputDir.y)).normalized()
 			var walking   = false
 			var dir       = m_LastDir
 			var newAngleY = m_AngleY
@@ -562,9 +561,9 @@ func _on_can_use_elevator(canUse, elevator):
 ###
 # Called when the player enters or leaves a swipping zone
 #@param swip - if true, player is in a swipping zone
-#@param velocity - swipping velocity
+#@param swippingVelocity - swipping velocity
 ##
-func _on_do_player_swip(swip, velocity):
+func _on_do_player_swip(swip, swippingVelocity):
 	# is swipping?
 	if (swip):
 		# increment the swip count
@@ -578,6 +577,6 @@ func _on_do_player_swip(swip, velocity):
 		# reset the values
 		m_SwippingCount    = 0
 		m_SwippingVelocity = 0.0
-	elif (velocity != 0.0):
+	elif (swippingVelocity != 0.0):
 		# otherwise set the swipping velocity
-		m_SwippingVelocity = velocity
+		m_SwippingVelocity = swippingVelocity
