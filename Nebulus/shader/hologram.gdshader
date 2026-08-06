@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_add, unshaded, cull_disabled;
+render_mode blend_add, unshaded, cull_back;
 
 uniform vec4  albedo:            source_color            = vec4(0.1, 0.7, 1.0, 1.0);
 uniform float rim_power:         hint_range(0.0, 10.0)   = 3.0;

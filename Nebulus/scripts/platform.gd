@@ -3,6 +3,7 @@ extends StaticBody3D
 # components
 @onready var m_Platform:           MeshInstance3D      = $Model
 @onready var m_Hologram:           MeshInstance3D      = $Hologram
+@onready var m_Explosion:          Node3D              = $Explosion
 @onready var m_Collider:           CollisionShape3D    = $Collider
 @onready var m_HologramBreakSound: AudioStreamPlayer3D = $HologramBreakSound
 
@@ -84,6 +85,7 @@ func _on_hologram_trigger_zone_body_entered(body):
 		return
 
 	m_Hologram.visible = false
+	m_Explosion.start()
 
 	# disable the platform collider
 	m_Collider.set_deferred("disabled", true)

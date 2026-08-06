@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://c7ks1x3fg6vqp"]
+[gd_scene load_steps=17 format=3 uid="uid://c7ks1x3fg6vqp"]
 
 [ext_resource type="Texture2D" uid="uid://t57rtikloo6t" path="res://assets/textures/metal/brushed-metal_albedo.png" id="1_44mrd"]
 [ext_resource type="Script" path="res://scripts/platform.gd" id="1_xh0l5"]
 [ext_resource type="Texture2D" uid="uid://doifsoo7o1hvh" path="res://assets/textures/metal/brushed-metal_ao.png" id="2_do36q"]
+[ext_resource type="PackedScene" uid="uid://djnhf2u3nwb26" path="res://scenes/explosion.tscn" id="2_oem4l"]
 [ext_resource type="Texture2D" uid="uid://drmtatiqppeui" path="res://assets/textures/metal/brushed-metal_normal-ogl.png" id="3_63134"]
 [ext_resource type="Shader" path="res://shader/hologram.gdshader" id="5_swe5e"]
 [ext_resource type="AudioStream" uid="uid://bk0mx2adkx7y4" path="res://assets/sounds/hologram/breaking_light_bulb.mp3" id="6_vsvcw"]
@@ -67,6 +68,9 @@ script = ExtResource("1_xh0l5")
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 shape = SubResource("CylinderShape3D_jyq3s")
+
+[node name="Explosion" parent="." instance=ExtResource("2_oem4l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 
 [node name="Hologram" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)

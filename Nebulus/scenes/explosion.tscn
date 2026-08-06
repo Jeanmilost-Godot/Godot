@@ -1,0 +1,82 @@
+[gd_scene load_steps=13 format=3 uid="uid://djnhf2u3nwb26"]
+
+[ext_resource type="Script" path="res://scripts/explosion.gd" id="1_f26gn"]
+[ext_resource type="Texture2D" uid="uid://c06f6yn2abvmw" path="res://assets/textures/details/flash.png" id="2_u2ofc"]
+
+[sub_resource type="Curve" id="Curve_mnxbe"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pw40v"]
+curve = SubResource("Curve_mnxbe")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yrv6a"]
+scale_curve = SubResource("CurveTexture_pw40v")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_al374"]
+transparency = 1
+blend_mode = 1
+shading_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.635294, 0.905882, 1, 0.733333)
+albedo_texture = ExtResource("2_u2ofc")
+emission_enabled = true
+emission = Color(0.745098, 0.847059, 1, 1)
+emission_energy_multiplier = 2.11
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_6f4ds"]
+material = SubResource("StandardMaterial3D_al374")
+size = Vector2(2.5, 2.5)
+
+[sub_resource type="Curve" id="Curve_xijpn"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.970149, 0.39), -2.80762, -2.80762, 0, 0, Vector2(1, 0), -3.14609, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xgyhx"]
+curve = SubResource("Curve_xijpn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_diiem"]
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 6.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, -40, 0)
+scale_curve = SubResource("CurveTexture_xgyhx")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tpq7"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.917647, 0.796078, 1)
+metallic = 0.25
+emission_enabled = true
+emission = Color(1, 0.164706, 0, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_hgi1u"]
+material = SubResource("StandardMaterial3D_4tpq7")
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Explosion" type="Node3D"]
+script = ExtResource("1_f26gn")
+
+[node name="FlashParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 1
+lifetime = 0.05
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_yrv6a")
+draw_pass_1 = SubResource("QuadMesh_6f4ds")
+
+[node name="SparkParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 50
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.95
+process_material = SubResource("ParticleProcessMaterial_diiem")
+draw_pass_1 = SubResource("BoxMesh_hgi1u")
