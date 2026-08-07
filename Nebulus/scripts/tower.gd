@@ -16,6 +16,7 @@ var m_StairsArray:      Array[Array] = []
 const m_TabChar                    = "\t"
 const m_ColumnCount:         int   = 16
 const m_RowHeight:           float = 2.5
+const m_BaseY:               float = 5.0
 const m_PlatformAngle:       float = 22.5
 const m_TextureRepeatOffset: float = 2.0
 
@@ -100,7 +101,7 @@ func create_tower_fundation():
 		add_child(towerRow)
 
 		# set its position
-		var towerPosY            = 0 - (m_RowHeight * x)
+		var towerPosY            = m_BaseY - (m_RowHeight * x)
 		towerRow.global_position = Vector3(0.0, towerPosY, 0.0)
 
 		# configure the tower row texture in a such manner it repeats harmoniously in the whole tower
@@ -185,7 +186,7 @@ func parse_data_line(dataIndex, line):
 
 	# calculate the tower row position, remember that the file is read from top to bottom, whereas
 	# the tower is built from the bottom to the top
-	var towerPosY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+	var towerPosY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 	towerRow.global_position = Vector3(0.0, towerPosY, 0.0)
 
 	# configure the tower row texture in a such manner it repeats harmoniously in the whole tower
@@ -212,7 +213,7 @@ func parse_data_line(dataIndex, line):
 				var platform = preload("res://scenes/blocker.tscn").instantiate()
 				add_child(platform)
 
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
 				var rotY = deg_to_rad(m_PlatformAngle * index)
@@ -230,7 +231,7 @@ func parse_data_line(dataIndex, line):
 				portal.can_enter_portal.connect(m_Player._on_can_enter_portal)
 
 				# set portal position
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 0.5
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 0.5
 				portal.global_position = Vector3(0.0, posY, 0.0)
 
 				# set portal rotation
@@ -262,7 +263,7 @@ func parse_data_line(dataIndex, line):
 				elevator.can_use_elevator.connect(m_Player._on_can_use_elevator)
 
 				# set elevator position
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 1.5
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex) - m_RowHeight + 1.5
 				elevator.global_position = Vector3(0.0, posY, 0.0)
 
 				# set elevator rotation
@@ -274,7 +275,7 @@ func parse_data_line(dataIndex, line):
 				elevator.m_StartBaseY = elevator.m_Base.global_position.y
 
 				# calculate the elevator end position
-				elevator.m_EndY = (m_RowCount * m_RowHeight) - (m_RowHeight * m_ElevatorEndArray[index]) + 1.2
+				elevator.m_EndY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * m_ElevatorEndArray[index]) + 1.2
 
 				index += 1
 
@@ -298,7 +299,7 @@ func parse_data_line(dataIndex, line):
 				platform.m_Velocity = 0.01 if ch == ">" else -0.01
 
 				# set platform position
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
 				# set platform rotation
@@ -321,7 +322,7 @@ func parse_data_line(dataIndex, line):
 				platform.add_to_group("LevelPlatforms")
 
 				# set platform position
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
 				# set platform rotation
@@ -342,7 +343,7 @@ func parse_data_line(dataIndex, line):
 				platform.set_hologram()
 
 				# set platform position
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				platform.global_position = Vector3(0.0, posY, 0.0)
 
 				# set platform rotation
@@ -357,7 +358,7 @@ func parse_data_line(dataIndex, line):
 				add_child(lamp)
 
 				# set lamp position
-				var posY = (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
+				var posY = m_BaseY + (m_RowCount * m_RowHeight) - (m_RowHeight * dataIndex)
 				lamp.global_position = Vector3(0.0, posY, 0.0)
 
 				# set lamp rotation
