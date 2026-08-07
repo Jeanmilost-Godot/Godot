@@ -1,7 +1,9 @@
 extends StaticBody3D
 
 # components
-@onready var m_Platform:           MeshInstance3D      = $Model
+@onready var m_Default:            MeshInstance3D      = $Default
+@onready var m_Frozen:             MeshInstance3D      = $Frozen
+@onready var m_FrozenBottom:       MeshInstance3D      = $FrozenBottom
 @onready var m_Hologram:           MeshInstance3D      = $Hologram
 @onready var m_Explosion:          Node3D              = $Explosion
 @onready var m_Collider:           CollisionShape3D    = $Collider
@@ -10,6 +12,7 @@ extends StaticBody3D
 # variables
 var m_Velocity:       float = 0.0
 var m_FadeDuration:   float = 0.2
+var m_IsFrozen:       bool  = false
 var m_IsHologram:     bool  = false
 var m_HologramBroken: bool  = false
 
@@ -36,18 +39,28 @@ func ensure_transparent(meshInst: MeshInstance3D):
 # Sets the platform an hologram
 ##
 func set_hologram():
-	m_Platform.visible = false
+	m_Default.visible  = false
 	m_Hologram.visible = true
 
 	m_IsHologram = true
+
+###
+# Sets the platform a frozen platform
+##
+func set_frozen():
+	m_Default.visible      = false
+	m_Frozen.visible       = true
+	m_FrozenBottom.visible = true
+
+	m_IsFrozen = true
 
 ###
 # Called when a body entered in the platform swip trigger zone
 #param body - body which entered in the swip trigger zone
 ##
 func _on_swip_trigger_zone_body_entered(body):
-	# is an hologram, ignore
-	if (m_IsHologram):
+	# not a frozen platform, ignore
+	if (!m_IsFrozen):
 		return
 
 	# ignore any body but player
@@ -61,8 +74,8 @@ func _on_swip_trigger_zone_body_entered(body):
 #param body - body which leaved the swip trigger zone
 ##
 func _on_swip_trigger_zone_body_exited(body):
-	# is an hologram, ignore
-	if (m_IsHologram):
+	# not a frozen platform, ignore
+	if (!m_IsFrozen):
 		return
 
 	# ignore any body but player

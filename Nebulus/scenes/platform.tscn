@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c7ks1x3fg6vqp"]
+[gd_scene load_steps=31 format=3 uid="uid://c7ks1x3fg6vqp"]
 
 [ext_resource type="Texture2D" uid="uid://t57rtikloo6t" path="res://assets/textures/metal/brushed-metal_albedo.png" id="1_44mrd"]
 [ext_resource type="Script" path="res://scripts/platform.gd" id="1_xh0l5"]
@@ -6,11 +6,109 @@
 [ext_resource type="PackedScene" uid="uid://djnhf2u3nwb26" path="res://scenes/explosion.tscn" id="2_oem4l"]
 [ext_resource type="Texture2D" uid="uid://drmtatiqppeui" path="res://assets/textures/metal/brushed-metal_normal-ogl.png" id="3_63134"]
 [ext_resource type="Shader" path="res://shader/hologram.gdshader" id="5_swe5e"]
+[ext_resource type="Shader" path="res://shader/ice.gdshader" id="6_qkiww"]
 [ext_resource type="AudioStream" uid="uid://bk0mx2adkx7y4" path="res://assets/sounds/hologram/breaking_light_bulb.mp3" id="6_vsvcw"]
+[ext_resource type="Shader" path="res://shader/ice_bottom.gdshader" id="9_0qiv5"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_jyq3s"]
 height = 2.5
 radius = 6.1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ir3el"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_htbjp"]
+seamless = true
+noise = SubResource("FastNoiseLite_ir3el")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yvwd5"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uhtq8"]
+seamless = true
+as_normal_map = true
+bump_strength = 19.5
+noise = SubResource("FastNoiseLite_yvwd5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0peqp"]
+render_priority = 0
+shader = ExtResource("6_qkiww")
+shader_parameter/ice_color = Color(0.0705882, 0.243137, 0.313726, 0.2)
+shader_parameter/frost_color = Color(0.705882, 0.886275, 1, 0.901961)
+shader_parameter/roughness = 0.022
+shader_parameter/metallic = 0.345
+shader_parameter/rim_intensity = 2.357
+shader_parameter/refraction_strength = 0.03
+shader_parameter/ice_thickness = 0.05
+shader_parameter/icicle_length = 0.0
+shader_parameter/icicle_sharpness = 10.0
+shader_parameter/uv_scale = Vector3(2, 2, 2)
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_htbjp")
+shader_parameter/normal_bump_tex = SubResource("NoiseTexture2D_uhtq8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6p6ay"]
+albedo_color = Color(0.831373, 0.831373, 0.862745, 1)
+albedo_texture = ExtResource("1_44mrd")
+metallic = 0.5
+metallic_specular = 0.75
+roughness = 0.6
+normal_enabled = true
+normal_texture = ExtResource("3_63134")
+clearcoat_roughness = 0.2
+ao_enabled = true
+ao_texture = ExtResource("2_do36q")
+uv1_scale = Vector3(1, 0.2, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b8mo6"]
+material = SubResource("StandardMaterial3D_6p6ay")
+top_radius = 6.1
+bottom_radius = 6.1
+height = 2.5
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p4xhv"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wyc38"]
+seamless = true
+noise = SubResource("FastNoiseLite_p4xhv")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_is0g3"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pg6b2"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_is0g3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_suul1"]
+render_priority = 0
+shader = ExtResource("9_0qiv5")
+shader_parameter/ice_color = Color(0.215686, 0.552941, 0.737255, 0.301961)
+shader_parameter/frost_color = Color(0.631373, 0.819608, 1, 0.901961)
+shader_parameter/roughness = 0.356
+shader_parameter/metallic = 0.107
+shader_parameter/rim_intensity = 3.538
+shader_parameter/refraction_strength = 0.045
+shader_parameter/ice_depth = 0.424
+shader_parameter/spike_sharpness = 3.714
+shader_parameter/uv_scale = Vector2(3, 3)
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_wyc38")
+shader_parameter/normal_bump_tex = SubResource("NoiseTexture2D_pg6b2")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g8a27"]
+albedo_color = Color(0.831373, 0.831373, 0.862745, 1)
+albedo_texture = ExtResource("1_44mrd")
+metallic = 0.5
+metallic_specular = 0.75
+roughness = 0.6
+normal_enabled = true
+normal_texture = ExtResource("3_63134")
+ao_enabled = true
+ao_texture = ExtResource("2_do36q")
+
+[sub_resource type="SphereMesh" id="SphereMesh_rthon"]
+material = SubResource("StandardMaterial3D_g8a27")
+radius = 6.1
+height = 0.001
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lkge5"]
 render_priority = 0
@@ -36,25 +134,6 @@ radius = 6.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_dk8x3"]
 size = Vector3(2.5, 3.85, 0.01)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6p6ay"]
-albedo_color = Color(0.831373, 0.831373, 0.862745, 1)
-albedo_texture = ExtResource("1_44mrd")
-metallic = 0.5
-metallic_specular = 0.75
-roughness = 0.6
-normal_enabled = true
-normal_texture = ExtResource("3_63134")
-clearcoat_roughness = 0.2
-ao_enabled = true
-ao_texture = ExtResource("2_do36q")
-uv1_scale = Vector3(1, 0.2, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_b8mo6"]
-material = SubResource("StandardMaterial3D_6p6ay")
-top_radius = 6.1
-bottom_radius = 6.1
-height = 2.5
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_j7008"]
 size = Vector3(2.5, 3.85, 0.01)
 
@@ -71,6 +150,18 @@ shape = SubResource("CylinderShape3D_jyq3s")
 
 [node name="Explosion" parent="." instance=ExtResource("2_oem4l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
+
+[node name="Frozen" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
+visible = false
+material_overlay = SubResource("ShaderMaterial_0peqp")
+mesh = SubResource("CylinderMesh_b8mo6")
+
+[node name="FrozenBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, -1.25, 0)
+visible = false
+material_overlay = SubResource("ShaderMaterial_suul1")
+mesh = SubResource("SphereMesh_rthon")
 
 [node name="Hologram" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
@@ -89,7 +180,7 @@ transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 
 shape = SubResource("BoxShape3D_dk8x3")
 disabled = true
 
-[node name="Model" type="MeshInstance3D" parent="."]
+[node name="Default" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, 0)
 mesh = SubResource("CylinderMesh_b8mo6")
 
